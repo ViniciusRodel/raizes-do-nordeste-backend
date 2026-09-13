@@ -1,6 +1,12 @@
 -- Esquema do back-end da rede Raizes do Nordeste (recorte da entrega do caminho de ouro).
 -- Recria tudo do zero a cada execucao de `npm run migrate`.
 
+-- pgcrypto: usado para cifrar em repouso os dados pessoais do cliente
+-- (nome_cif, cpf_cif, email_cif, telefone_cif) via pgp_sym_encrypt/pgp_sym_decrypt
+-- (RNF-06). A chave simetrica vem de DADOS_PESSOAIS_CHAVE (config.js), nunca fica
+-- hardcoded em SQL; ver src/lib/dadosPessoais.js.
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
 DROP TABLE IF EXISTS
   movimento_pontos, conta_fidelidade, consentimento_lgpd,
   evento_pagamento_recebido, pagamento, item_pedido, pedido,
@@ -26,6 +32,8 @@ CREATE TABLE unidade (
   regiao_id BIGINT NOT NULL REFERENCES regiao(id)
 );
 
+-- nome_cif/cpf_cif/email_cif/telefone_cif: BYTEA cifrado com pgp_sym_encrypt (pgcrypto),
+-- nunca texto plano. Ver src/lib/dadosPessoais.js (unica porta de entrada/saida desses campos).
 CREATE TABLE cliente (
   id              BIGSERIAL PRIMARY KEY,
   nome_cif        BYTEA,

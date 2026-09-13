@@ -29,6 +29,7 @@ app.use('/v1', require('./modules/pagamento/webhookRoutes'));
 app.use('/v1', autenticar);
 app.use('/v1', require('./modules/catalogo/routes'));
 app.use('/v1', require('./modules/pedidos/routes'));
+app.use('/v1', require('./modules/clientes/routes'));
 app.use('/v1', require('./modules/fidelidade/routes'));
 app.use('/v1', require('./modules/auditoria/routes'));
 app.use('/v1', require('./modules/relatorios/routes'));

@@ -95,6 +95,10 @@ npx newman run postman/raizes-do-nordeste.postman_collection.json \
 | 27 | `GET /v1/auditoria?tipo=CANCELAMENTO` — registro com autor, papel e motivo | RF-14 |
 | 28 | Cancelar o 1º pedido (já `ENTREGUE`) → **409** | RF-13 |
 | 29 | Cancelar sem `motivo` → **400** | RF-14 (operação sensível exige motivo) |
+| 30 | Login Admin | RF-25 |
+| 31 | `GET /v1/clientes/:id` (Admin) — nome/CPF decifrados corretamente | **RNF-06** |
+| 32 | Mesmo endpoint com token do Atendente → **403** | RNF-07 (RBAC) |
+| 33 | `GET /v1/auditoria?tipo=ACESSO_DADO_PESSOAL` — registra quem acessou | RF-14 |
 
 Outros negativos já suportados pelo código, sem passo dedicado na coleção:
 **CT-02** (pedido no totem sem `clienteId`), **CT-03** (pedido pelo atendente),
@@ -116,6 +120,7 @@ Outros negativos já suportados pelo código, sem passo dedicado na coleção:
 | GET | `/v1/unidades/:id/fila-cozinha` | COZINHEIRO, GERENTE_UNIDADE |
 | PATCH | `/v1/pedidos/:id/status` | COZINHEIRO, ATENDENTE, GERENTE_UNIDADE |
 | POST | `/v1/pedidos/:id/cancelamento` | ATENDENTE, GERENTE_UNIDADE (exige `motivo`) |
+| GET | `/v1/clientes/:id` | ADMIN, GERENTE_UNIDADE — dados pessoais decifrados; sempre audita `ACESSO_DADO_PESSOAL` |
 | GET | `/v1/clientes/:id/fidelidade` | dono, ou ATENDENTE/GERENTE/ADMIN |
 | GET | `/v1/relatorios/vendas` | ANALISTA_MATRIZ |
 | GET | `/v1/auditoria` | ANALISTA_MATRIZ, ADMIN |
@@ -132,11 +137,12 @@ src/
   server.js                 montagem do Express e middlewares
   config.js  db.js
   auth/          jwt.js (assinar/autenticar) · rbac.js · routes.js (login)
-  lib/           errors.js · asyncHandler.js · audit.js · estoque.js · pontos.js
+  lib/           errors.js · asyncHandler.js · audit.js · estoque.js · pontos.js · dadosPessoais.js
   modules/
     catalogo/routes.js
     pedidos/routes.js (criar, status, cancelamento) · stateMachine.js
     pagamento/webhookRoutes.js · pspClient.js
+    clientes/routes.js        (cadastro do cliente, dados pessoais decifrados sob auditoria)
     fidelidade/routes.js
     auditoria/routes.js
     relatorios/routes.js
@@ -172,7 +178,10 @@ criação de pedido com validação e reserva de estoque em transação, integra
 efeitos (status, pontos condicionados a consentimento LGPD, devolução de estoque),
 fila da cozinha e máquina de estados, trilha de auditoria, relatório de vendas agregado,
 **cancelamento de pedido pago com estorno ao PSP, reversão de pontos e devolução de
-estoque (RF-13, CT-17)**.
+estoque (RF-13, CT-17)**, **dados pessoais do cliente (nome, CPF, e-mail, telefone)
+cifrados em repouso com pgcrypto — `pgp_sym_encrypt`/`pgp_sym_decrypt`, chave fora do
+código (`DADOS_PESSOAIS_CHAVE`) — com acesso restrito a ADMIN/GERENTE_UNIDADE e sempre
+auditado (`ACESSO_DADO_PESSOAL`) (RNF-06)**.
 
 **Ainda não implementado (documentado no PDF, fora do recorte "caminho de ouro"):**
 o endpoint de desconto manual; resgate de pontos (RF-20);

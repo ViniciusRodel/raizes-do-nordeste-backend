@@ -30,6 +30,7 @@ services:
       PSP_BASE_URL: http://psp-fake:4000
       PSP_WEBHOOK_SECRET: dev-psp-hmac-secret
       WEBHOOK_URL_PUBLICA: http://api:3000/v1/webhooks/pagamento
+      DADOS_PESSOAIS_CHAVE: dev-chave-dados-pessoais
     ports:
       - "3000:3000"
     volumes:

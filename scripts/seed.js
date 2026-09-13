@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const { pool } = require('../src/db');
+const { criarClienteCifrado } = require('../src/lib/dadosPessoais');
 
 const PRECOS = {
   'Tapioca de Queijo Coalho': 12.0,
@@ -82,13 +83,22 @@ async function main() {
     }
 
     // Clientes: Maria consente FIDELIDADE (acumula pontos); Joao NAO consente (CT-15).
-    const { rows: cli } = await client.query(
-      `INSERT INTO cliente (nome_cif) VALUES
-         (convert_to('Maria Souza', 'UTF8')),
-         (convert_to('Joao Lima', 'UTF8'))
-       RETURNING id`,
-    );
-    const [maria, joao] = cli.map((r) => r.id);
+    // nome/cpf/email/telefone gravados cifrados em repouso (pgcrypto) - ver
+    // src/lib/dadosPessoais.js; dados ficticios, so para o seed de exemplo.
+    const maria = await criarClienteCifrado(client, {
+      nome: 'Maria Souza',
+      cpf: '123.456.789-00',
+      email: 'maria.souza@example.com',
+      telefone: '+55 51 99999-0001',
+      dataNascimento: '1990-04-12',
+    });
+    const joao = await criarClienteCifrado(client, {
+      nome: 'Joao Lima',
+      cpf: '987.654.321-00',
+      email: 'joao.lima@example.com',
+      telefone: '+55 51 99999-0002',
+      dataNascimento: '1988-11-03',
+    });
     await client.query(
       `INSERT INTO consentimento_lgpd (cliente_id, finalidade) VALUES
          ($1, 'FIDELIDADE'), ($1, 'CAMPANHA_SEGMENTADA')`,

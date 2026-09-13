@@ -15,7 +15,8 @@
     { "key": "pedido_id", "value": "" },
     { "key": "charge_id", "value": "" },
     { "key": "pedido2_id", "value": "" },
-    { "key": "charge2_id", "value": "" }
+    { "key": "charge2_id", "value": "" },
+    { "key": "token_admin", "value": "" }
   ],
   "item": [
     {
@@ -450,6 +451,60 @@
       "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
         "pm.test('400 Bad Request', () => pm.response.to.have.status(400));",
         "pm.test('codigo PAYLOAD_INVALIDO', () => pm.expect(pm.response.json().erro.codigo).to.eql('PAYLOAD_INVALIDO'));"
+      ] } } ]
+    },
+    {
+      "name": "30. Login - Admin",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/v1/auth/login", "host": ["{{baseUrl}}"], "path": ["v1", "auth", "login"] },
+        "body": { "mode": "raw", "raw": "{\n  \"login\": \"admin\",\n  \"senha\": \"senha123\"\n}" }
+      },
+      "event": [
+        { "listen": "test", "script": { "type": "text/javascript", "exec": [
+          "pm.collectionVariables.set('token_admin', pm.response.json().token);",
+          "pm.test('200', () => pm.response.to.have.status(200));"
+        ] } }
+      ]
+    },
+    {
+      "name": "31. Admin consulta cadastro do cliente (dados decifrados)  [RNF-06]",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token_admin}}" }],
+        "url": { "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_maria}}", "host": ["{{baseUrl}}"], "path": ["v1", "clientes", "{{cliente_id_maria}}"] }
+      },
+      "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
+        "const j = pm.response.json();",
+        "pm.test('200 e nome/cpf decifrados corretamente', () => { pm.response.to.have.status(200); pm.expect(j.nome).to.eql('Maria Souza'); pm.expect(j.cpf).to.eql('123.456.789-00'); });"
+      ] } } ]
+    },
+    {
+      "name": "32. Negativo: Atendente NAO pode ver cadastro do cliente => 403",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token_atendente}}" }],
+        "url": { "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_maria}}", "host": ["{{baseUrl}}"], "path": ["v1", "clientes", "{{cliente_id_maria}}"] }
+      },
+      "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
+        "pm.test('403 Forbidden', () => pm.response.to.have.status(403));"
+      ] } } ]
+    },
+    {
+      "name": "33. Auditoria mostra o ACESSO_DADO_PESSOAL do Admin",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token_analista}}" }],
+        "url": {
+          "raw": "{{baseUrl}}/v1/auditoria?tipo=ACESSO_DADO_PESSOAL",
+          "host": ["{{baseUrl}}"], "path": ["v1", "auditoria"],
+          "query": [{ "key": "tipo", "value": "ACESSO_DADO_PESSOAL" }]
+        }
+      },
+      "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
+        "const j = pm.response.json();",
+        "pm.test('200 e registrou o acesso ao dado pessoal', () => { pm.response.to.have.status(200); pm.expect(j.registros.some(r => r.tipo === 'ACESSO_DADO_PESSOAL')).to.be.true; });"
       ] } } ]
     }
   ]

@@ -9,22 +9,41 @@ antes da execução.
 ## Resultado da coleção Postman (Newman)
 
 ```
-29 requests, 29 test-scripts, 38 assertions — 0 falhas
+33 requests, 33 test-scripts, 42 assertions — 0 falhas
 ```
 
-Cobre o caminho de ouro completo, incluindo **cancelamento de pedido pago com estorno**
-(RF-13, CT-17): cria um segundo pedido, aprova o pagamento, credita pontos, cancela com
-`motivo` obrigatório, confirma que o PSP fake marca a cobrança como `ESTORNADO`, que os
-pontos creditados são revertidos (`saldo` volta ao valor anterior) e que a trilha de
-auditoria registra `CANCELAMENTO` com autor/papel/motivo. Mais dois negativos: cancelar
-um pedido já `ENTREGUE` (409) e cancelar sem `motivo` (400).
+Cobre o caminho de ouro completo:
+- **Cancelamento de pedido pago com estorno** (RF-13, CT-17): cria um segundo pedido, aprova
+  o pagamento, credita pontos, cancela com `motivo` obrigatório, confirma que o PSP fake marca
+  a cobrança como `ESTORNADO`, que os pontos creditados são revertidos (`saldo` volta ao valor
+  anterior) e que a trilha de auditoria registra `CANCELAMENTO` com autor/papel/motivo. Mais
+  dois negativos: cancelar um pedido já `ENTREGUE` (409) e cancelar sem `motivo` (400).
+- **Dados pessoais cifrados em repouso** (RNF-06): `GET /v1/clientes/:id` (só ADMIN/GERENTE_UNIDADE)
+  devolve nome/CPF/e-mail/telefone **decifrados na hora** com `pgp_sym_decrypt` (pgcrypto) — na
+  tabela eles ficam como `BYTEA` cifrado com `pgp_sym_encrypt`, nunca texto plano. Testado também
+  que um papel sem permissão (ATENDENTE) recebe 403, e que o acesso gera auditoria
+  `ACESSO_DADO_PESSOAL` com autor e papel.
 
 Arquivos desta pasta:
 - `relatorio-execucao.html` — relatório visual completo (newman-reporter-htmlextra); abra no navegador.
 - `newman-output.txt` — saída da execução em texto (linha de comando).
-- `auditoria-exemplo.json` — resposta real de `GET /v1/auditoria`, incluindo o registro
-  `CANCELAMENTO` (pedido 2, motivo "Cozinha sem insumo para produzir o pedido") e o
-  `PAGAMENTO_CONFIRMADO` do webhook.
+- `auditoria-exemplo.json` — resposta real de `GET /v1/auditoria`, incluindo os registros
+  `ACESSO_DADO_PESSOAL`, `CANCELAMENTO` (com motivo) e `PAGAMENTO_CONFIRMADO`.
+
+## Cifragem verificada diretamente no banco (fora da coleção)
+
+```sql
+-- dado bruto na tabela: binario ilegivel (comeca com \xc30d0407..., cabecalho OpenPGP)
+SELECT nome_cif FROM cliente WHERE id = 1;
+
+-- com a chave certa, decifra
+SELECT pgp_sym_decrypt(nome_cif, 'dev-chave-dados-pessoais') FROM cliente WHERE id = 1;
+--> 'Maria Souza'
+
+-- com a chave errada, falha (prova que e cifragem de verdade, nao so encoding)
+SELECT pgp_sym_decrypt(nome_cif, 'chave-errada') FROM cliente WHERE id = 1;
+--> ERROR:  Wrong key or corrupt data
+```
 
 ## Bug real encontrado e corrigido nesta execução
 
