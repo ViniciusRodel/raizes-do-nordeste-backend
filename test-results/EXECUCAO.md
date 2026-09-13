@@ -9,14 +9,22 @@ antes da execução.
 ## Resultado da coleção Postman (Newman)
 
 ```
-21 requests, 21 test-scripts, 28 assertions — 0 falhas
+29 requests, 29 test-scripts, 38 assertions — 0 falhas
 ```
+
+Cobre o caminho de ouro completo, incluindo **cancelamento de pedido pago com estorno**
+(RF-13, CT-17): cria um segundo pedido, aprova o pagamento, credita pontos, cancela com
+`motivo` obrigatório, confirma que o PSP fake marca a cobrança como `ESTORNADO`, que os
+pontos creditados são revertidos (`saldo` volta ao valor anterior) e que a trilha de
+auditoria registra `CANCELAMENTO` com autor/papel/motivo. Mais dois negativos: cancelar
+um pedido já `ENTREGUE` (409) e cancelar sem `motivo` (400).
 
 Arquivos desta pasta:
 - `relatorio-execucao.html` — relatório visual completo (newman-reporter-htmlextra); abra no navegador.
 - `newman-output.txt` — saída da execução em texto (linha de comando).
-- `auditoria-exemplo.json` — resposta real de `GET /v1/auditoria` após o webhook de pagamento
-  aprovado, mostrando o registro `PAGAMENTO_CONFIRMADO` gravado pela trilha de auditoria.
+- `auditoria-exemplo.json` — resposta real de `GET /v1/auditoria`, incluindo o registro
+  `CANCELAMENTO` (pedido 2, motivo "Cozinha sem insumo para produzir o pedido") e o
+  `PAGAMENTO_CONFIRMADO` do webhook.
 
 ## Bug real encontrado e corrigido nesta execução
 

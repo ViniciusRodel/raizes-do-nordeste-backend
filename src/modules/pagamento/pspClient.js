@@ -30,4 +30,26 @@ async function solicitarCobranca({ valor, pedidoId, chaveIdempotencia }) {
   return resp.json(); // { idTransacao, meio, dadosPagamento }
 }
 
-module.exports = { solicitarCobranca };
+/**
+ * Solicita o estorno de uma cobranca ja aprovada (RF-13).
+ * Usado no cancelamento de pedido pago (POST /v1/pedidos/:id/cancelamento).
+ * Diferente da cobranca, o estorno aqui e sincrono: o PSP confirma na resposta
+ * (nao volta por webhook) — simplificacao razoavel para esta entrega.
+ *
+ * @throws Error com .pspStatus quando o PSP responde erro de HTTP.
+ */
+async function solicitarEstorno({ idTransacaoPSP }) {
+  const resp = await fetch(`${pspBaseUrl}/charges/${idTransacaoPSP}/estornar`, {
+    method: 'POST',
+    signal: AbortSignal.timeout(5000),
+  });
+  if (!resp.ok) {
+    const texto = await resp.text().catch(() => '');
+    const err = new Error(`PSP respondeu HTTP ${resp.status}: ${texto}`);
+    err.pspStatus = resp.status;
+    throw err;
+  }
+  return resp.json(); // { idTransacao, status: 'ESTORNADO' }
+}
+
+module.exports = { solicitarCobranca, solicitarEstorno };

@@ -77,6 +77,16 @@ app.post('/charges/:id/reenviar', async (req, res) => {
   res.json(await dispararWebhook(c, c.status, true));
 });
 
+app.post('/charges/:id/estornar', (req, res) => {
+  const c = charges.get(req.params.id);
+  if (!c) return res.status(404).json({ erro: 'cobranca nao encontrada' });
+  if (c.status !== 'APROVADO') {
+    return res.status(409).json({ erro: 'so e possivel estornar cobranca aprovada', statusAtual: c.status });
+  }
+  c.status = 'ESTORNADO';
+  res.json({ idTransacao: c.id, status: 'ESTORNADO' });
+});
+
 app.get('/health', (_req, res) => res.json({ status: 'ok' }));
 
 app.listen(PORT, () => console.log(`PSP fake ouvindo em http://localhost:${PORT}`));

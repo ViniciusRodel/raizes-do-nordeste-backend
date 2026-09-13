@@ -86,8 +86,15 @@ npx newman run postman/raizes-do-nordeste.postman_collection.json \
 | 17 | ENTREGUE → EM_PREPARO devolve **409** | **CT-20** |
 | 18 | `GET /v1/relatorios/vendas` com token do cozinheiro → **403** | **CT-16** (RBAC) |
 | 19 | mesmo endpoint com o Analista → 200 | CT-07 (parcial) |
-| 20 | `GET /v1/auditoria` — registro `PAGAMENTO_CONFIRMADO` | RF-14 / evidência de CT-17 |
+| 20 | `GET /v1/auditoria` — registro `PAGAMENTO_CONFIRMADO` | RF-14 |
 | 21 | `POST /v1/pedidos` com a Canjica fora de junho → **422** | **CT-13** |
+| 22–23 | Cria um 2º pedido (Cuscuz) e aprova o pagamento | RF-05, RF-09 |
+| 24 | Fidelidade da Maria: 30 + 18 = 48 pontos | RF-19 |
+| 25 | `POST /v1/pedidos/:id/cancelamento` no pedido **pago**, com `motivo` → `CANCELADO_COM_ESTORNO` | **CT-17** |
+| 26 | Fidelidade da Maria: pontos do 2º pedido estornados, saldo volta a 30 | RF-13, RF-19 |
+| 27 | `GET /v1/auditoria?tipo=CANCELAMENTO` — registro com autor, papel e motivo | RF-14 |
+| 28 | Cancelar o 1º pedido (já `ENTREGUE`) → **409** | RF-13 |
+| 29 | Cancelar sem `motivo` → **400** | RF-14 (operação sensível exige motivo) |
 
 Outros negativos já suportados pelo código, sem passo dedicado na coleção:
 **CT-02** (pedido no totem sem `clienteId`), **CT-03** (pedido pelo atendente),
@@ -108,6 +115,7 @@ Outros negativos já suportados pelo código, sem passo dedicado na coleção:
 | GET | `/v1/pedidos/:id` | autenticado (cliente só vê o próprio) |
 | GET | `/v1/unidades/:id/fila-cozinha` | COZINHEIRO, GERENTE_UNIDADE |
 | PATCH | `/v1/pedidos/:id/status` | COZINHEIRO, ATENDENTE, GERENTE_UNIDADE |
+| POST | `/v1/pedidos/:id/cancelamento` | ATENDENTE, GERENTE_UNIDADE (exige `motivo`) |
 | GET | `/v1/clientes/:id/fidelidade` | dono, ou ATENDENTE/GERENTE/ADMIN |
 | GET | `/v1/relatorios/vendas` | ANALISTA_MATRIZ |
 | GET | `/v1/auditoria` | ANALISTA_MATRIZ, ADMIN |
@@ -124,10 +132,10 @@ src/
   server.js                 montagem do Express e middlewares
   config.js  db.js
   auth/          jwt.js (assinar/autenticar) · rbac.js · routes.js (login)
-  lib/           errors.js · asyncHandler.js · audit.js
+  lib/           errors.js · asyncHandler.js · audit.js · estoque.js · pontos.js
   modules/
     catalogo/routes.js
-    pedidos/routes.js · stateMachine.js
+    pedidos/routes.js (criar, status, cancelamento) · stateMachine.js
     pagamento/webhookRoutes.js · pspClient.js
     fidelidade/routes.js
     auditoria/routes.js
@@ -162,10 +170,12 @@ Rodar a coleção via Newman dentro do pipeline de CI é o próximo incremento (
 criação de pedido com validação e reserva de estoque em transação, integração com o PSP
 (solicitação + webhook assinado + idempotência), confirmação/recusa de pagamento com
 efeitos (status, pontos condicionados a consentimento LGPD, devolução de estoque),
-fila da cozinha e máquina de estados, trilha de auditoria, relatório de vendas agregado.
+fila da cozinha e máquina de estados, trilha de auditoria, relatório de vendas agregado,
+**cancelamento de pedido pago com estorno ao PSP, reversão de pontos e devolução de
+estoque (RF-13, CT-17)**.
 
 **Ainda não implementado (documentado no PDF, fora do recorte "caminho de ouro"):**
-cancelamento com estorno (CT-17) e o endpoint de desconto manual; resgate de pontos (RF-20);
+o endpoint de desconto manual; resgate de pontos (RF-20);
 campanhas segmentadas (RF-21); revogação de consentimento + anonimização (RF-18 / CT-18);
 tabelas `consolidado_*` + job de agregação (hoje o relatório lê direto das transacionais);
 reprocessamento automático de `PAGAMENTO_PENDENTE` com backoff; réplica de leitura, cache Redis

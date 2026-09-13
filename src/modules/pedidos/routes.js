@@ -6,6 +6,9 @@ const { erro } = require('../../lib/errors');
 const { requer } = require('../../auth/rbac');
 const { podeTransicionar } = require('./stateMachine');
 const psp = require('../pagamento/pspClient');
+const { registrarAuditoria } = require('../../lib/audit');
+const { devolverEstoque } = require('../../lib/estoque');
+const { estornarPontos } = require('../../lib/pontos');
 
 const router = express.Router();
 const CANAIS = ['APP', 'TOTEM', 'BALCAO', 'PICKUP'];
@@ -260,6 +263,94 @@ router.patch(
     });
 
     res.json(atualizado);
+  }),
+);
+
+// ---------------------------------------------------------------------------
+// POST /v1/pedidos/:id/cancelamento  -> RF-13, RF-14 (CT-17)
+// Operacao sensivel: exige motivo, gera auditoria. Se o pedido ja tinha
+// pagamento aprovado, soliciata estorno ao PSP e vai para
+// CANCELADO_COM_ESTORNO; caso contrario vai para CANCELADO. Em ambos os
+// casos o estoque reservado e devolvido. Decisao de negocio documentada no
+// PDF (Secao 2.3, ambiguidade 2): pedido pago que a cozinha nao consegue
+// produzir e cancelado com estorno, nunca silenciosamente.
+// ---------------------------------------------------------------------------
+router.post(
+  '/pedidos/:id/cancelamento',
+  requer('ATENDENTE', 'GERENTE_UNIDADE'),
+  asyncHandler(async (req, res) => {
+    const { motivo } = req.body || {};
+    if (!motivo || !String(motivo).trim()) {
+      throw erro(400, 'PAYLOAD_INVALIDO', 'motivo e obrigatorio para cancelar um pedido');
+    }
+
+    const resultado = await db.withTransaction(async (client) => {
+      const { rows: peds } = await client.query(
+        'SELECT * FROM pedido WHERE id = $1 FOR UPDATE',
+        [req.params.id],
+      );
+      const pedido = peds[0];
+      if (!pedido) throw erro(404, 'PEDIDO_NAO_ENCONTRADO', 'Pedido inexistente');
+
+      const precisaEstorno = ['PAGO', 'EM_PREPARO'].includes(pedido.status);
+      const destino = precisaEstorno ? 'CANCELADO_COM_ESTORNO' : 'CANCELADO';
+      if (!podeTransicionar(pedido.status, destino)) {
+        throw erro(
+          409,
+          'TRANSICAO_INVALIDA',
+          `Pedido em ${pedido.status} nao pode ser cancelado por este endpoint`,
+        );
+      }
+
+      if (precisaEstorno) {
+        const { rows: pgs } = await client.query(
+          'SELECT * FROM pagamento WHERE pedido_id = $1 FOR UPDATE',
+          [pedido.id],
+        );
+        const pagamento = pgs[0];
+        if (pagamento?.status === 'APROVADO' && pagamento.id_transacao_psp) {
+          try {
+            await psp.solicitarEstorno({ idTransacaoPSP: pagamento.id_transacao_psp });
+          } catch (e) {
+            throw erro(
+              502,
+              'PSP_INDISPONIVEL',
+              'Nao foi possivel solicitar o estorno ao PSP; tente novamente em instantes',
+            );
+          }
+          await client.query(
+            "UPDATE pagamento SET status = 'ESTORNADO', resolvido_em = now() WHERE id = $1",
+            [pagamento.id],
+          );
+        }
+        await estornarPontos(client, pedido);
+      }
+
+      await devolverEstoque(client, pedido);
+
+      await client.query(
+        `UPDATE pedido
+            SET status = $1, cancelado_em = now(), motivo_cancelamento = $2
+          WHERE id = $3`,
+        [destino, motivo, pedido.id],
+      );
+
+      await registrarAuditoria(client, {
+        tipo: 'CANCELAMENTO',
+        usuarioId: req.usuario.id,
+        papel: req.usuario.papeis.join(','),
+        unidadeId: pedido.unidade_id,
+        entidadeAfetada: 'pedido',
+        entidadeId: pedido.id,
+        valorAnterior: { status: pedido.status },
+        valorNovo: { status: destino },
+        motivo,
+      });
+
+      return { pedidoId: pedido.id, status: destino };
+    });
+
+    res.json(resultado);
   }),
 );
 
