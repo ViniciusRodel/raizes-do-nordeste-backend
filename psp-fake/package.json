@@ -1,0 +1,13 @@
+{
+  "name": "psp-fake",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Provedor de pagamento simulado para a demonstracao (nao e parte do sistema)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
