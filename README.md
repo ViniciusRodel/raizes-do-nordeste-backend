@@ -148,8 +148,11 @@ npm test          # unitário: regras da máquina de estados do pedido
 ```
 
 O workflow em `.github/workflows/ci.yml` roda `npm test` a cada push/PR.
-Testes de integração contra PostgreSQL/RabbitMQ reais e a execução da coleção via Newman
-no pipeline são o próximo incremento (RNF-12).
+
+**A coleção Postman foi executada de ponta a ponta contra o stack real** (API + PostgreSQL +
+PSP fake) — evidência, relatório HTML e os detalhes (incluindo um bug real encontrado e
+corrigido nessa execução) estão em [`test-results/EXECUCAO.md`](test-results/EXECUCAO.md).
+Rodar a coleção via Newman dentro do pipeline de CI é o próximo incremento (RNF-12).
 
 ---
 

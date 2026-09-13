@@ -1,0 +1,116 @@
+(node:9316) [DEP0176] DeprecationWarning: fs.F_OK is deprecated, use fs.constants.F_OK instead
+(Use `node --trace-deprecation ...` to show where the warning was created)
+newman
+
+Raizes do Nordeste - Back-end (caminho de ouro)
+
+→ 1. Login - Cliente (Maria)
+  POST http://localhost:3000/v1/auth/login [200 OK, 536B, 82ms]
+  √  200 e token recebido
+
+→ 2. Login - Atendente
+  POST http://localhost:3000/v1/auth/login [200 OK, 550B, 20ms]
+  √  200
+
+→ 3. Login - Cozinheiro
+  POST http://localhost:3000/v1/auth/login [200 OK, 554B, 19ms]
+  √  200
+
+→ 4. Login - Analista da Matriz
+  POST http://localhost:3000/v1/auth/login [200 OK, 567B, 19ms]
+  √  200
+
+→ 5. Cardapio da unidade 1 (canal APP)
+  GET http://localhost:3000/v1/unidades/1/cardapio?canal=APP [200 OK, 789B, 27ms]
+  √  200 e lista de itens
+  √  Canjica sazonal NAO aparece fora de junho/2026
+
+→ 6. Criar pedido (Cliente, canal APP)  [CT-01]
+  POST http://localhost:3000/v1/pedidos [201 Created, 448B, 72ms]
+  √  201 Created
+  √  status AGUARDANDO_PAGAMENTO
+  √  total = 1x12 + 2x9 = 30
+
+→ 7. Consultar pedido (AGUARDANDO_PAGAMENTO)
+  GET http://localhost:3000/v1/pedidos/1 [200 OK, 677B, 3ms]
+  √  200
+  √  ainda nao pago
+
+→ 8. PSP: aprovar cobranca (dispara webhook)  [CT-04]
+  POST http://localhost:4000/charges/psp_1aa67ecb794231c8/aprovar [200 OK, 381B, 41ms]
+  √  webhook entregue com 200
+
+→ 9. Consultar pedido (agora PAGO)
+  GET http://localhost:3000/v1/pedidos/1 [200 OK, 683B, 4ms]
+  √  status PAGO
+
+→ 10. Fidelidade da Maria (pontos creditados)
+  GET http://localhost:3000/v1/clientes/1/fidelidade [200 OK, 368B, 7ms]
+  √  saldo = 30 pontos (1 por real)
+
+→ 11. PSP: reenviar o MESMO webhook (idempotencia)  [CT-11]
+  POST http://localhost:4000/charges/psp_1aa67ecb794231c8/reenviar [200 OK, 381B, 10ms]
+  √  webhook reenviado com 200
+
+→ 12. Fidelidade da Maria (saldo NAO dobrou)
+  GET http://localhost:3000/v1/clientes/1/fidelidade [200 OK, 368B, 6ms]
+  √  saldo continua 30 (idempotencia)
+
+→ 13. Fila da cozinha (unidade 1)  [CT-05]
+  GET http://localhost:3000/v1/unidades/1/fila-cozinha [200 OK, 391B, 6ms]
+  √  200 e o pedido esta na fila
+
+→ 14. Avancar status -> EM_PREPARO
+  PATCH http://localhost:3000/v1/pedidos/1/status [200 OK, 265B, 7ms]
+  √  200 e EM_PREPARO
+
+→ 15. Avancar status -> PRONTO
+  PATCH http://localhost:3000/v1/pedidos/1/status [200 OK, 261B, 3ms]
+  √  200 e PRONTO
+
+→ 16. Avancar status -> ENTREGUE
+  PATCH http://localhost:3000/v1/pedidos/1/status [200 OK, 263B, 14ms]
+  √  200 e ENTREGUE
+
+→ 17. Transicao invalida (ENTREGUE -> EM_PREPARO) => 409  [CT-20]
+  PATCH http://localhost:3000/v1/pedidos/1/status [409 Conflict, 340B, 3ms]
+  √  409 Conflict
+  √  codigo TRANSICAO_INVALIDA
+
+→ 18. RBAC: relatorio de vendas com token do Cozinheiro => 403  [CT-16]
+  GET http://localhost:3000/v1/relatorios/vendas [403 Forbidden, 320B, 1ms]
+  √  403 Forbidden
+  √  codigo ACESSO_NEGADO
+
+→ 19. Relatorio de vendas com Analista => 200  [CT-07 parcial]
+  GET http://localhost:3000/v1/relatorios/vendas [200 OK, 392B, 8ms]
+  √  200 e series agregadas
+
+→ 20. Trilha de auditoria (Analista)  [CT-17 evidencia]
+  GET http://localhost:3000/v1/auditoria [200 OK, 527B, 10ms]
+  √  200 e registrou PAGAMENTO_CONFIRMADO
+
+→ 21. Negativo: item sazonal fora da janela => 422  [CT-13]
+  POST http://localhost:3000/v1/pedidos [422 Unprocessable Entity, 411B, 3ms]
+  √  422 Unprocessable
+  √  motivo FORA_DA_JANELA_SAZONAL
+
+┌─────────────────────────┬──────────────────┬──────────────────┐
+│                         │         executed │           failed │
+├─────────────────────────┼──────────────────┼──────────────────┤
+│              iterations │                1 │                0 │
+├─────────────────────────┼──────────────────┼──────────────────┤
+│                requests │               21 │                0 │
+├─────────────────────────┼──────────────────┼──────────────────┤
+│            test-scripts │               21 │                0 │
+├─────────────────────────┼──────────────────┼──────────────────┤
+│      prerequest-scripts │                0 │                0 │
+├─────────────────────────┼──────────────────┼──────────────────┤
+│              assertions │               28 │                0 │
+├─────────────────────────┴──────────────────┴──────────────────┤
+│ total run duration: 2.1s                                      │
+├───────────────────────────────────────────────────────────────┤
+│ total data received: 4.48kB (approx)                          │
+├───────────────────────────────────────────────────────────────┤
+│ average response time: 17ms [min: 1ms, max: 82ms, s.d.: 21ms] │
+└───────────────────────────────────────────────────────────────┘
