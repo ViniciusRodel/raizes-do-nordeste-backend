@@ -99,6 +99,15 @@ npx newman run postman/raizes-do-nordeste.postman_collection.json \
 | 31 | `GET /v1/clientes/:id` (Admin) — nome/CPF decifrados corretamente | **RNF-06** |
 | 32 | Mesmo endpoint com token do Atendente → **403** | RNF-07 (RBAC) |
 | 33 | `GET /v1/auditoria?tipo=ACESSO_DADO_PESSOAL` — registra quem acessou | RF-14 |
+| 34 | Login Joao | RF-25 |
+| 35 | Joao tenta revogar consentimento da Maria → **403** | RNF-07 |
+| 36–37 | Maria revoga o próprio consentimento de FIDELIDADE (idempotente na 2ª chamada) | **RF-18** |
+| 38 | `POST /v1/clientes/:id/anonimizacao` → `anonimizado: true` | **RF-18 / CT-18** |
+| 39 | Anonimizar de novo → **409** `JA_ANONIMIZADO` | RF-18 |
+| 40 | Admin confirma: nome/CPF/e-mail/telefone agora `null` | RNF-06 |
+| 41–43 | Novo pedido pago da Maria → saldo de pontos **não muda** (consentimento revogado) | **CT-18** |
+| 44 | `GET /v1/auditoria?tipo=ANONIMIZACAO` | RF-14 |
+| 45–46 | Joao registra consentimento (`POST /consentimentos`); repetir a mesma finalidade → **409** | **RF-17** |
 
 Outros negativos já suportados pelo código, sem passo dedicado na coleção:
 **CT-02** (pedido no totem sem `clienteId`), **CT-03** (pedido pelo atendente),
@@ -121,6 +130,9 @@ Outros negativos já suportados pelo código, sem passo dedicado na coleção:
 | PATCH | `/v1/pedidos/:id/status` | COZINHEIRO, ATENDENTE, GERENTE_UNIDADE |
 | POST | `/v1/pedidos/:id/cancelamento` | ATENDENTE, GERENTE_UNIDADE (exige `motivo`) |
 | GET | `/v1/clientes/:id` | ADMIN, GERENTE_UNIDADE — dados pessoais decifrados; sempre audita `ACESSO_DADO_PESSOAL` |
+| POST | `/v1/clientes/:id/consentimentos` | CLIENTE (dono), ATENDENTE — 409 se já vigente |
+| DELETE | `/v1/clientes/:id/consentimentos/:cid` | CLIENTE (dono) — idempotente |
+| POST | `/v1/clientes/:id/anonimizacao` | CLIENTE (dono), ADMIN — 409 se já anonimizado |
 | GET | `/v1/clientes/:id/fidelidade` | dono, ou ATENDENTE/GERENTE/ADMIN |
 | GET | `/v1/relatorios/vendas` | ANALISTA_MATRIZ |
 | GET | `/v1/auditoria` | ANALISTA_MATRIZ, ADMIN |
@@ -142,7 +154,7 @@ src/
     catalogo/routes.js
     pedidos/routes.js (criar, status, cancelamento) · stateMachine.js
     pagamento/webhookRoutes.js · pspClient.js
-    clientes/routes.js        (cadastro do cliente, dados pessoais decifrados sob auditoria)
+    clientes/routes.js        (cadastro decifrado, consentimentos, anonimizacao - RF-17/RF-18)
     fidelidade/routes.js
     auditoria/routes.js
     relatorios/routes.js
@@ -181,11 +193,14 @@ fila da cozinha e máquina de estados, trilha de auditoria, relatório de vendas
 estoque (RF-13, CT-17)**, **dados pessoais do cliente (nome, CPF, e-mail, telefone)
 cifrados em repouso com pgcrypto — `pgp_sym_encrypt`/`pgp_sym_decrypt`, chave fora do
 código (`DADOS_PESSOAIS_CHAVE`) — com acesso restrito a ADMIN/GERENTE_UNIDADE e sempre
-auditado (`ACESSO_DADO_PESSOAL`) (RNF-06)**.
+auditado (`ACESSO_DADO_PESSOAL`) (RNF-06)**, **registro e revogação de consentimento LGPD
+e anonimização do cliente (RF-17, RF-18, CT-18)** — anonimizar revoga também os
+consentimentos ainda vigentes, então o acúmulo de pontos e a elegibilidade a campanha
+segmentada cessam sozinhos, sem lógica especial; o histórico de pedidos permanece
+vinculado ao `cliente_id`, só sem dado pessoal associado.
 
 **Ainda não implementado (documentado no PDF, fora do recorte "caminho de ouro"):**
-o endpoint de desconto manual; resgate de pontos (RF-20);
-campanhas segmentadas (RF-21); revogação de consentimento + anonimização (RF-18 / CT-18);
+o endpoint de desconto manual; resgate de pontos (RF-20); campanhas segmentadas (RF-21);
 tabelas `consolidado_*` + job de agregação (hoje o relatório lê direto das transacionais);
 reprocessamento automático de `PAGAMENTO_PENDENTE` com backoff; réplica de leitura, cache Redis
 e broker de eventos (RabbitMQ) — os efeitos de negócio já estão isolados em funções, prontos

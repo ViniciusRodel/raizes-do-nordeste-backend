@@ -9,7 +9,7 @@ antes da execução.
 ## Resultado da coleção Postman (Newman)
 
 ```
-33 requests, 33 test-scripts, 42 assertions — 0 falhas
+46 requests, 46 test-scripts, 57 assertions — 0 falhas
 ```
 
 Cobre o caminho de ouro completo:
@@ -23,12 +23,19 @@ Cobre o caminho de ouro completo:
   tabela eles ficam como `BYTEA` cifrado com `pgp_sym_encrypt`, nunca texto plano. Testado também
   que um papel sem permissão (ATENDENTE) recebe 403, e que o acesso gera auditoria
   `ACESSO_DADO_PESSOAL` com autor e papel.
+- **Revogação de consentimento e anonimização** (RF-17, RF-18, CT-18): registra consentimento
+  (`POST /clientes/:id/consentimentos`, com 409 se já vigente), revoga (idempotente), solicita
+  anonimização (`POST /clientes/:id/anonimizacao`) e confirma que: o cadastro passa a devolver
+  nome/CPF/e-mail/telefone `null`; um novo pedido pago **não** credita pontos (o consentimento de
+  FIDELIDADE foi revogado junto); o pedido antigo continua no histórico com `cliente_id` intacto
+  (sem dado pessoal associado); anonimizar de novo dá `409 JA_ANONIMIZADO`; e a auditoria registra
+  `ANONIMIZACAO`. Mais um negativo: outro cliente tentando revogar consentimento alheio → 403.
 
 Arquivos desta pasta:
 - `relatorio-execucao.html` — relatório visual completo (newman-reporter-htmlextra); abra no navegador.
 - `newman-output.txt` — saída da execução em texto (linha de comando).
 - `auditoria-exemplo.json` — resposta real de `GET /v1/auditoria`, incluindo os registros
-  `ACESSO_DADO_PESSOAL`, `CANCELAMENTO` (com motivo) e `PAGAMENTO_CONFIRMADO`.
+  `ANONIMIZACAO`, `ACESSO_DADO_PESSOAL`, `CANCELAMENTO` (com motivo) e `PAGAMENTO_CONFIRMADO`.
 
 ## Cifragem verificada diretamente no banco (fora da coleção)
 
