@@ -164,6 +164,7 @@ psp-fake/server.js           provedor de pagamento simulado (fora do sistema)
 postman/                     coleção + environment
 loadtest/pedidos.js          script k6 do teste de carga (CT-19)
 test/stateMachine.test.js    unitário puro (roda no CI, sem banco)
+docs/diagramas.drawio        casos de uso, classes, DER, componentes, máquina de estados
 ```
 
 ---
