@@ -10,8 +10,11 @@ const { registrarAuditoria } = require('../../lib/audit');
 const { devolverEstoque } = require('../../lib/estoque');
 const { estornarPontos, resgatarPontos, reverterResgate } = require('../../lib/pontos');
 const { CANAIS } = require('../../lib/canais');
+const { DESCONTO_TIPOS } = require('../../lib/descontoTipos');
 
 const router = express.Router();
+// Desconto manual (RF-14, operacao sensivel): atendente tem teto; gerente/admin nao.
+const LIMITE_ATENDENTE = { PERCENTUAL: 10, VALOR_FIXO: 20 };
 
 // ---------------------------------------------------------------------------
 // POST /v1/pedidos  -> RF-05, RF-06, RF-15, RF-08 (CT-01/02/03/10/13/14)
@@ -210,7 +213,7 @@ router.get(
     const id = parseId(req.params.id);
     const { rows } = await db.query(
       `SELECT p.id, p.unidade_id, p.canal, p.cliente_id, p.status,
-              p.subtotal, p.desconto_pontos, p.total, p.criado_em, p.pago_em,
+              p.subtotal, p.desconto_pontos, p.desconto_manual, p.total, p.criado_em, p.pago_em,
               COALESCE(
                 json_agg(json_build_object(
                   'produtoId', ip.produto_base_id,
@@ -243,6 +246,7 @@ router.get(
       status: pedido.status,
       subtotal: pedido.subtotal,
       descontoPontos: pedido.desconto_pontos,
+      descontoManual: pedido.desconto_manual,
       total: pedido.total,
       criadoEm: pedido.criado_em,
       pagoEm: pedido.pago_em,
@@ -311,6 +315,81 @@ router.patch(
     });
 
     res.json(atualizado);
+  }),
+);
+
+// ---------------------------------------------------------------------------
+// POST /v1/pedidos/:id/desconto  -> RF-14 (operacao sensivel)
+// Gerente/admin sem teto; atendente com teto (LIMITE_ATENDENTE). So permitido
+// antes do pagamento ser confirmado - alterar o total depois desincronizaria
+// da cobranca ja solicitada ao PSP. Reaplicar substitui o desconto anterior
+// (nao acumula), evitando ambiguidade sobre "somar ou substituir".
+// ---------------------------------------------------------------------------
+router.post(
+  '/pedidos/:id/desconto',
+  requer('GERENTE_UNIDADE', 'ATENDENTE', 'ADMIN'),
+  asyncHandler(async (req, res) => {
+    const { tipo, valor, motivo } = req.body || {};
+    if (!DESCONTO_TIPOS.includes(tipo)) {
+      throw erro(400, 'PAYLOAD_INVALIDO', `tipo deve ser um de ${DESCONTO_TIPOS.join(', ')}`);
+    }
+    const valorNum = Number(valor);
+    if (!Number.isFinite(valorNum) || valorNum <= 0) {
+      throw erro(400, 'PAYLOAD_INVALIDO', 'valor deve ser um numero positivo');
+    }
+    if (!motivo || !String(motivo).trim()) {
+      throw erro(400, 'PAYLOAD_INVALIDO', 'motivo e obrigatorio para desconto manual');
+    }
+
+    const ehGerenteOuAdmin = req.usuario.papeis.some((p) => ['GERENTE_UNIDADE', 'ADMIN'].includes(p));
+    if (!ehGerenteOuAdmin && valorNum > LIMITE_ATENDENTE[tipo]) {
+      throw erro(
+        422,
+        'LIMITE_EXCEDIDO',
+        `Atendente so pode aplicar ate ${LIMITE_ATENDENTE[tipo]}${tipo === 'PERCENTUAL' ? '%' : ' (valor fixo)'} sem gerente`,
+      );
+    }
+
+    const id = parseId(req.params.id);
+    const resultado = await db.withTransaction(async (client) => {
+      const { rows } = await client.query('SELECT * FROM pedido WHERE id = $1 FOR UPDATE', [id]);
+      const pedido = rows[0];
+      if (!pedido) throw erro(404, 'PEDIDO_NAO_ENCONTRADO', 'Pedido inexistente');
+      if (!['AGUARDANDO_PAGAMENTO', 'PAGAMENTO_PENDENTE'].includes(pedido.status)) {
+        throw erro(409, 'TRANSICAO_INVALIDA', 'Desconto so pode ser aplicado antes do pagamento ser confirmado');
+      }
+
+      const descontoAnterior = Number(pedido.desconto_manual);
+      const descontoManual = tipo === 'PERCENTUAL'
+        ? Number((Number(pedido.subtotal) * valorNum / 100).toFixed(2))
+        : valorNum;
+      const tetoDisponivel = Number(pedido.subtotal) - Number(pedido.desconto_pontos);
+      if (descontoManual > tetoDisponivel) {
+        throw erro(422, 'DESCONTO_EXCEDE_TOTAL', 'O desconto excede o total do pedido');
+      }
+
+      const total = Number((tetoDisponivel - descontoManual).toFixed(2));
+      await client.query(
+        'UPDATE pedido SET desconto_manual = $1, total = $2 WHERE id = $3',
+        [descontoManual, total, id],
+      );
+
+      await registrarAuditoria(client, {
+        tipo: 'DESCONTO_MANUAL',
+        usuarioId: req.usuario.id,
+        papel: req.usuario.papeis.join(','),
+        unidadeId: pedido.unidade_id,
+        entidadeAfetada: 'pedido',
+        entidadeId: id,
+        valorAnterior: { descontoManual: descontoAnterior },
+        valorNovo: { descontoManual, tipo, valorInformado: valorNum },
+        motivo,
+      });
+
+      return { pedidoId: id, subtotal: Number(pedido.subtotal), descontoPontos: Number(pedido.desconto_pontos), descontoManual, total };
+    });
+
+    res.json(resultado);
   }),
 );
 

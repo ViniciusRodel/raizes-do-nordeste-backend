@@ -15,6 +15,10 @@ jobs:
           node-version: "20"
       - run: npm install --no-audit --no-fund
       - run: npm test
+      - run: npm run lint
+      # RNF-12: cobertura minima de 70% no nucleo de dominio testavel isoladamente
+      # (maquina de estados do pedido) - build falha abaixo do limite.
+      - run: npm run test:coverage
 
   # Sobe a API real contra um Postgres real (servico do runner) + o PSP fake,
   # e roda a colecao Postman/Newman de ponta a ponta - mesmo fluxo validado

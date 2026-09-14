@@ -3,9 +3,9 @@ const db = require('../../db');
 const asyncHandler = require('../../lib/asyncHandler');
 const { erro, parseId } = require('../../lib/errors');
 const { requer } = require('../../auth/rbac');
+const { DESCONTO_TIPOS } = require('../../lib/descontoTipos');
 
 const router = express.Router();
-const DESCONTO_TIPOS = ['PERCENTUAL', 'VALOR_FIXO'];
 
 // ---------------------------------------------------------------------------
 // POST /v1/campanhas  -> RF-21

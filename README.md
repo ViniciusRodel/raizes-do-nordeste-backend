@@ -129,6 +129,7 @@ Outros negativos já suportados pelo código, sem passo dedicado na coleção:
 | GET | `/v1/unidades/:id/fila-cozinha` | COZINHEIRO, GERENTE_UNIDADE |
 | PATCH | `/v1/pedidos/:id/status` | COZINHEIRO, ATENDENTE, GERENTE_UNIDADE |
 | POST | `/v1/pedidos/:id/cancelamento` | ATENDENTE, GERENTE_UNIDADE (exige `motivo`) |
+| POST | `/v1/pedidos/:id/desconto` | GERENTE_UNIDADE/ADMIN sem teto; ATENDENTE com teto (10%/R$ 20) — só antes do pagamento, exige `motivo`, audita `DESCONTO_MANUAL` |
 | GET | `/v1/clientes/:id` | ADMIN, GERENTE_UNIDADE — dados pessoais decifrados; sempre audita `ACESSO_DADO_PESSOAL` |
 | POST | `/v1/clientes/:id/consentimentos` | CLIENTE (dono), ATENDENTE — 409 se já vigente |
 | DELETE | `/v1/clientes/:id/consentimentos/:cid` | CLIENTE (dono) — idempotente |
@@ -162,7 +163,7 @@ src/
   lib/           errors.js · asyncHandler.js · audit.js · estoque.js · pontos.js · dadosPessoais.js
   modules/
     catalogo/routes.js
-    pedidos/routes.js (criar, status, cancelamento, resgate de pontos - RF-20) · stateMachine.js
+    pedidos/routes.js (criar, status, cancelamento, resgate de pontos - RF-20, desconto manual - RF-14) · stateMachine.js
     pagamento/webhookRoutes.js · pspClient.js
     estoque/routes.js         (entrada e ajuste de estoque - RF-16)
     clientes/routes.js        (cadastro decifrado, consentimentos, anonimizacao - RF-17/RF-18)
@@ -185,16 +186,25 @@ docs/diagramas.drawio        casos de uso, classes, DER, componentes, máquina d
 ## Testes e CI
 
 ```bash
-npm test          # unitário: regras da máquina de estados do pedido
-npm run lint       # ESLint (regras recomendadas, config em eslint.config.js)
+npm test              # unitário: regras da máquina de estados do pedido
+npm run test:coverage # o mesmo, com gate de cobertura (RNF-12, ver abaixo)
+npm run lint           # ESLint (regras recomendadas, config em eslint.config.js)
 ```
 
-O workflow em `.github/workflows/ci.yml` tem dois jobs a cada push/PR:
-**`unit`** (`npm test`, sem serviços) e **`e2e`**, que sobe um PostgreSQL real como
-serviço do runner, aplica o schema e o seed, sobe a API e o PSP fake, e roda a
-coleção Postman completa via Newman (61 requests / 85 assertions) — o relatório
-HTML fica publicado como artefato do job (RNF-12 — automatizado, não é mais só
-execução manual).
+O workflow em `.github/workflows/ci.yml` tem um job **`unit`** a cada push/PR que roda
+`npm test`, `npm run lint` e `npm run test:coverage` (sem serviços), e um job **`e2e`**
+que sobe um PostgreSQL real como serviço do runner, aplica o schema e o seed, sobe a
+API e o PSP fake, e roda a coleção Postman completa via Newman (68 requests / 98
+assertions) — o relatório HTML fica publicado como artefato do job (RNF-12 —
+automatizado, não é mais só execução manual).
+
+**Cobertura de testes (RNF-12).** `npm run test:coverage` roda via `c8`, escopado ao
+único módulo hoje coberto por teste unitário isolado (sem banco): a máquina de estados
+do pedido (`src/modules/pedidos/stateMachine.js`), com **gate de 70% em linhas, branches
+e funções** — o build falha abaixo do limite (hoje: 100/100/100). O resto da lógica de
+domínio (`src/lib/*.js`) depende de PostgreSQL e é validado pela suíte de integração
+(Newman/CT-*), não por teste unitário isolado — por isso o escopo do gate é só o que é
+unitariamente testável hoje, não o repositório inteiro.
 
 **Evidência de execução real** (fora do CI, feita durante o desenvolvimento):
 - [`test-results/EXECUCAO.md`](test-results/EXECUCAO.md) — coleção completa contra
@@ -232,10 +242,12 @@ audita `AJUSTE_ESTOQUE`; gerente só mexe na própria unidade. **Campanhas segme
 consentimento `CAMPANHA_SEGMENTADA` vigente, filtrado por critério simples de
 frequência/faixa etária). **Ranking de produtos e exportação CSV do relatório de vendas
 (RF-22/RF-23)**. **Cadastro de usuário interno com papéis (RF-24)** — só ADMIN, audita
-`ALTERACAO_USUARIO`, senha nunca volta na resposta.
+`ALTERACAO_USUARIO`, senha nunca volta na resposta. **Desconto manual em um pedido ainda
+não pago** — gerente/admin sem teto, atendente com teto (10% ou R$ 20, o que for definido
+como `tipo`); reaplicar substitui o desconto anterior (não acumula); exige `motivo` e
+audita `DESCONTO_MANUAL`.
 
 **Ainda não implementado (documentado no PDF, fora do recorte "caminho de ouro"):**
-o endpoint de desconto manual em um pedido já criado;
 tabelas `consolidado_*` + job de agregação (hoje o relatório lê direto das transacionais);
 reprocessamento automático de `PAGAMENTO_PENDENTE` com backoff; réplica de leitura, cache Redis
 e broker de eventos (RabbitMQ) — os efeitos de negócio já estão isolados em funções, prontos

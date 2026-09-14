@@ -80,6 +80,10 @@
     {
       "key": "campanha_id",
       "value": ""
+    },
+    {
+      "key": "pedido_desconto_id",
+      "value": ""
     }
   ],
   "item": [
@@ -2480,6 +2484,315 @@
             "exec": [
               "pm.test('403 Forbidden', () => pm.response.to.have.status(403));",
               "pm.test('codigo ACESSO_NEGADO', () => pm.expect(pm.response.json().erro.codigo).to.eql('ACESSO_NEGADO'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "62. Criar pedido (setup p/ desconto manual)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_cliente}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/pedidos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "pedidos"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"unidadeId\": 1,\n  \"canal\": \"APP\",\n  \"itens\": [\n    {\n      \"produtoId\": 4,\n      \"quantidade\": 1\n    }\n  ]\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const j = pm.response.json();",
+              "pm.collectionVariables.set('pedido_desconto_id', String(j.pedidoId));",
+              "pm.test('201 Created e total = 9.00', () => { pm.response.to.have.status(201); pm.expect(j.total).to.eql(9); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "63. Atendente aplica desconto de 5% (dentro do limite)  [RF-14]",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_atendente}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/pedidos/{{pedido_desconto_id}}/desconto",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "pedidos",
+            "{{pedido_desconto_id}}",
+            "desconto"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"tipo\": \"PERCENTUAL\",\n  \"valor\": 5,\n  \"motivo\": \"cliente fidelizado\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const j = pm.response.json();",
+              "pm.test('200', () => pm.response.to.have.status(200));",
+              "pm.test('descontoManual = 0.45, total = 8.55', () => { pm.expect(j.descontoManual).to.eql(0.45); pm.expect(j.total).to.eql(8.55); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "64. Negativo: atendente acima do teto de desconto => 422  [RF-14]",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_atendente}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/pedidos/{{pedido_desconto_id}}/desconto",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "pedidos",
+            "{{pedido_desconto_id}}",
+            "desconto"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"tipo\": \"PERCENTUAL\",\n  \"valor\": 50,\n  \"motivo\": \"teste\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('422 Unprocessable', () => pm.response.to.have.status(422));",
+              "pm.test('codigo LIMITE_EXCEDIDO', () => pm.expect(pm.response.json().erro.codigo).to.eql('LIMITE_EXCEDIDO'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "65. Gerente aplica 50% sem teto (substitui, nao acumula)  [RF-14]",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_gerente}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/pedidos/{{pedido_desconto_id}}/desconto",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "pedidos",
+            "{{pedido_desconto_id}}",
+            "desconto"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"tipo\": \"PERCENTUAL\",\n  \"valor\": 50,\n  \"motivo\": \"promocao autorizada pelo gerente\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const j = pm.response.json();",
+              "pm.test('200', () => pm.response.to.have.status(200));",
+              "pm.test('desconto substituido (4.50), nao somado aos 5% anteriores', () => { pm.expect(j.descontoManual).to.eql(4.5); pm.expect(j.total).to.eql(4.5); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "66. Negativo: desconto sem motivo => 400  [RF-14]",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_gerente}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/pedidos/{{pedido_desconto_id}}/desconto",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "pedidos",
+            "{{pedido_desconto_id}}",
+            "desconto"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"tipo\": \"PERCENTUAL\",\n  \"valor\": 10\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('400 Bad Request', () => pm.response.to.have.status(400));",
+              "pm.test('codigo PAYLOAD_INVALIDO', () => pm.expect(pm.response.json().erro.codigo).to.eql('PAYLOAD_INVALIDO'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "67. Negativo: desconto em pedido ja pago => 409  [RF-14]",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_gerente}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/pedidos/{{pedido_id}}/desconto",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "pedidos",
+            "{{pedido_id}}",
+            "desconto"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"tipo\": \"VALOR_FIXO\",\n  \"valor\": 1,\n  \"motivo\": \"teste pos-pagamento\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('409 Conflict', () => pm.response.to.have.status(409));",
+              "pm.test('codigo TRANSICAO_INVALIDA', () => pm.expect(pm.response.json().erro.codigo).to.eql('TRANSICAO_INVALIDA'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "68. Negativo: desconto excede o total do pedido => 422  [RF-14]",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_gerente}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/pedidos/{{pedido_desconto_id}}/desconto",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "pedidos",
+            "{{pedido_desconto_id}}",
+            "desconto"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"tipo\": \"VALOR_FIXO\",\n  \"valor\": 999,\n  \"motivo\": \"teste exagerado\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('422 Unprocessable', () => pm.response.to.have.status(422));",
+              "pm.test('codigo DESCONTO_EXCEDE_TOTAL', () => pm.expect(pm.response.json().erro.codigo).to.eql('DESCONTO_EXCEDE_TOTAL'));"
             ]
           }
         }

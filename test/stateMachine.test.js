@@ -38,3 +38,8 @@ test('cancelamento simples (sem estorno) antes do pagamento ser aprovado', () =>
   assert.equal(podeTransicionar('PAGAMENTO_PENDENTE', 'CANCELADO'), true);
   assert.equal(podeTransicionar('PAGO', 'CANCELADO'), false);
 });
+
+test('status desconhecido (dado corrompido/nao mapeado) nunca transiciona', () => {
+  assert.equal(podeTransicionar('STATUS_INEXISTENTE', 'PAGO'), false);
+  assert.equal(podeTransicionar(undefined, 'PAGO'), false);
+});
