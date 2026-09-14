@@ -1,7 +1,7 @@
 const express = require('express');
 const db = require('../../db');
 const asyncHandler = require('../../lib/asyncHandler');
-const { erro } = require('../../lib/errors');
+const { erro, parseData } = require('../../lib/errors');
 const { requer } = require('../../auth/rbac');
 
 const router = express.Router();
@@ -50,9 +50,10 @@ router.get(
   '/relatorios/vendas',
   requer('ANALISTA_MATRIZ'),
   asyncHandler(async (req, res) => {
-    const { inicio, fim } = req.query;
+    const inicio = parseData(req.query.inicio, 'inicio', { obrigatorio: false });
+    const fim = parseData(req.query.fim, 'fim', { obrigatorio: false });
     const series = await buscarVendasAgregadas(inicio, fim);
-    res.json({ periodo: { inicio: inicio || null, fim: fim || null }, series });
+    res.json({ periodo: { inicio, fim }, series });
   }),
 );
 
@@ -61,7 +62,9 @@ router.get(
   '/relatorios/vendas/export',
   requer('ANALISTA_MATRIZ'),
   asyncHandler(async (req, res) => {
-    const { inicio, fim, formato } = req.query;
+    const inicio = parseData(req.query.inicio, 'inicio', { obrigatorio: false });
+    const fim = parseData(req.query.fim, 'fim', { obrigatorio: false });
+    const { formato } = req.query;
     if (formato && formato !== 'csv') {
       throw erro(400, 'FORMATO_INVALIDO', 'Somente formato=csv e suportado nesta AP');
     }
@@ -84,7 +87,8 @@ router.get(
   '/relatorios/produtos',
   requer('ANALISTA_MATRIZ'),
   asyncHandler(async (req, res) => {
-    const { inicio, fim } = req.query;
+    const inicio = parseData(req.query.inicio, 'inicio', { obrigatorio: false });
+    const fim = parseData(req.query.fim, 'fim', { obrigatorio: false });
     const { rows } = await db.query(
       `SELECT ip.produto_base_id,
               pb.nome                               AS produto,
@@ -98,7 +102,7 @@ router.get(
           AND ($2::date IS NULL OR p.pago_em < ($2::date + 1))
         GROUP BY ip.produto_base_id, pb.nome
         ORDER BY valor DESC`,
-      [inicio || null, fim || null, STATUS_PAGOS],
+      [inicio, fim, STATUS_PAGOS],
     );
     const ranking = rows.map((r) => ({
       produtoId: r.produto_base_id,
@@ -106,7 +110,7 @@ router.get(
       quantidade: r.quantidade,
       valor: r.valor,
     }));
-    res.json({ periodo: { inicio: inicio || null, fim: fim || null }, ranking });
+    res.json({ periodo: { inicio, fim }, ranking });
   }),
 );
 

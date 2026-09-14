@@ -1,7 +1,7 @@
 const express = require('express');
 const db = require('../../db');
 const asyncHandler = require('../../lib/asyncHandler');
-const { erro, parseId } = require('../../lib/errors');
+const { erro, parseId, parseTexto } = require('../../lib/errors');
 const { requer, garantirDonoOuStaff } = require('../../auth/rbac');
 const { registrarAuditoria } = require('../../lib/audit');
 const { buscarClienteDecifrado } = require('../../lib/dadosPessoais');
@@ -60,10 +60,11 @@ router.post(
     const id = parseId(req.params.id, 'id');
     garantirDonoOuStaff(req, id, ['ATENDENTE']);
 
-    const { finalidade, versaoTexto } = req.body || {};
+    const { finalidade, versaoTexto: versaoTextoBody } = req.body || {};
     if (!FINALIDADES.includes(finalidade)) {
       throw erro(400, 'PAYLOAD_INVALIDO', `finalidade deve ser um de ${FINALIDADES.join(', ')}`);
     }
+    const versaoTexto = parseTexto(versaoTextoBody, 'versaoTexto', 20, { obrigatorio: false }) || 'v1';
 
     const resultado = await db.withTransaction(async (client) => {
       const { rows: cli } = await client.query('SELECT id FROM cliente WHERE id = $1', [id]);
@@ -82,7 +83,7 @@ router.post(
         `INSERT INTO consentimento_lgpd (cliente_id, finalidade, versao_texto)
          VALUES ($1, $2, $3)
          RETURNING id, cliente_id, finalidade, versao_texto, concedido_em`,
-        [id, finalidade, versaoTexto || 'v1'],
+        [id, finalidade, versaoTexto],
       );
       return rows[0];
     });

@@ -8,501 +8,501 @@
 
      execution: local
         script: loadtest/pedidos.js
-        output: -
+        output: json (test-results/loadtest/k6-timeseries.json)
 
      scenarios: (100.00%) 2 scenarios, 100 max VUs, 2m30s max duration (incl. graceful stop):
               * cardapio: 3.33 iterations/s for 2m0s (maxVUs: 10-40, exec: consultarCardapio, gracefulStop: 30s)
               * criarPedido: 3.33 iterations/s for 2m0s (maxVUs: 20-60, exec: criarPedido, gracefulStop: 30s)
 
 
-running (0m01.0s), 000/030 VUs, 6 complete and 0 interrupted iterations
-cardapio      [   1% ] 00/10 VUs  0m00.8s/2m0s  3.33 iters/s
-criarPedido   [   1% ] 00/20 VUs  0m00.8s/2m0s  3.33 iters/s
+running (0m01.0s), 000/030 VUs, 8 complete and 0 interrupted iterations
+cardapio      [   1% ] 00/10 VUs  0m00.9s/2m0s  3.33 iters/s
+criarPedido   [   1% ] 00/20 VUs  0m00.9s/2m0s  3.33 iters/s
 
 running (0m02.0s), 000/030 VUs, 14 complete and 0 interrupted iterations
-cardapio      [   2% ] 00/10 VUs  0m01.8s/2m0s  3.33 iters/s
-criarPedido   [   2% ] 00/20 VUs  0m01.8s/2m0s  3.33 iters/s
+cardapio      [   2% ] 00/10 VUs  0m01.9s/2m0s  3.33 iters/s
+criarPedido   [   2% ] 00/20 VUs  0m01.9s/2m0s  3.33 iters/s
 
 running (0m03.0s), 000/030 VUs, 20 complete and 0 interrupted iterations
-cardapio      [   2% ] 00/10 VUs  0m02.8s/2m0s  3.33 iters/s
-criarPedido   [   2% ] 00/20 VUs  0m02.8s/2m0s  3.33 iters/s
+cardapio      [   2% ] 00/10 VUs  0m02.9s/2m0s  3.33 iters/s
+criarPedido   [   2% ] 00/20 VUs  0m02.9s/2m0s  3.33 iters/s
 
-running (0m04.0s), 000/030 VUs, 26 complete and 0 interrupted iterations
-cardapio      [   3% ] 00/10 VUs  0m03.8s/2m0s  3.33 iters/s
-criarPedido   [   3% ] 00/20 VUs  0m03.8s/2m0s  3.33 iters/s
+running (0m04.0s), 000/030 VUs, 28 complete and 0 interrupted iterations
+cardapio      [   3% ] 00/10 VUs  0m03.9s/2m0s  3.33 iters/s
+criarPedido   [   3% ] 00/20 VUs  0m03.9s/2m0s  3.33 iters/s
 
 running (0m05.0s), 000/030 VUs, 34 complete and 0 interrupted iterations
-cardapio      [   4% ] 00/10 VUs  0m04.8s/2m0s  3.33 iters/s
-criarPedido   [   4% ] 00/20 VUs  0m04.8s/2m0s  3.33 iters/s
+cardapio      [   4% ] 00/10 VUs  0m04.9s/2m0s  3.33 iters/s
+criarPedido   [   4% ] 00/20 VUs  0m04.9s/2m0s  3.33 iters/s
 
 running (0m06.0s), 000/030 VUs, 40 complete and 0 interrupted iterations
-cardapio      [   5% ] 00/10 VUs  0m05.8s/2m0s  3.33 iters/s
-criarPedido   [   5% ] 00/20 VUs  0m05.8s/2m0s  3.33 iters/s
+cardapio      [   5% ] 00/10 VUs  0m05.9s/2m0s  3.33 iters/s
+criarPedido   [   5% ] 00/20 VUs  0m05.9s/2m0s  3.33 iters/s
 
-running (0m07.0s), 000/030 VUs, 46 complete and 0 interrupted iterations
-cardapio      [   6% ] 00/10 VUs  0m06.8s/2m0s  3.33 iters/s
-criarPedido   [   6% ] 00/20 VUs  0m06.8s/2m0s  3.33 iters/s
+running (0m07.0s), 000/030 VUs, 48 complete and 0 interrupted iterations
+cardapio      [   6% ] 00/10 VUs  0m06.9s/2m0s  3.33 iters/s
+criarPedido   [   6% ] 00/20 VUs  0m06.9s/2m0s  3.33 iters/s
 
 running (0m08.0s), 000/030 VUs, 54 complete and 0 interrupted iterations
-cardapio      [   7% ] 00/10 VUs  0m07.8s/2m0s  3.33 iters/s
-criarPedido   [   7% ] 00/20 VUs  0m07.8s/2m0s  3.33 iters/s
+cardapio      [   7% ] 00/10 VUs  0m07.9s/2m0s  3.33 iters/s
+criarPedido   [   7% ] 00/20 VUs  0m07.9s/2m0s  3.33 iters/s
 
 running (0m09.0s), 000/030 VUs, 60 complete and 0 interrupted iterations
-cardapio      [   7% ] 00/10 VUs  0m08.8s/2m0s  3.33 iters/s
-criarPedido   [   7% ] 00/20 VUs  0m08.8s/2m0s  3.33 iters/s
+cardapio      [   7% ] 00/10 VUs  0m08.9s/2m0s  3.33 iters/s
+criarPedido   [   7% ] 00/20 VUs  0m08.9s/2m0s  3.33 iters/s
 
-running (0m10.0s), 000/030 VUs, 66 complete and 0 interrupted iterations
-cardapio      [   8% ] 00/10 VUs  0m09.8s/2m0s  3.33 iters/s
-criarPedido   [   8% ] 00/20 VUs  0m09.8s/2m0s  3.33 iters/s
+running (0m10.0s), 000/030 VUs, 68 complete and 0 interrupted iterations
+cardapio      [   8% ] 00/10 VUs  0m09.9s/2m0s  3.33 iters/s
+criarPedido   [   8% ] 00/20 VUs  0m09.9s/2m0s  3.33 iters/s
 
 running (0m11.0s), 000/030 VUs, 74 complete and 0 interrupted iterations
-cardapio      [   9% ] 00/10 VUs  0m10.8s/2m0s  3.33 iters/s
-criarPedido   [   9% ] 00/20 VUs  0m10.8s/2m0s  3.33 iters/s
+cardapio      [   9% ] 00/10 VUs  0m10.9s/2m0s  3.33 iters/s
+criarPedido   [   9% ] 00/20 VUs  0m10.9s/2m0s  3.33 iters/s
 
 running (0m12.0s), 000/030 VUs, 80 complete and 0 interrupted iterations
-cardapio      [  10% ] 00/10 VUs  0m11.8s/2m0s  3.33 iters/s
-criarPedido   [  10% ] 00/20 VUs  0m11.8s/2m0s  3.33 iters/s
+cardapio      [  10% ] 00/10 VUs  0m11.9s/2m0s  3.33 iters/s
+criarPedido   [  10% ] 00/20 VUs  0m11.9s/2m0s  3.33 iters/s
 
-running (0m13.0s), 000/030 VUs, 86 complete and 0 interrupted iterations
-cardapio      [  11% ] 00/10 VUs  0m12.8s/2m0s  3.33 iters/s
-criarPedido   [  11% ] 00/20 VUs  0m12.8s/2m0s  3.33 iters/s
+running (0m13.0s), 000/030 VUs, 88 complete and 0 interrupted iterations
+cardapio      [  11% ] 00/10 VUs  0m12.9s/2m0s  3.33 iters/s
+criarPedido   [  11% ] 00/20 VUs  0m12.9s/2m0s  3.33 iters/s
 
 running (0m14.0s), 000/030 VUs, 94 complete and 0 interrupted iterations
-cardapio      [  12% ] 00/10 VUs  0m13.8s/2m0s  3.33 iters/s
-criarPedido   [  12% ] 00/20 VUs  0m13.8s/2m0s  3.33 iters/s
+cardapio      [  12% ] 00/10 VUs  0m13.9s/2m0s  3.33 iters/s
+criarPedido   [  12% ] 00/20 VUs  0m13.9s/2m0s  3.33 iters/s
 
 running (0m15.0s), 000/030 VUs, 100 complete and 0 interrupted iterations
-cardapio      [  12% ] 00/10 VUs  0m14.8s/2m0s  3.33 iters/s
-criarPedido   [  12% ] 00/20 VUs  0m14.8s/2m0s  3.33 iters/s
+cardapio      [  12% ] 00/10 VUs  0m14.9s/2m0s  3.33 iters/s
+criarPedido   [  12% ] 00/20 VUs  0m14.9s/2m0s  3.33 iters/s
 
-running (0m16.0s), 000/030 VUs, 106 complete and 0 interrupted iterations
-cardapio      [  13% ] 00/10 VUs  0m15.8s/2m0s  3.33 iters/s
-criarPedido   [  13% ] 00/20 VUs  0m15.8s/2m0s  3.33 iters/s
+running (0m16.0s), 000/030 VUs, 108 complete and 0 interrupted iterations
+cardapio      [  13% ] 00/10 VUs  0m15.9s/2m0s  3.33 iters/s
+criarPedido   [  13% ] 00/20 VUs  0m15.9s/2m0s  3.33 iters/s
 
 running (0m17.0s), 000/030 VUs, 114 complete and 0 interrupted iterations
-cardapio      [  14% ] 00/10 VUs  0m16.8s/2m0s  3.33 iters/s
-criarPedido   [  14% ] 00/20 VUs  0m16.8s/2m0s  3.33 iters/s
+cardapio      [  14% ] 00/10 VUs  0m16.9s/2m0s  3.33 iters/s
+criarPedido   [  14% ] 00/20 VUs  0m16.9s/2m0s  3.33 iters/s
 
 running (0m18.0s), 000/030 VUs, 120 complete and 0 interrupted iterations
-cardapio      [  15% ] 00/10 VUs  0m17.8s/2m0s  3.33 iters/s
-criarPedido   [  15% ] 00/20 VUs  0m17.8s/2m0s  3.33 iters/s
+cardapio      [  15% ] 00/10 VUs  0m17.9s/2m0s  3.33 iters/s
+criarPedido   [  15% ] 00/20 VUs  0m17.9s/2m0s  3.33 iters/s
 
-running (0m19.0s), 000/030 VUs, 126 complete and 0 interrupted iterations
-cardapio      [  16% ] 00/10 VUs  0m18.8s/2m0s  3.33 iters/s
-criarPedido   [  16% ] 00/20 VUs  0m18.8s/2m0s  3.33 iters/s
+running (0m19.0s), 000/030 VUs, 128 complete and 0 interrupted iterations
+cardapio      [  16% ] 00/10 VUs  0m18.9s/2m0s  3.33 iters/s
+criarPedido   [  16% ] 00/20 VUs  0m18.9s/2m0s  3.33 iters/s
 
-running (0m20.0s), 001/030 VUs, 133 complete and 0 interrupted iterations
-cardapio      [  17% ] 00/10 VUs  0m19.8s/2m0s  3.33 iters/s
-criarPedido   [  17% ] 01/20 VUs  0m19.8s/2m0s  3.33 iters/s
+running (0m20.0s), 000/030 VUs, 134 complete and 0 interrupted iterations
+cardapio      [  17% ] 00/10 VUs  0m19.9s/2m0s  3.33 iters/s
+criarPedido   [  17% ] 00/20 VUs  0m19.9s/2m0s  3.33 iters/s
 
 running (0m21.0s), 000/030 VUs, 140 complete and 0 interrupted iterations
-cardapio      [  17% ] 00/10 VUs  0m20.8s/2m0s  3.33 iters/s
-criarPedido   [  17% ] 00/20 VUs  0m20.8s/2m0s  3.33 iters/s
+cardapio      [  17% ] 00/10 VUs  0m20.9s/2m0s  3.33 iters/s
+criarPedido   [  17% ] 00/20 VUs  0m20.9s/2m0s  3.33 iters/s
 
-running (0m22.0s), 000/030 VUs, 146 complete and 0 interrupted iterations
-cardapio      [  18% ] 00/10 VUs  0m21.8s/2m0s  3.33 iters/s
-criarPedido   [  18% ] 00/20 VUs  0m21.8s/2m0s  3.33 iters/s
+running (0m22.0s), 000/030 VUs, 148 complete and 0 interrupted iterations
+cardapio      [  18% ] 00/10 VUs  0m21.9s/2m0s  3.33 iters/s
+criarPedido   [  18% ] 00/20 VUs  0m21.9s/2m0s  3.33 iters/s
 
 running (0m23.0s), 000/030 VUs, 154 complete and 0 interrupted iterations
-cardapio      [  19% ] 00/10 VUs  0m22.8s/2m0s  3.33 iters/s
-criarPedido   [  19% ] 00/20 VUs  0m22.8s/2m0s  3.33 iters/s
+cardapio      [  19% ] 00/10 VUs  0m22.9s/2m0s  3.33 iters/s
+criarPedido   [  19% ] 00/20 VUs  0m22.9s/2m0s  3.33 iters/s
 
 running (0m24.0s), 000/030 VUs, 160 complete and 0 interrupted iterations
-cardapio      [  20% ] 00/10 VUs  0m23.8s/2m0s  3.33 iters/s
-criarPedido   [  20% ] 00/20 VUs  0m23.8s/2m0s  3.33 iters/s
+cardapio      [  20% ] 00/10 VUs  0m23.9s/2m0s  3.33 iters/s
+criarPedido   [  20% ] 00/20 VUs  0m23.9s/2m0s  3.33 iters/s
 
-running (0m25.0s), 000/030 VUs, 166 complete and 0 interrupted iterations
-cardapio      [  21% ] 00/10 VUs  0m24.8s/2m0s  3.33 iters/s
-criarPedido   [  21% ] 00/20 VUs  0m24.8s/2m0s  3.33 iters/s
+running (0m25.0s), 000/030 VUs, 168 complete and 0 interrupted iterations
+cardapio      [  21% ] 00/10 VUs  0m24.9s/2m0s  3.33 iters/s
+criarPedido   [  21% ] 00/20 VUs  0m24.9s/2m0s  3.33 iters/s
 
 running (0m26.0s), 000/030 VUs, 174 complete and 0 interrupted iterations
-cardapio      [  22% ] 00/10 VUs  0m25.8s/2m0s  3.33 iters/s
-criarPedido   [  22% ] 00/20 VUs  0m25.8s/2m0s  3.33 iters/s
+cardapio      [  22% ] 00/10 VUs  0m25.9s/2m0s  3.33 iters/s
+criarPedido   [  22% ] 00/20 VUs  0m25.9s/2m0s  3.33 iters/s
 
 running (0m27.0s), 000/030 VUs, 180 complete and 0 interrupted iterations
-cardapio      [  22% ] 00/10 VUs  0m26.8s/2m0s  3.33 iters/s
-criarPedido   [  22% ] 00/20 VUs  0m26.8s/2m0s  3.33 iters/s
+cardapio      [  22% ] 00/10 VUs  0m26.9s/2m0s  3.33 iters/s
+criarPedido   [  22% ] 00/20 VUs  0m26.9s/2m0s  3.33 iters/s
 
-running (0m28.0s), 000/030 VUs, 186 complete and 0 interrupted iterations
-cardapio      [  23% ] 00/10 VUs  0m27.8s/2m0s  3.33 iters/s
-criarPedido   [  23% ] 00/20 VUs  0m27.8s/2m0s  3.33 iters/s
+running (0m28.0s), 000/030 VUs, 188 complete and 0 interrupted iterations
+cardapio      [  23% ] 00/10 VUs  0m27.9s/2m0s  3.33 iters/s
+criarPedido   [  23% ] 00/20 VUs  0m27.9s/2m0s  3.33 iters/s
 
 running (0m29.0s), 000/030 VUs, 194 complete and 0 interrupted iterations
-cardapio      [  24% ] 00/10 VUs  0m28.8s/2m0s  3.33 iters/s
-criarPedido   [  24% ] 00/20 VUs  0m28.8s/2m0s  3.33 iters/s
+cardapio      [  24% ] 00/10 VUs  0m28.9s/2m0s  3.33 iters/s
+criarPedido   [  24% ] 00/20 VUs  0m28.9s/2m0s  3.33 iters/s
 
 running (0m30.0s), 000/030 VUs, 200 complete and 0 interrupted iterations
-cardapio      [  25% ] 00/10 VUs  0m29.8s/2m0s  3.33 iters/s
-criarPedido   [  25% ] 00/20 VUs  0m29.8s/2m0s  3.33 iters/s
+cardapio      [  25% ] 00/10 VUs  0m29.9s/2m0s  3.33 iters/s
+criarPedido   [  25% ] 00/20 VUs  0m29.9s/2m0s  3.33 iters/s
 
-running (0m31.0s), 000/030 VUs, 206 complete and 0 interrupted iterations
-cardapio      [  26% ] 00/10 VUs  0m30.8s/2m0s  3.33 iters/s
-criarPedido   [  26% ] 00/20 VUs  0m30.8s/2m0s  3.33 iters/s
+running (0m31.0s), 000/030 VUs, 208 complete and 0 interrupted iterations
+cardapio      [  26% ] 00/10 VUs  0m30.9s/2m0s  3.33 iters/s
+criarPedido   [  26% ] 00/20 VUs  0m30.9s/2m0s  3.33 iters/s
 
 running (0m32.0s), 000/030 VUs, 214 complete and 0 interrupted iterations
-cardapio      [  27% ] 00/10 VUs  0m31.8s/2m0s  3.33 iters/s
-criarPedido   [  27% ] 00/20 VUs  0m31.8s/2m0s  3.33 iters/s
+cardapio      [  27% ] 00/10 VUs  0m31.9s/2m0s  3.33 iters/s
+criarPedido   [  27% ] 00/20 VUs  0m31.9s/2m0s  3.33 iters/s
 
 running (0m33.0s), 000/030 VUs, 220 complete and 0 interrupted iterations
-cardapio      [  27% ] 00/10 VUs  0m32.8s/2m0s  3.33 iters/s
-criarPedido   [  27% ] 00/20 VUs  0m32.8s/2m0s  3.33 iters/s
+cardapio      [  27% ] 00/10 VUs  0m32.9s/2m0s  3.33 iters/s
+criarPedido   [  27% ] 00/20 VUs  0m32.9s/2m0s  3.33 iters/s
 
-running (0m34.0s), 000/030 VUs, 226 complete and 0 interrupted iterations
-cardapio      [  28% ] 00/10 VUs  0m33.8s/2m0s  3.33 iters/s
-criarPedido   [  28% ] 00/20 VUs  0m33.8s/2m0s  3.33 iters/s
+running (0m34.0s), 000/030 VUs, 228 complete and 0 interrupted iterations
+cardapio      [  28% ] 00/10 VUs  0m33.9s/2m0s  3.33 iters/s
+criarPedido   [  28% ] 00/20 VUs  0m33.9s/2m0s  3.33 iters/s
 
 running (0m35.0s), 000/030 VUs, 234 complete and 0 interrupted iterations
-cardapio      [  29% ] 00/10 VUs  0m34.8s/2m0s  3.33 iters/s
-criarPedido   [  29% ] 00/20 VUs  0m34.8s/2m0s  3.33 iters/s
+cardapio      [  29% ] 00/10 VUs  0m34.9s/2m0s  3.33 iters/s
+criarPedido   [  29% ] 00/20 VUs  0m34.9s/2m0s  3.33 iters/s
 
 running (0m36.0s), 000/030 VUs, 240 complete and 0 interrupted iterations
-cardapio      [  30% ] 00/10 VUs  0m35.8s/2m0s  3.33 iters/s
-criarPedido   [  30% ] 00/20 VUs  0m35.8s/2m0s  3.33 iters/s
+cardapio      [  30% ] 00/10 VUs  0m35.9s/2m0s  3.33 iters/s
+criarPedido   [  30% ] 00/20 VUs  0m35.9s/2m0s  3.33 iters/s
 
-running (0m37.0s), 000/030 VUs, 246 complete and 0 interrupted iterations
-cardapio      [  31% ] 00/10 VUs  0m36.8s/2m0s  3.33 iters/s
-criarPedido   [  31% ] 00/20 VUs  0m36.8s/2m0s  3.33 iters/s
+running (0m37.0s), 000/030 VUs, 248 complete and 0 interrupted iterations
+cardapio      [  31% ] 00/10 VUs  0m36.9s/2m0s  3.33 iters/s
+criarPedido   [  31% ] 00/20 VUs  0m36.9s/2m0s  3.33 iters/s
 
 running (0m38.0s), 000/030 VUs, 254 complete and 0 interrupted iterations
-cardapio      [  32% ] 00/10 VUs  0m37.8s/2m0s  3.33 iters/s
-criarPedido   [  32% ] 00/20 VUs  0m37.8s/2m0s  3.33 iters/s
+cardapio      [  32% ] 00/10 VUs  0m37.9s/2m0s  3.33 iters/s
+criarPedido   [  32% ] 00/20 VUs  0m37.9s/2m0s  3.33 iters/s
 
 running (0m39.0s), 000/030 VUs, 260 complete and 0 interrupted iterations
-cardapio      [  32% ] 00/10 VUs  0m38.8s/2m0s  3.33 iters/s
-criarPedido   [  32% ] 00/20 VUs  0m38.8s/2m0s  3.33 iters/s
+cardapio      [  32% ] 00/10 VUs  0m38.9s/2m0s  3.33 iters/s
+criarPedido   [  32% ] 00/20 VUs  0m38.9s/2m0s  3.33 iters/s
 
-running (0m40.0s), 000/030 VUs, 266 complete and 0 interrupted iterations
-cardapio      [  33% ] 00/10 VUs  0m39.8s/2m0s  3.33 iters/s
-criarPedido   [  33% ] 00/20 VUs  0m39.8s/2m0s  3.33 iters/s
+running (0m40.0s), 000/030 VUs, 268 complete and 0 interrupted iterations
+cardapio      [  33% ] 00/10 VUs  0m39.9s/2m0s  3.33 iters/s
+criarPedido   [  33% ] 00/20 VUs  0m39.9s/2m0s  3.33 iters/s
 
 running (0m41.0s), 000/030 VUs, 274 complete and 0 interrupted iterations
-cardapio      [  34% ] 00/10 VUs  0m40.8s/2m0s  3.33 iters/s
-criarPedido   [  34% ] 00/20 VUs  0m40.8s/2m0s  3.33 iters/s
+cardapio      [  34% ] 00/10 VUs  0m40.9s/2m0s  3.33 iters/s
+criarPedido   [  34% ] 00/20 VUs  0m40.9s/2m0s  3.33 iters/s
 
 running (0m42.0s), 000/030 VUs, 280 complete and 0 interrupted iterations
-cardapio      [  35% ] 00/10 VUs  0m41.8s/2m0s  3.33 iters/s
-criarPedido   [  35% ] 00/20 VUs  0m41.8s/2m0s  3.33 iters/s
+cardapio      [  35% ] 00/10 VUs  0m41.9s/2m0s  3.33 iters/s
+criarPedido   [  35% ] 00/20 VUs  0m41.9s/2m0s  3.33 iters/s
 
-running (0m43.0s), 000/030 VUs, 286 complete and 0 interrupted iterations
-cardapio      [  36% ] 00/10 VUs  0m42.8s/2m0s  3.33 iters/s
-criarPedido   [  36% ] 00/20 VUs  0m42.8s/2m0s  3.33 iters/s
+running (0m43.0s), 000/030 VUs, 288 complete and 0 interrupted iterations
+cardapio      [  36% ] 00/10 VUs  0m42.9s/2m0s  3.33 iters/s
+criarPedido   [  36% ] 00/20 VUs  0m42.9s/2m0s  3.33 iters/s
 
 running (0m44.0s), 000/030 VUs, 294 complete and 0 interrupted iterations
-cardapio      [  37% ] 00/10 VUs  0m43.8s/2m0s  3.33 iters/s
-criarPedido   [  37% ] 00/20 VUs  0m43.8s/2m0s  3.33 iters/s
+cardapio      [  37% ] 00/10 VUs  0m43.9s/2m0s  3.33 iters/s
+criarPedido   [  37% ] 00/20 VUs  0m43.9s/2m0s  3.33 iters/s
 
 running (0m45.0s), 000/030 VUs, 300 complete and 0 interrupted iterations
-cardapio      [  37% ] 00/10 VUs  0m44.8s/2m0s  3.33 iters/s
-criarPedido   [  37% ] 00/20 VUs  0m44.8s/2m0s  3.33 iters/s
+cardapio      [  37% ] 00/10 VUs  0m44.9s/2m0s  3.33 iters/s
+criarPedido   [  37% ] 00/20 VUs  0m44.9s/2m0s  3.33 iters/s
 
-running (0m46.0s), 000/030 VUs, 306 complete and 0 interrupted iterations
-cardapio      [  38% ] 00/10 VUs  0m45.8s/2m0s  3.33 iters/s
-criarPedido   [  38% ] 00/20 VUs  0m45.8s/2m0s  3.33 iters/s
+running (0m46.0s), 000/030 VUs, 308 complete and 0 interrupted iterations
+cardapio      [  38% ] 00/10 VUs  0m45.9s/2m0s  3.33 iters/s
+criarPedido   [  38% ] 00/20 VUs  0m45.9s/2m0s  3.33 iters/s
 
 running (0m47.0s), 000/030 VUs, 314 complete and 0 interrupted iterations
-cardapio      [  39% ] 00/10 VUs  0m46.8s/2m0s  3.33 iters/s
-criarPedido   [  39% ] 00/20 VUs  0m46.8s/2m0s  3.33 iters/s
+cardapio      [  39% ] 00/10 VUs  0m46.9s/2m0s  3.33 iters/s
+criarPedido   [  39% ] 00/20 VUs  0m46.9s/2m0s  3.33 iters/s
 
 running (0m48.0s), 000/030 VUs, 320 complete and 0 interrupted iterations
-cardapio      [  40% ] 00/10 VUs  0m47.8s/2m0s  3.33 iters/s
-criarPedido   [  40% ] 00/20 VUs  0m47.8s/2m0s  3.33 iters/s
+cardapio      [  40% ] 00/10 VUs  0m47.9s/2m0s  3.33 iters/s
+criarPedido   [  40% ] 00/20 VUs  0m47.9s/2m0s  3.33 iters/s
 
-running (0m49.0s), 000/030 VUs, 326 complete and 0 interrupted iterations
-cardapio      [  41% ] 00/10 VUs  0m48.8s/2m0s  3.33 iters/s
-criarPedido   [  41% ] 00/20 VUs  0m48.8s/2m0s  3.33 iters/s
+running (0m49.0s), 000/030 VUs, 328 complete and 0 interrupted iterations
+cardapio      [  41% ] 00/10 VUs  0m48.9s/2m0s  3.33 iters/s
+criarPedido   [  41% ] 00/20 VUs  0m48.9s/2m0s  3.33 iters/s
 
 running (0m50.0s), 000/030 VUs, 334 complete and 0 interrupted iterations
-cardapio      [  42% ] 00/10 VUs  0m49.8s/2m0s  3.33 iters/s
-criarPedido   [  42% ] 00/20 VUs  0m49.8s/2m0s  3.33 iters/s
+cardapio      [  42% ] 00/10 VUs  0m49.9s/2m0s  3.33 iters/s
+criarPedido   [  42% ] 00/20 VUs  0m49.9s/2m0s  3.33 iters/s
 
 running (0m51.0s), 000/030 VUs, 340 complete and 0 interrupted iterations
-cardapio      [  42% ] 00/10 VUs  0m50.8s/2m0s  3.33 iters/s
-criarPedido   [  42% ] 00/20 VUs  0m50.8s/2m0s  3.33 iters/s
+cardapio      [  42% ] 00/10 VUs  0m50.9s/2m0s  3.33 iters/s
+criarPedido   [  42% ] 00/20 VUs  0m50.9s/2m0s  3.33 iters/s
 
-running (0m52.0s), 000/030 VUs, 346 complete and 0 interrupted iterations
-cardapio      [  43% ] 00/10 VUs  0m51.8s/2m0s  3.33 iters/s
-criarPedido   [  43% ] 00/20 VUs  0m51.8s/2m0s  3.33 iters/s
+running (0m52.0s), 000/030 VUs, 348 complete and 0 interrupted iterations
+cardapio      [  43% ] 00/10 VUs  0m51.9s/2m0s  3.33 iters/s
+criarPedido   [  43% ] 00/20 VUs  0m51.9s/2m0s  3.33 iters/s
 
 running (0m53.0s), 000/030 VUs, 354 complete and 0 interrupted iterations
-cardapio      [  44% ] 00/10 VUs  0m52.8s/2m0s  3.33 iters/s
-criarPedido   [  44% ] 00/20 VUs  0m52.8s/2m0s  3.33 iters/s
+cardapio      [  44% ] 00/10 VUs  0m52.9s/2m0s  3.33 iters/s
+criarPedido   [  44% ] 00/20 VUs  0m52.9s/2m0s  3.33 iters/s
 
 running (0m54.0s), 000/030 VUs, 360 complete and 0 interrupted iterations
-cardapio      [  45% ] 00/10 VUs  0m53.8s/2m0s  3.33 iters/s
-criarPedido   [  45% ] 00/20 VUs  0m53.8s/2m0s  3.33 iters/s
+cardapio      [  45% ] 00/10 VUs  0m53.9s/2m0s  3.33 iters/s
+criarPedido   [  45% ] 00/20 VUs  0m53.9s/2m0s  3.33 iters/s
 
-running (0m55.0s), 000/030 VUs, 366 complete and 0 interrupted iterations
-cardapio      [  46% ] 00/10 VUs  0m54.8s/2m0s  3.33 iters/s
-criarPedido   [  46% ] 00/20 VUs  0m54.8s/2m0s  3.33 iters/s
+running (0m55.0s), 000/030 VUs, 368 complete and 0 interrupted iterations
+cardapio      [  46% ] 00/10 VUs  0m54.9s/2m0s  3.33 iters/s
+criarPedido   [  46% ] 00/20 VUs  0m54.9s/2m0s  3.33 iters/s
 
 running (0m56.0s), 000/030 VUs, 374 complete and 0 interrupted iterations
-cardapio      [  47% ] 00/10 VUs  0m55.8s/2m0s  3.33 iters/s
-criarPedido   [  47% ] 00/20 VUs  0m55.8s/2m0s  3.33 iters/s
+cardapio      [  47% ] 00/10 VUs  0m55.9s/2m0s  3.33 iters/s
+criarPedido   [  47% ] 00/20 VUs  0m55.9s/2m0s  3.33 iters/s
 
 running (0m57.0s), 000/030 VUs, 380 complete and 0 interrupted iterations
-cardapio      [  47% ] 00/10 VUs  0m56.8s/2m0s  3.33 iters/s
-criarPedido   [  47% ] 00/20 VUs  0m56.8s/2m0s  3.33 iters/s
+cardapio      [  47% ] 00/10 VUs  0m56.9s/2m0s  3.33 iters/s
+criarPedido   [  47% ] 00/20 VUs  0m56.9s/2m0s  3.33 iters/s
 
-running (0m58.0s), 000/030 VUs, 386 complete and 0 interrupted iterations
-cardapio      [  48% ] 00/10 VUs  0m57.8s/2m0s  3.33 iters/s
-criarPedido   [  48% ] 00/20 VUs  0m57.8s/2m0s  3.33 iters/s
+running (0m58.0s), 001/030 VUs, 387 complete and 0 interrupted iterations
+cardapio      [  48% ] 00/10 VUs  0m57.9s/2m0s  3.33 iters/s
+criarPedido   [  48% ] 01/20 VUs  0m57.9s/2m0s  3.33 iters/s
 
 running (0m59.0s), 000/030 VUs, 394 complete and 0 interrupted iterations
-cardapio      [  49% ] 00/10 VUs  0m58.8s/2m0s  3.33 iters/s
-criarPedido   [  49% ] 00/20 VUs  0m58.8s/2m0s  3.33 iters/s
+cardapio      [  49% ] 00/10 VUs  0m58.9s/2m0s  3.33 iters/s
+criarPedido   [  49% ] 00/20 VUs  0m58.9s/2m0s  3.33 iters/s
 
 running (1m00.0s), 000/030 VUs, 400 complete and 0 interrupted iterations
-cardapio      [  50% ] 00/10 VUs  0m59.8s/2m0s  3.33 iters/s
-criarPedido   [  50% ] 00/20 VUs  0m59.8s/2m0s  3.33 iters/s
+cardapio      [  50% ] 00/10 VUs  0m59.9s/2m0s  3.33 iters/s
+criarPedido   [  50% ] 00/20 VUs  0m59.9s/2m0s  3.33 iters/s
 
-running (1m01.0s), 000/030 VUs, 406 complete and 0 interrupted iterations
-cardapio      [  51% ] 00/10 VUs  1m00.8s/2m0s  3.33 iters/s
-criarPedido   [  51% ] 00/20 VUs  1m00.8s/2m0s  3.33 iters/s
+running (1m01.0s), 000/030 VUs, 408 complete and 0 interrupted iterations
+cardapio      [  51% ] 00/10 VUs  1m00.9s/2m0s  3.33 iters/s
+criarPedido   [  51% ] 00/20 VUs  1m00.9s/2m0s  3.33 iters/s
 
 running (1m02.0s), 000/030 VUs, 414 complete and 0 interrupted iterations
-cardapio      [  52% ] 00/10 VUs  1m01.8s/2m0s  3.33 iters/s
-criarPedido   [  52% ] 00/20 VUs  1m01.8s/2m0s  3.33 iters/s
+cardapio      [  52% ] 00/10 VUs  1m01.9s/2m0s  3.33 iters/s
+criarPedido   [  52% ] 00/20 VUs  1m01.9s/2m0s  3.33 iters/s
 
 running (1m03.0s), 000/030 VUs, 420 complete and 0 interrupted iterations
-cardapio      [  52% ] 00/10 VUs  1m02.8s/2m0s  3.33 iters/s
-criarPedido   [  52% ] 00/20 VUs  1m02.8s/2m0s  3.33 iters/s
+cardapio      [  52% ] 00/10 VUs  1m02.9s/2m0s  3.33 iters/s
+criarPedido   [  52% ] 00/20 VUs  1m02.9s/2m0s  3.33 iters/s
 
-running (1m04.0s), 000/030 VUs, 426 complete and 0 interrupted iterations
-cardapio      [  53% ] 00/10 VUs  1m03.8s/2m0s  3.33 iters/s
-criarPedido   [  53% ] 00/20 VUs  1m03.8s/2m0s  3.33 iters/s
+running (1m04.0s), 001/030 VUs, 427 complete and 0 interrupted iterations
+cardapio      [  53% ] 00/10 VUs  1m03.9s/2m0s  3.33 iters/s
+criarPedido   [  53% ] 01/20 VUs  1m03.9s/2m0s  3.33 iters/s
 
 running (1m05.0s), 000/030 VUs, 434 complete and 0 interrupted iterations
-cardapio      [  54% ] 00/10 VUs  1m04.8s/2m0s  3.33 iters/s
-criarPedido   [  54% ] 00/20 VUs  1m04.8s/2m0s  3.33 iters/s
+cardapio      [  54% ] 00/10 VUs  1m04.9s/2m0s  3.33 iters/s
+criarPedido   [  54% ] 00/20 VUs  1m04.9s/2m0s  3.33 iters/s
 
 running (1m06.0s), 000/030 VUs, 440 complete and 0 interrupted iterations
-cardapio      [  55% ] 00/10 VUs  1m05.8s/2m0s  3.33 iters/s
-criarPedido   [  55% ] 00/20 VUs  1m05.8s/2m0s  3.33 iters/s
+cardapio      [  55% ] 00/10 VUs  1m05.9s/2m0s  3.33 iters/s
+criarPedido   [  55% ] 00/20 VUs  1m05.9s/2m0s  3.33 iters/s
 
-running (1m07.0s), 000/030 VUs, 446 complete and 0 interrupted iterations
-cardapio      [  56% ] 00/10 VUs  1m06.8s/2m0s  3.33 iters/s
-criarPedido   [  56% ] 00/20 VUs  1m06.8s/2m0s  3.33 iters/s
+running (1m07.0s), 000/030 VUs, 448 complete and 0 interrupted iterations
+cardapio      [  56% ] 00/10 VUs  1m06.9s/2m0s  3.33 iters/s
+criarPedido   [  56% ] 00/20 VUs  1m06.9s/2m0s  3.33 iters/s
 
 running (1m08.0s), 000/030 VUs, 454 complete and 0 interrupted iterations
-cardapio      [  57% ] 00/10 VUs  1m07.8s/2m0s  3.33 iters/s
-criarPedido   [  57% ] 00/20 VUs  1m07.8s/2m0s  3.33 iters/s
+cardapio      [  57% ] 00/10 VUs  1m07.9s/2m0s  3.33 iters/s
+criarPedido   [  57% ] 00/20 VUs  1m07.9s/2m0s  3.33 iters/s
 
 running (1m09.0s), 000/030 VUs, 460 complete and 0 interrupted iterations
-cardapio      [  57% ] 00/10 VUs  1m08.8s/2m0s  3.33 iters/s
-criarPedido   [  57% ] 00/20 VUs  1m08.8s/2m0s  3.33 iters/s
+cardapio      [  57% ] 00/10 VUs  1m08.9s/2m0s  3.33 iters/s
+criarPedido   [  57% ] 00/20 VUs  1m08.9s/2m0s  3.33 iters/s
 
-running (1m10.0s), 000/030 VUs, 466 complete and 0 interrupted iterations
-cardapio      [  58% ] 00/10 VUs  1m09.8s/2m0s  3.33 iters/s
-criarPedido   [  58% ] 00/20 VUs  1m09.8s/2m0s  3.33 iters/s
+running (1m10.0s), 000/030 VUs, 468 complete and 0 interrupted iterations
+cardapio      [  58% ] 00/10 VUs  1m09.9s/2m0s  3.33 iters/s
+criarPedido   [  58% ] 00/20 VUs  1m09.9s/2m0s  3.33 iters/s
 
 running (1m11.0s), 000/030 VUs, 474 complete and 0 interrupted iterations
-cardapio      [  59% ] 00/10 VUs  1m10.8s/2m0s  3.33 iters/s
-criarPedido   [  59% ] 00/20 VUs  1m10.8s/2m0s  3.33 iters/s
+cardapio      [  59% ] 00/10 VUs  1m10.9s/2m0s  3.33 iters/s
+criarPedido   [  59% ] 00/20 VUs  1m10.9s/2m0s  3.33 iters/s
 
 running (1m12.0s), 000/030 VUs, 480 complete and 0 interrupted iterations
-cardapio      [  60% ] 00/10 VUs  1m11.8s/2m0s  3.33 iters/s
-criarPedido   [  60% ] 00/20 VUs  1m11.8s/2m0s  3.33 iters/s
+cardapio      [  60% ] 00/10 VUs  1m11.9s/2m0s  3.33 iters/s
+criarPedido   [  60% ] 00/20 VUs  1m11.9s/2m0s  3.33 iters/s
 
-running (1m13.0s), 000/030 VUs, 486 complete and 0 interrupted iterations
-cardapio      [  61% ] 00/10 VUs  1m12.8s/2m0s  3.33 iters/s
-criarPedido   [  61% ] 00/20 VUs  1m12.8s/2m0s  3.33 iters/s
+running (1m13.0s), 000/030 VUs, 488 complete and 0 interrupted iterations
+cardapio      [  61% ] 00/10 VUs  1m12.9s/2m0s  3.33 iters/s
+criarPedido   [  61% ] 00/20 VUs  1m12.9s/2m0s  3.33 iters/s
 
 running (1m14.0s), 000/030 VUs, 494 complete and 0 interrupted iterations
-cardapio      [  62% ] 00/10 VUs  1m13.8s/2m0s  3.33 iters/s
-criarPedido   [  62% ] 00/20 VUs  1m13.8s/2m0s  3.33 iters/s
+cardapio      [  62% ] 00/10 VUs  1m13.9s/2m0s  3.33 iters/s
+criarPedido   [  62% ] 00/20 VUs  1m13.9s/2m0s  3.33 iters/s
 
 running (1m15.0s), 000/030 VUs, 500 complete and 0 interrupted iterations
-cardapio      [  62% ] 00/10 VUs  1m14.8s/2m0s  3.33 iters/s
-criarPedido   [  62% ] 00/20 VUs  1m14.8s/2m0s  3.33 iters/s
+cardapio      [  62% ] 00/10 VUs  1m14.9s/2m0s  3.33 iters/s
+criarPedido   [  62% ] 00/20 VUs  1m14.9s/2m0s  3.33 iters/s
 
-running (1m16.0s), 000/030 VUs, 506 complete and 0 interrupted iterations
-cardapio      [  63% ] 00/10 VUs  1m15.8s/2m0s  3.33 iters/s
-criarPedido   [  63% ] 00/20 VUs  1m15.8s/2m0s  3.33 iters/s
+running (1m16.0s), 000/030 VUs, 508 complete and 0 interrupted iterations
+cardapio      [  63% ] 00/10 VUs  1m15.9s/2m0s  3.33 iters/s
+criarPedido   [  63% ] 00/20 VUs  1m15.9s/2m0s  3.33 iters/s
 
 running (1m17.0s), 000/030 VUs, 514 complete and 0 interrupted iterations
-cardapio      [  64% ] 00/10 VUs  1m16.8s/2m0s  3.33 iters/s
-criarPedido   [  64% ] 00/20 VUs  1m16.8s/2m0s  3.33 iters/s
+cardapio      [  64% ] 00/10 VUs  1m16.9s/2m0s  3.33 iters/s
+criarPedido   [  64% ] 00/20 VUs  1m16.9s/2m0s  3.33 iters/s
 
 running (1m18.0s), 000/030 VUs, 520 complete and 0 interrupted iterations
-cardapio      [  65% ] 00/10 VUs  1m17.8s/2m0s  3.33 iters/s
-criarPedido   [  65% ] 00/20 VUs  1m17.8s/2m0s  3.33 iters/s
+cardapio      [  65% ] 00/10 VUs  1m17.9s/2m0s  3.33 iters/s
+criarPedido   [  65% ] 00/20 VUs  1m17.9s/2m0s  3.33 iters/s
 
-running (1m19.0s), 000/030 VUs, 526 complete and 0 interrupted iterations
-cardapio      [  66% ] 00/10 VUs  1m18.8s/2m0s  3.33 iters/s
-criarPedido   [  66% ] 00/20 VUs  1m18.8s/2m0s  3.33 iters/s
+running (1m19.0s), 000/030 VUs, 528 complete and 0 interrupted iterations
+cardapio      [  66% ] 00/10 VUs  1m18.9s/2m0s  3.33 iters/s
+criarPedido   [  66% ] 00/20 VUs  1m18.9s/2m0s  3.33 iters/s
 
 running (1m20.0s), 000/030 VUs, 534 complete and 0 interrupted iterations
-cardapio      [  67% ] 00/10 VUs  1m19.8s/2m0s  3.33 iters/s
-criarPedido   [  67% ] 00/20 VUs  1m19.8s/2m0s  3.33 iters/s
+cardapio      [  67% ] 00/10 VUs  1m19.9s/2m0s  3.33 iters/s
+criarPedido   [  67% ] 00/20 VUs  1m19.9s/2m0s  3.33 iters/s
 
 running (1m21.0s), 000/030 VUs, 540 complete and 0 interrupted iterations
-cardapio      [  67% ] 00/10 VUs  1m20.8s/2m0s  3.33 iters/s
-criarPedido   [  67% ] 00/20 VUs  1m20.8s/2m0s  3.33 iters/s
+cardapio      [  67% ] 00/10 VUs  1m20.9s/2m0s  3.33 iters/s
+criarPedido   [  67% ] 00/20 VUs  1m20.9s/2m0s  3.33 iters/s
 
-running (1m22.0s), 000/030 VUs, 546 complete and 0 interrupted iterations
-cardapio      [  68% ] 00/10 VUs  1m21.8s/2m0s  3.33 iters/s
-criarPedido   [  68% ] 00/20 VUs  1m21.8s/2m0s  3.33 iters/s
+running (1m22.0s), 000/030 VUs, 548 complete and 0 interrupted iterations
+cardapio      [  68% ] 00/10 VUs  1m21.9s/2m0s  3.33 iters/s
+criarPedido   [  68% ] 00/20 VUs  1m21.9s/2m0s  3.33 iters/s
 
 running (1m23.0s), 000/030 VUs, 554 complete and 0 interrupted iterations
-cardapio      [  69% ] 00/10 VUs  1m22.8s/2m0s  3.33 iters/s
-criarPedido   [  69% ] 00/20 VUs  1m22.8s/2m0s  3.33 iters/s
+cardapio      [  69% ] 00/10 VUs  1m22.9s/2m0s  3.33 iters/s
+criarPedido   [  69% ] 00/20 VUs  1m22.9s/2m0s  3.33 iters/s
 
 running (1m24.0s), 000/030 VUs, 560 complete and 0 interrupted iterations
-cardapio      [  70% ] 00/10 VUs  1m23.8s/2m0s  3.33 iters/s
-criarPedido   [  70% ] 00/20 VUs  1m23.8s/2m0s  3.33 iters/s
+cardapio      [  70% ] 00/10 VUs  1m23.9s/2m0s  3.33 iters/s
+criarPedido   [  70% ] 00/20 VUs  1m23.9s/2m0s  3.33 iters/s
 
-running (1m25.0s), 000/030 VUs, 566 complete and 0 interrupted iterations
-cardapio      [  71% ] 00/10 VUs  1m24.8s/2m0s  3.33 iters/s
-criarPedido   [  71% ] 00/20 VUs  1m24.8s/2m0s  3.33 iters/s
+running (1m25.0s), 000/030 VUs, 568 complete and 0 interrupted iterations
+cardapio      [  71% ] 00/10 VUs  1m24.9s/2m0s  3.33 iters/s
+criarPedido   [  71% ] 00/20 VUs  1m24.9s/2m0s  3.33 iters/s
 
 running (1m26.0s), 000/030 VUs, 574 complete and 0 interrupted iterations
-cardapio      [  72% ] 00/10 VUs  1m25.8s/2m0s  3.33 iters/s
-criarPedido   [  72% ] 00/20 VUs  1m25.8s/2m0s  3.33 iters/s
+cardapio      [  72% ] 00/10 VUs  1m25.9s/2m0s  3.33 iters/s
+criarPedido   [  72% ] 00/20 VUs  1m25.9s/2m0s  3.33 iters/s
 
 running (1m27.0s), 000/030 VUs, 580 complete and 0 interrupted iterations
-cardapio      [  72% ] 00/10 VUs  1m26.8s/2m0s  3.33 iters/s
-criarPedido   [  72% ] 00/20 VUs  1m26.8s/2m0s  3.33 iters/s
+cardapio      [  72% ] 00/10 VUs  1m26.9s/2m0s  3.33 iters/s
+criarPedido   [  72% ] 00/20 VUs  1m26.9s/2m0s  3.33 iters/s
 
-running (1m28.0s), 000/030 VUs, 586 complete and 0 interrupted iterations
-cardapio      [  73% ] 00/10 VUs  1m27.8s/2m0s  3.33 iters/s
-criarPedido   [  73% ] 00/20 VUs  1m27.8s/2m0s  3.33 iters/s
+running (1m28.0s), 001/030 VUs, 587 complete and 0 interrupted iterations
+cardapio      [  73% ] 00/10 VUs  1m27.9s/2m0s  3.33 iters/s
+criarPedido   [  73% ] 01/20 VUs  1m27.9s/2m0s  3.33 iters/s
 
 running (1m29.0s), 000/030 VUs, 594 complete and 0 interrupted iterations
-cardapio      [  74% ] 00/10 VUs  1m28.8s/2m0s  3.33 iters/s
-criarPedido   [  74% ] 00/20 VUs  1m28.8s/2m0s  3.33 iters/s
+cardapio      [  74% ] 00/10 VUs  1m28.9s/2m0s  3.33 iters/s
+criarPedido   [  74% ] 00/20 VUs  1m28.9s/2m0s  3.33 iters/s
 
 running (1m30.0s), 000/030 VUs, 600 complete and 0 interrupted iterations
-cardapio      [  75% ] 00/10 VUs  1m29.8s/2m0s  3.33 iters/s
-criarPedido   [  75% ] 00/20 VUs  1m29.8s/2m0s  3.33 iters/s
+cardapio      [  75% ] 00/10 VUs  1m29.9s/2m0s  3.33 iters/s
+criarPedido   [  75% ] 00/20 VUs  1m29.9s/2m0s  3.33 iters/s
 
-running (1m31.0s), 000/030 VUs, 606 complete and 0 interrupted iterations
-cardapio      [  76% ] 00/10 VUs  1m30.8s/2m0s  3.33 iters/s
-criarPedido   [  76% ] 00/20 VUs  1m30.8s/2m0s  3.33 iters/s
+running (1m31.0s), 000/030 VUs, 608 complete and 0 interrupted iterations
+cardapio      [  76% ] 00/10 VUs  1m30.9s/2m0s  3.33 iters/s
+criarPedido   [  76% ] 00/20 VUs  1m30.9s/2m0s  3.33 iters/s
 
 running (1m32.0s), 000/030 VUs, 614 complete and 0 interrupted iterations
-cardapio      [  77% ] 00/10 VUs  1m31.8s/2m0s  3.33 iters/s
-criarPedido   [  77% ] 00/20 VUs  1m31.8s/2m0s  3.33 iters/s
+cardapio      [  77% ] 00/10 VUs  1m31.9s/2m0s  3.33 iters/s
+criarPedido   [  77% ] 00/20 VUs  1m31.9s/2m0s  3.33 iters/s
 
 running (1m33.0s), 000/030 VUs, 620 complete and 0 interrupted iterations
-cardapio      [  77% ] 00/10 VUs  1m32.8s/2m0s  3.33 iters/s
-criarPedido   [  77% ] 00/20 VUs  1m32.8s/2m0s  3.33 iters/s
+cardapio      [  77% ] 00/10 VUs  1m32.9s/2m0s  3.33 iters/s
+criarPedido   [  77% ] 00/20 VUs  1m32.9s/2m0s  3.33 iters/s
 
-running (1m34.0s), 000/030 VUs, 626 complete and 0 interrupted iterations
-cardapio      [  78% ] 00/10 VUs  1m33.8s/2m0s  3.33 iters/s
-criarPedido   [  78% ] 00/20 VUs  1m33.8s/2m0s  3.33 iters/s
+running (1m34.0s), 000/030 VUs, 628 complete and 0 interrupted iterations
+cardapio      [  78% ] 00/10 VUs  1m33.9s/2m0s  3.33 iters/s
+criarPedido   [  78% ] 00/20 VUs  1m33.9s/2m0s  3.33 iters/s
 
 running (1m35.0s), 000/030 VUs, 634 complete and 0 interrupted iterations
-cardapio      [  79% ] 00/10 VUs  1m34.8s/2m0s  3.33 iters/s
-criarPedido   [  79% ] 00/20 VUs  1m34.8s/2m0s  3.33 iters/s
+cardapio      [  79% ] 00/10 VUs  1m34.9s/2m0s  3.33 iters/s
+criarPedido   [  79% ] 00/20 VUs  1m34.9s/2m0s  3.33 iters/s
 
 running (1m36.0s), 000/030 VUs, 640 complete and 0 interrupted iterations
-cardapio      [  80% ] 00/10 VUs  1m35.8s/2m0s  3.33 iters/s
-criarPedido   [  80% ] 00/20 VUs  1m35.8s/2m0s  3.33 iters/s
+cardapio      [  80% ] 00/10 VUs  1m35.9s/2m0s  3.33 iters/s
+criarPedido   [  80% ] 00/20 VUs  1m35.9s/2m0s  3.33 iters/s
 
-running (1m37.0s), 000/030 VUs, 646 complete and 0 interrupted iterations
-cardapio      [  81% ] 00/10 VUs  1m36.8s/2m0s  3.33 iters/s
-criarPedido   [  81% ] 00/20 VUs  1m36.8s/2m0s  3.33 iters/s
+running (1m37.0s), 000/030 VUs, 648 complete and 0 interrupted iterations
+cardapio      [  81% ] 00/10 VUs  1m36.9s/2m0s  3.33 iters/s
+criarPedido   [  81% ] 00/20 VUs  1m36.9s/2m0s  3.33 iters/s
 
 running (1m38.0s), 000/030 VUs, 654 complete and 0 interrupted iterations
-cardapio      [  82% ] 00/10 VUs  1m37.8s/2m0s  3.33 iters/s
-criarPedido   [  82% ] 00/20 VUs  1m37.8s/2m0s  3.33 iters/s
+cardapio      [  82% ] 00/10 VUs  1m37.9s/2m0s  3.33 iters/s
+criarPedido   [  82% ] 00/20 VUs  1m37.9s/2m0s  3.33 iters/s
 
 running (1m39.0s), 000/030 VUs, 660 complete and 0 interrupted iterations
-cardapio      [  82% ] 00/10 VUs  1m38.8s/2m0s  3.33 iters/s
-criarPedido   [  82% ] 00/20 VUs  1m38.8s/2m0s  3.33 iters/s
+cardapio      [  82% ] 00/10 VUs  1m38.9s/2m0s  3.33 iters/s
+criarPedido   [  82% ] 00/20 VUs  1m38.9s/2m0s  3.33 iters/s
 
-running (1m40.0s), 000/030 VUs, 666 complete and 0 interrupted iterations
-cardapio      [  83% ] 00/10 VUs  1m39.8s/2m0s  3.33 iters/s
-criarPedido   [  83% ] 00/20 VUs  1m39.8s/2m0s  3.33 iters/s
+running (1m40.0s), 000/030 VUs, 668 complete and 0 interrupted iterations
+cardapio      [  83% ] 00/10 VUs  1m39.9s/2m0s  3.33 iters/s
+criarPedido   [  83% ] 00/20 VUs  1m39.9s/2m0s  3.33 iters/s
 
 running (1m41.0s), 000/030 VUs, 674 complete and 0 interrupted iterations
-cardapio      [  84% ] 00/10 VUs  1m40.8s/2m0s  3.33 iters/s
-criarPedido   [  84% ] 00/20 VUs  1m40.8s/2m0s  3.33 iters/s
+cardapio      [  84% ] 00/10 VUs  1m40.9s/2m0s  3.33 iters/s
+criarPedido   [  84% ] 00/20 VUs  1m40.9s/2m0s  3.33 iters/s
 
 running (1m42.0s), 000/030 VUs, 680 complete and 0 interrupted iterations
-cardapio      [  85% ] 00/10 VUs  1m41.8s/2m0s  3.33 iters/s
-criarPedido   [  85% ] 00/20 VUs  1m41.8s/2m0s  3.33 iters/s
+cardapio      [  85% ] 00/10 VUs  1m41.9s/2m0s  3.33 iters/s
+criarPedido   [  85% ] 00/20 VUs  1m41.9s/2m0s  3.33 iters/s
 
-running (1m43.0s), 000/030 VUs, 686 complete and 0 interrupted iterations
-cardapio      [  86% ] 00/10 VUs  1m42.8s/2m0s  3.33 iters/s
-criarPedido   [  86% ] 00/20 VUs  1m42.8s/2m0s  3.33 iters/s
+running (1m43.0s), 000/030 VUs, 688 complete and 0 interrupted iterations
+cardapio      [  86% ] 00/10 VUs  1m42.9s/2m0s  3.33 iters/s
+criarPedido   [  86% ] 00/20 VUs  1m42.9s/2m0s  3.33 iters/s
 
 running (1m44.0s), 000/030 VUs, 694 complete and 0 interrupted iterations
-cardapio      [  87% ] 00/10 VUs  1m43.8s/2m0s  3.33 iters/s
-criarPedido   [  87% ] 00/20 VUs  1m43.8s/2m0s  3.33 iters/s
+cardapio      [  87% ] 00/10 VUs  1m43.9s/2m0s  3.33 iters/s
+criarPedido   [  87% ] 00/20 VUs  1m43.9s/2m0s  3.33 iters/s
 
 running (1m45.0s), 000/030 VUs, 700 complete and 0 interrupted iterations
-cardapio      [  87% ] 00/10 VUs  1m44.8s/2m0s  3.33 iters/s
-criarPedido   [  87% ] 00/20 VUs  1m44.8s/2m0s  3.33 iters/s
+cardapio      [  87% ] 00/10 VUs  1m44.9s/2m0s  3.33 iters/s
+criarPedido   [  87% ] 00/20 VUs  1m44.9s/2m0s  3.33 iters/s
 
-running (1m46.0s), 000/030 VUs, 706 complete and 0 interrupted iterations
-cardapio      [  88% ] 00/10 VUs  1m45.8s/2m0s  3.33 iters/s
-criarPedido   [  88% ] 00/20 VUs  1m45.8s/2m0s  3.33 iters/s
+running (1m46.0s), 000/030 VUs, 708 complete and 0 interrupted iterations
+cardapio      [  88% ] 00/10 VUs  1m45.9s/2m0s  3.33 iters/s
+criarPedido   [  88% ] 00/20 VUs  1m45.9s/2m0s  3.33 iters/s
 
 running (1m47.0s), 000/030 VUs, 714 complete and 0 interrupted iterations
-cardapio      [  89% ] 00/10 VUs  1m46.8s/2m0s  3.33 iters/s
-criarPedido   [  89% ] 00/20 VUs  1m46.8s/2m0s  3.33 iters/s
+cardapio      [  89% ] 00/10 VUs  1m46.9s/2m0s  3.33 iters/s
+criarPedido   [  89% ] 00/20 VUs  1m46.9s/2m0s  3.33 iters/s
 
 running (1m48.0s), 000/030 VUs, 720 complete and 0 interrupted iterations
-cardapio      [  90% ] 00/10 VUs  1m47.8s/2m0s  3.33 iters/s
-criarPedido   [  90% ] 00/20 VUs  1m47.8s/2m0s  3.33 iters/s
+cardapio      [  90% ] 00/10 VUs  1m47.9s/2m0s  3.33 iters/s
+criarPedido   [  90% ] 00/20 VUs  1m47.9s/2m0s  3.33 iters/s
 
-running (1m49.0s), 000/030 VUs, 726 complete and 0 interrupted iterations
-cardapio      [  91% ] 00/10 VUs  1m48.8s/2m0s  3.33 iters/s
-criarPedido   [  91% ] 00/20 VUs  1m48.8s/2m0s  3.33 iters/s
+running (1m49.0s), 000/030 VUs, 728 complete and 0 interrupted iterations
+cardapio      [  91% ] 00/10 VUs  1m48.9s/2m0s  3.33 iters/s
+criarPedido   [  91% ] 00/20 VUs  1m48.9s/2m0s  3.33 iters/s
 
-running (1m50.0s), 001/030 VUs, 733 complete and 0 interrupted iterations
-cardapio      [  92% ] 00/10 VUs  1m49.8s/2m0s  3.33 iters/s
-criarPedido   [  92% ] 01/20 VUs  1m49.8s/2m0s  3.33 iters/s
+running (1m50.0s), 000/030 VUs, 734 complete and 0 interrupted iterations
+cardapio      [  92% ] 00/10 VUs  1m49.9s/2m0s  3.33 iters/s
+criarPedido   [  92% ] 00/20 VUs  1m49.9s/2m0s  3.33 iters/s
 
 running (1m51.0s), 000/030 VUs, 740 complete and 0 interrupted iterations
-cardapio      [  92% ] 00/10 VUs  1m50.8s/2m0s  3.33 iters/s
-criarPedido   [  92% ] 00/20 VUs  1m50.8s/2m0s  3.33 iters/s
+cardapio      [  92% ] 00/10 VUs  1m50.9s/2m0s  3.33 iters/s
+criarPedido   [  92% ] 00/20 VUs  1m50.9s/2m0s  3.33 iters/s
 
-running (1m52.0s), 000/030 VUs, 746 complete and 0 interrupted iterations
-cardapio      [  93% ] 00/10 VUs  1m51.8s/2m0s  3.33 iters/s
-criarPedido   [  93% ] 00/20 VUs  1m51.8s/2m0s  3.33 iters/s
+running (1m52.0s), 000/030 VUs, 748 complete and 0 interrupted iterations
+cardapio      [  93% ] 00/10 VUs  1m51.9s/2m0s  3.33 iters/s
+criarPedido   [  93% ] 00/20 VUs  1m51.9s/2m0s  3.33 iters/s
 
 running (1m53.0s), 000/030 VUs, 754 complete and 0 interrupted iterations
-cardapio      [  94% ] 00/10 VUs  1m52.8s/2m0s  3.33 iters/s
-criarPedido   [  94% ] 00/20 VUs  1m52.8s/2m0s  3.33 iters/s
+cardapio      [  94% ] 00/10 VUs  1m52.9s/2m0s  3.33 iters/s
+criarPedido   [  94% ] 00/20 VUs  1m52.9s/2m0s  3.33 iters/s
 
 running (1m54.0s), 000/030 VUs, 760 complete and 0 interrupted iterations
-cardapio      [  95% ] 00/10 VUs  1m53.8s/2m0s  3.33 iters/s
-criarPedido   [  95% ] 00/20 VUs  1m53.8s/2m0s  3.33 iters/s
+cardapio      [  95% ] 00/10 VUs  1m53.9s/2m0s  3.33 iters/s
+criarPedido   [  95% ] 00/20 VUs  1m53.9s/2m0s  3.33 iters/s
 
-running (1m55.0s), 000/030 VUs, 766 complete and 0 interrupted iterations
-cardapio      [  96% ] 00/10 VUs  1m54.8s/2m0s  3.33 iters/s
-criarPedido   [  96% ] 00/20 VUs  1m54.8s/2m0s  3.33 iters/s
+running (1m55.0s), 000/030 VUs, 768 complete and 0 interrupted iterations
+cardapio      [  96% ] 00/10 VUs  1m54.9s/2m0s  3.33 iters/s
+criarPedido   [  96% ] 00/20 VUs  1m54.9s/2m0s  3.33 iters/s
 
 running (1m56.0s), 000/030 VUs, 774 complete and 0 interrupted iterations
-cardapio      [  97% ] 00/10 VUs  1m55.8s/2m0s  3.33 iters/s
-criarPedido   [  97% ] 00/20 VUs  1m55.8s/2m0s  3.33 iters/s
+cardapio      [  97% ] 00/10 VUs  1m55.9s/2m0s  3.33 iters/s
+criarPedido   [  97% ] 00/20 VUs  1m55.9s/2m0s  3.33 iters/s
 
 running (1m57.0s), 000/030 VUs, 780 complete and 0 interrupted iterations
-cardapio      [  97% ] 00/10 VUs  1m56.8s/2m0s  3.33 iters/s
-criarPedido   [  97% ] 00/20 VUs  1m56.8s/2m0s  3.33 iters/s
+cardapio      [  97% ] 00/10 VUs  1m56.9s/2m0s  3.33 iters/s
+criarPedido   [  97% ] 00/20 VUs  1m56.9s/2m0s  3.33 iters/s
 
-running (1m58.0s), 000/030 VUs, 786 complete and 0 interrupted iterations
-cardapio      [  98% ] 00/10 VUs  1m57.8s/2m0s  3.33 iters/s
-criarPedido   [  98% ] 00/20 VUs  1m57.8s/2m0s  3.33 iters/s
+running (1m58.0s), 000/030 VUs, 788 complete and 0 interrupted iterations
+cardapio      [  98% ] 00/10 VUs  1m57.9s/2m0s  3.33 iters/s
+criarPedido   [  98% ] 00/20 VUs  1m57.9s/2m0s  3.33 iters/s
 
 running (1m59.0s), 000/030 VUs, 794 complete and 0 interrupted iterations
-cardapio      [  99% ] 00/10 VUs  1m58.8s/2m0s  3.33 iters/s
-criarPedido   [  99% ] 00/20 VUs  1m58.8s/2m0s  3.33 iters/s
+cardapio      [  99% ] 00/10 VUs  1m58.9s/2m0s  3.33 iters/s
+criarPedido   [  99% ] 00/20 VUs  1m58.9s/2m0s  3.33 iters/s
 
 running (2m00.0s), 000/030 VUs, 800 complete and 0 interrupted iterations
-cardapio      [ 100% ] 00/10 VUs  1m59.8s/2m0s  3.33 iters/s
-criarPedido   [ 100% ] 00/20 VUs  1m59.8s/2m0s  3.33 iters/s
+cardapio      [ 100% ] 00/10 VUs  1m59.9s/2m0s  3.33 iters/s
+criarPedido   [ 100% ] 00/20 VUs  1m59.9s/2m0s  3.33 iters/s
 
 
   █ THRESHOLDS 
 
     http_req_duration{scenario:cardapio}
-    ✓ 'p(95)<500' p(95)=4.61ms
+    ✓ 'p(95)<500' p(95)=6.34ms
 
     http_req_duration{scenario:criarPedido}
-    ✓ 'p(95)<1000' p(95)=31.45ms
+    ✓ 'p(95)<1000' p(95)=68.94ms
 
     http_req_failed
     ✓ 'rate<0.001' rate=0.00%
@@ -510,7 +510,7 @@ criarPedido   [ 100% ] 00/20 VUs  1m59.8s/2m0s  3.33 iters/s
 
   █ TOTAL RESULTS 
 
-    checks_total.......: 801     6.666838/s
+    checks_total.......: 801     6.671438/s
     checks_succeeded...: 100.00% 801 out of 801
     checks_failed......: 0.00%   0 out of 801
 
@@ -518,21 +518,21 @@ criarPedido   [ 100% ] 00/20 VUs  1m59.8s/2m0s  3.33 iters/s
     ✓ pedido 201
 
     HTTP
-    http_req_duration..............: avg=11.85ms min=1.1ms  med=7.29ms  max=241.21ms p(90)=22.31ms p(95)=24.71ms
-      { expected_response:true }...: avg=11.85ms min=1.1ms  med=7.29ms  max=241.21ms p(90)=22.31ms p(95)=24.71ms
-      { scenario:cardapio }........: avg=3.12ms  min=1.1ms  med=2.91ms  max=26.53ms  p(90)=4.1ms   p(95)=4.61ms 
-      { scenario:criarPedido }.....: avg=20.32ms min=5.39ms med=16.64ms max=241.21ms p(90)=24.56ms p(95)=31.45ms
+    http_req_duration..............: avg=10.08ms min=533.59µs med=6.06ms max=134.13ms p(90)=19.25ms p(95)=29.68ms
+      { expected_response:true }...: avg=10.08ms min=533.59µs med=6.06ms max=134.13ms p(90)=19.25ms p(95)=29.68ms
+      { scenario:cardapio }........: avg=2.53ms  min=533.59µs med=2.09ms max=9.06ms   p(90)=3.88ms  p(95)=6.34ms 
+      { scenario:criarPedido }.....: avg=17.53ms min=2.59ms   med=12.6ms max=134.13ms p(90)=29.17ms p(95)=68.94ms
     http_req_failed................: 0.00%  0 out of 802
-    http_reqs......................: 802    6.675161/s
+    http_reqs......................: 802    6.679767/s
 
     EXECUTION
-    iteration_duration.............: avg=11.8ms  min=1.64ms med=7.27ms  max=242.21ms p(90)=22.36ms p(95)=24.69ms
-    iterations.....................: 801    6.666838/s
+    iteration_duration.............: avg=10.19ms min=723.6µs  med=6.33ms max=134.13ms p(90)=19.26ms p(95)=29.17ms
+    iterations.....................: 801    6.671438/s
     vus............................: 0      min=0        max=1 
     vus_max........................: 30     min=30       max=30
 
     NETWORK
-    data_received..................: 498 kB 4.1 kB/s
+    data_received..................: 513 kB 4.3 kB/s
     data_sent......................: 338 kB 2.8 kB/s
 
 

@@ -2,7 +2,7 @@ const express = require('express');
 const { randomUUID } = require('crypto');
 const db = require('../../db');
 const asyncHandler = require('../../lib/asyncHandler');
-const { erro, parseId } = require('../../lib/errors');
+const { erro, parseId, parseTexto } = require('../../lib/errors');
 const { requer } = require('../../auth/rbac');
 const { podeTransicionar } = require('./stateMachine');
 const psp = require('../pagamento/pspClient');
@@ -329,7 +329,7 @@ router.post(
   '/pedidos/:id/desconto',
   requer('GERENTE_UNIDADE', 'ATENDENTE', 'ADMIN'),
   asyncHandler(async (req, res) => {
-    const { tipo, valor, motivo } = req.body || {};
+    const { tipo, valor, motivo: motivoBody } = req.body || {};
     if (!DESCONTO_TIPOS.includes(tipo)) {
       throw erro(400, 'PAYLOAD_INVALIDO', `tipo deve ser um de ${DESCONTO_TIPOS.join(', ')}`);
     }
@@ -337,9 +337,7 @@ router.post(
     if (!Number.isFinite(valorNum) || valorNum <= 0) {
       throw erro(400, 'PAYLOAD_INVALIDO', 'valor deve ser um numero positivo');
     }
-    if (!motivo || !String(motivo).trim()) {
-      throw erro(400, 'PAYLOAD_INVALIDO', 'motivo e obrigatorio para desconto manual');
-    }
+    const motivo = parseTexto(motivoBody, 'motivo', 200);
 
     const ehGerenteOuAdmin = req.usuario.papeis.some((p) => ['GERENTE_UNIDADE', 'ADMIN'].includes(p));
     if (!ehGerenteOuAdmin && valorNum > LIMITE_ATENDENTE[tipo]) {
@@ -406,10 +404,7 @@ router.post(
   '/pedidos/:id/cancelamento',
   requer('ATENDENTE', 'GERENTE_UNIDADE'),
   asyncHandler(async (req, res) => {
-    const { motivo } = req.body || {};
-    if (!motivo || !String(motivo).trim()) {
-      throw erro(400, 'PAYLOAD_INVALIDO', 'motivo e obrigatorio para cancelar um pedido');
-    }
+    const motivo = parseTexto((req.body || {}).motivo, 'motivo', 200);
 
     const id = parseId(req.params.id);
     const resultado = await db.withTransaction(async (client) => {

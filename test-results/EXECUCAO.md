@@ -15,8 +15,14 @@ Plano de Testes:
 ## Resultado da coleção Postman (Newman)
 
 ```
-46 requests, 46 test-scripts, 57 assertions — 0 falhas
+70 requests, 70 test-scripts, 102 assertions — 0 falhas
 ```
+
+(Cresceu de 46/57 para 70/102 nesta rodada, com a cobertura de RF-16, RF-20,
+RF-21, RF-22, RF-23, RF-24, do desconto manual e de regressão para os 2 bugs
+de validação achados via OWASP ZAP — ver a Seção 5 do PDF e
+`security/ZAP.md` para os 3 bugs reais achados e corrigidos durante essa
+rodada de testes.)
 
 Cobre o caminho de ouro completo:
 - **Cancelamento de pedido pago com estorno** (RF-13, CT-17): cria um segundo pedido, aprova
@@ -66,6 +72,27 @@ o driver `pg` devolve colunas `BIGINT` como *string* por padrão; o `clienteId` 
 falhava. Corrigido em `src/db.js` configurando `pg.types.setTypeParser(20, parseInt)` para o
 driver inteiro (não só o ponto que falhou) — fez o valor voltar consistente como `Number` em toda
 a aplicação. Reexecutada a coleção após a correção: 28/28 assertions, 0 falhas.
+
+## 3 bugs reais encontrados e corrigidos na rodada de OWASP ZAP
+
+Detalhe completo em [`security/ZAP.md`](security/ZAP.md) — resumo:
+
+1. **Sem validação de tamanho de texto** (`login`, `nome`, `motivo`, `versaoTexto`)
+   contra o limite `VARCHAR` da coluna — um valor maior que a coluna virava
+   `500 ERRO_INTERNO` em vez de `400`. Corrigido com `parseTexto()`.
+2. **Corrida entre checagem e inserção** em `POST /v1/usuarios`: dois logins
+   iguais quase simultâneos podiam os dois passar pela checagem de unicidade
+   antes de qualquer um confirmar o `INSERT`, e o segundo explodia em `500`
+   em vez de `409 LOGIN_EM_USO`. Corrigido capturando a violação de unicidade
+   do Postgres (`23505`).
+3. **Sem validação de formato de data** (`inicio`/`fim` em campanhas e
+   relatórios) — uma data mal formada ia direto pro cast `::date` do Postgres
+   e virava `500`. Corrigido com `parseData()`.
+
+Nenhum dos três era a vulnerabilidade que o ZAP diagnosticou (SQL Injection /
+Path Traversal / Format String Error) — eram bugs reais de validação ausente
+causando erros não tratados, que o scanner interpretou errado. Todos
+verificados por reprodução direta antes e depois do fix.
 
 ## Casos extras verificados manualmente (fora da coleção automatizada)
 

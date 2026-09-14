@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const db = require('../../db');
 const asyncHandler = require('../../lib/asyncHandler');
-const { erro, parseId } = require('../../lib/errors');
+const { erro, parseId, parseTexto } = require('../../lib/errors');
 const { requer } = require('../../auth/rbac');
 const { registrarAuditoria } = require('../../lib/audit');
 const { PAPEIS_INTERNOS } = require('../../lib/papeis');
@@ -18,10 +18,12 @@ router.post(
   '/usuarios',
   requer('ADMIN'),
   asyncHandler(async (req, res) => {
-    const { nome, login, senha, papeis, unidadeId } = req.body || {};
-    if (!nome || !login || !senha || !Array.isArray(papeis) || papeis.length === 0) {
+    const { nome: nomeBody, login: loginBody, senha, papeis, unidadeId } = req.body || {};
+    if (!nomeBody || !loginBody || !senha || !Array.isArray(papeis) || papeis.length === 0) {
       throw erro(400, 'PAYLOAD_INVALIDO', 'Informe nome, login, senha e papeis[] nao vazio');
     }
+    const nome = parseTexto(nomeBody, 'nome', 120);
+    const login = parseTexto(loginBody, 'login', 60);
     const papeisInvalidos = papeis.filter((p) => !PAPEIS_INTERNOS.includes(p));
     if (papeisInvalidos.length) {
       throw erro(400, 'PAYLOAD_INVALIDO', `Papeis invalidos: ${papeisInvalidos.join(', ')}`);
@@ -39,12 +41,22 @@ router.post(
       if (existente.length) throw erro(409, 'LOGIN_EM_USO', 'Ja existe usuario com este login');
 
       const hash = bcrypt.hashSync(senha, 8);
-      const { rows: us } = await client.query(
-        `INSERT INTO usuario (nome, login, hash_senha, unidade_id)
-         VALUES ($1, $2, $3, $4) RETURNING id`,
-        [nome, login, hash, unidadeIdFinal],
-      );
-      const usuarioId = us[0].id;
+      let usuarioId;
+      try {
+        const { rows: us } = await client.query(
+          `INSERT INTO usuario (nome, login, hash_senha, unidade_id)
+           VALUES ($1, $2, $3, $4) RETURNING id`,
+          [nome, login, hash, unidadeIdFinal],
+        );
+        usuarioId = us[0].id;
+      } catch (e) {
+        // 23505 = unique_violation: cobre a corrida entre o SELECT acima e este
+        // INSERT (duas criacoes do mesmo login quase simultaneas) - achado real
+        // de uma varredura OWASP ZAP, que o rotulou (errado) como SQL Injection
+        // por ver um 500 onde deveria ver um 409 (ver test-results/security/ZAP.md).
+        if (e.code === '23505') throw erro(409, 'LOGIN_EM_USO', 'Ja existe usuario com este login');
+        throw e;
+      }
 
       const { rows: pr } = await client.query(
         'SELECT id, nome FROM papel WHERE nome = ANY($1::text[])',

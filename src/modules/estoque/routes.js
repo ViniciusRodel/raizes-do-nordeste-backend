@@ -1,7 +1,7 @@
 const express = require('express');
 const db = require('../../db');
 const asyncHandler = require('../../lib/asyncHandler');
-const { erro, parseId } = require('../../lib/errors');
+const { erro, parseId, parseTexto } = require('../../lib/errors');
 const { requer } = require('../../auth/rbac');
 const { registrarAuditoria } = require('../../lib/audit');
 
@@ -27,7 +27,7 @@ router.post(
       throw erro(403, 'ACESSO_NEGADO', 'Gerente so movimenta o estoque da propria unidade');
     }
 
-    const { itemEstoqueId, tipo, quantidade, motivo } = req.body || {};
+    const { itemEstoqueId, tipo, quantidade, motivo: motivoBody } = req.body || {};
     const itemId = parseId(itemEstoqueId, 'itemEstoqueId');
     if (!TIPOS.includes(tipo)) {
       throw erro(400, 'PAYLOAD_INVALIDO', `tipo deve ser um de ${TIPOS.join(', ')}`);
@@ -39,9 +39,7 @@ router.post(
     if (tipo === 'ENTRADA_COMPRA' && qtd < 0) {
       throw erro(400, 'PAYLOAD_INVALIDO', 'ENTRADA_COMPRA exige quantidade positiva');
     }
-    if (tipo === 'AJUSTE' && (!motivo || !String(motivo).trim())) {
-      throw erro(400, 'PAYLOAD_INVALIDO', 'motivo e obrigatorio para AJUSTE de estoque');
-    }
+    const motivo = parseTexto(motivoBody, 'motivo', 200, { obrigatorio: tipo === 'AJUSTE' });
 
     const resultado = await db.withTransaction(async (client) => {
       const { rows: ie } = await client.query(
@@ -60,7 +58,7 @@ router.post(
         `INSERT INTO movimento_estoque (item_estoque_id, tipo, quantidade, usuario_id, motivo)
          VALUES ($1, $2, $3, $4, $5)
          RETURNING id, data_hora`,
-        [itemId, tipo, qtd, req.usuario.id, motivo || null],
+        [itemId, tipo, qtd, req.usuario.id, motivo],
       );
 
       if (tipo === 'AJUSTE') {

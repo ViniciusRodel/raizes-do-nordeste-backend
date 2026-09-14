@@ -1,7 +1,7 @@
 const express = require('express');
 const db = require('../../db');
 const asyncHandler = require('../../lib/asyncHandler');
-const { erro, parseId } = require('../../lib/errors');
+const { erro, parseId, parseTexto, parseData } = require('../../lib/errors');
 const { requer } = require('../../auth/rbac');
 const { DESCONTO_TIPOS } = require('../../lib/descontoTipos');
 
@@ -16,10 +16,13 @@ router.post(
   '/campanhas',
   requer('ADMIN', 'ANALISTA_MATRIZ'),
   asyncHandler(async (req, res) => {
-    const { nome, criterio, descontoTipo, descontoValor, inicio, fim } = req.body || {};
-    if (!nome || !inicio || !fim || descontoValor == null) {
+    const { nome: nomeBody, criterio, descontoTipo, descontoValor, inicio: inicioBody, fim: fimBody } = req.body || {};
+    if (!nomeBody || !inicioBody || !fimBody || descontoValor == null) {
       throw erro(400, 'PAYLOAD_INVALIDO', 'Informe nome, descontoValor, inicio e fim');
     }
+    const nome = parseTexto(nomeBody, 'nome', 120);
+    const inicio = parseData(inicioBody, 'inicio');
+    const fim = parseData(fimBody, 'fim');
     if (!DESCONTO_TIPOS.includes(descontoTipo)) {
       throw erro(400, 'PAYLOAD_INVALIDO', `descontoTipo deve ser um de ${DESCONTO_TIPOS.join(', ')}`);
     }

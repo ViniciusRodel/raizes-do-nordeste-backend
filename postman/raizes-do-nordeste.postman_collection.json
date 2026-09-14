@@ -2797,6 +2797,90 @@
           }
         }
       ]
+    },
+    {
+      "name": "69. Negativo: login maior que 60 chars => 400 (regressao OWASP ZAP)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_admin}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/usuarios",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "usuarios"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Teste\",\n  \"login\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\n  \"senha\": \"senha123\",\n  \"papeis\": [\n    \"ATENDENTE\"\n  ]\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('400 Bad Request', () => pm.response.to.have.status(400));",
+              "pm.test('codigo PAYLOAD_INVALIDO', () => pm.expect(pm.response.json().erro.codigo).to.eql('PAYLOAD_INVALIDO'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "70. Negativo: data invalida em campanha => 400 (regressao OWASP ZAP)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_admin}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/campanhas",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "campanhas"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"X\",\n  \"descontoTipo\": \"PERCENTUAL\",\n  \"descontoValor\": 10,\n  \"inicio\": \"2026-01-01\",\n  \"fim\": \"nao-e-uma-data\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('400 Bad Request', () => pm.response.to.have.status(400));",
+              "pm.test('codigo PAYLOAD_INVALIDO', () => pm.expect(pm.response.json().erro.codigo).to.eql('PAYLOAD_INVALIDO'));"
+            ]
+          }
+        }
+      ]
     }
   ]
 }

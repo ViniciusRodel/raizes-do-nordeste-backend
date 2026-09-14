@@ -194,7 +194,7 @@ npm run lint           # ESLint (regras recomendadas, config em eslint.config.js
 O workflow em `.github/workflows/ci.yml` tem um job **`unit`** a cada push/PR que roda
 `npm test`, `npm run lint` e `npm run test:coverage` (sem serviços), e um job **`e2e`**
 que sobe um PostgreSQL real como serviço do runner, aplica o schema e o seed, sobe a
-API e o PSP fake, e roda a coleção Postman completa via Newman (68 requests / 98
+API e o PSP fake, e roda a coleção Postman completa via Newman (70 requests / 102
 assertions) — o relatório HTML fica publicado como artefato do job (RNF-12 —
 automatizado, não é mais só execução manual).
 
@@ -213,8 +213,12 @@ unitariamente testável hoje, não o repositório inteiro.
   carga com k6: p95 de 31ms na criação de pedido (meta RNF-02: 1000ms) e 0% de
   erro (meta RNF-03: 0,1%).
 - [`test-results/security/ZAP.md`](test-results/security/ZAP.md) — varredura
-  OWASP ZAP (passiva + ativa): 1 achado Alto investigado e explicado como falso
-  positivo, 2 achados Baixo (headers) corrigidos de verdade no código.
+  OWASP ZAP (passiva + ativa), 4 rodadas de scan contra os 68 endpoints atuais:
+  **3 bugs reais encontrados e corrigidos** (validação de tamanho de texto,
+  corrida em checagem de login único, validação de formato de data — nenhum
+  era a vulnerabilidade que o scanner apontou) e os achados restantes
+  (SQL Injection/Path Traversal/XSS-em-JSON) investigados e confirmados como
+  falso positivo, com evidência.
 
 ---
 
