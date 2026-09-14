@@ -12,7 +12,9 @@
     "dev": "node --watch src/server.js",
     "migrate": "node scripts/migrate.js",
     "seed": "node scripts/seed.js",
-    "test": "node --test"
+    "test": "node --test",
+    "loadtest:setup": "node scripts/loadtest-setup.js",
+    "loadtest": "k6 run loadtest/pedidos.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

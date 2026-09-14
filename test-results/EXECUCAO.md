@@ -4,7 +4,13 @@ Execução real do stack completo (API + PostgreSQL + PSP fake), não apenas lei
 
 **Ambiente:** Windows, Node.js 20/24, PostgreSQL 16 (instância local dedicada, porta 5433),
 API na porta 3000, PSP fake na porta 4000. Banco recriado do zero (`npm run migrate && npm run seed`)
-antes da execução.
+antes da execução. Desde a versão mais recente, **a mesma coleção também roda dentro do CI**
+a cada push (`.github/workflows/ci.yml`, job `e2e`) — ver seção "Testes e CI" do README.
+
+Este arquivo cobre o funcional (caminho de ouro). Para os outros dois tipos de evidência do
+Plano de Testes:
+- [`loadtest/CT-19.md`](loadtest/CT-19.md) — teste de carga (k6).
+- [`security/ZAP.md`](security/ZAP.md) — varredura de segurança (OWASP ZAP).
 
 ## Resultado da coleção Postman (Newman)
 

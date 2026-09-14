@@ -3,6 +3,7 @@ const db = require('../../db');
 const asyncHandler = require('../../lib/asyncHandler');
 
 const router = express.Router();
+const CANAIS = ['APP', 'TOTEM', 'BALCAO', 'PICKUP'];
 
 // GET /v1/unidades/:unidadeId/cardapio?canal=APP  -> RF-04
 // Retorna apenas itens habilitados na unidade, com produto ativo,
@@ -34,9 +35,15 @@ router.get(
       [unidadeId],
     );
 
+    // canal nunca entra em SQL nenhum (so e ecoado); mesmo assim, validamos
+    // contra a lista permitida em vez de refletir texto arbitrario do
+    // cliente na resposta (achado de varredura OWASP ZAP - ver
+    // test-results/security/ZAP.md).
+    const canal = CANAIS.includes(req.query.canal) ? req.query.canal : 'APP';
+
     res.json({
       unidadeId: Number(unidadeId),
-      canal: req.query.canal || 'APP',
+      canal,
       itens: rows,
     });
   }),

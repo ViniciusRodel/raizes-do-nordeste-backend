@@ -6,8 +6,19 @@ const { HttpError } = require('./lib/errors');
 
 const app = express();
 
+// Nao anunciar a stack (achado OWASP ZAP: "Server Leaks Information via
+// X-Powered-By" - ver test-results/security/ZAP.md).
+app.disable('x-powered-by');
+
 // Guarda o corpo cru para validar a assinatura HMAC do webhook do PSP.
 app.use(express.json({ verify: (req, _res, buf) => { req.rawBody = buf; } }));
+
+// Cabecalhos minimos de seguranca (achado OWASP ZAP: "X-Content-Type-Options
+// Header Missing"). Sem trazer helmet como dependencia so por isto.
+app.use((_req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  next();
+});
 
 // ---- Saude / prontidao (RNF-01) ----
 app.get('/health', (_req, res) => res.json({ status: 'ok' }));

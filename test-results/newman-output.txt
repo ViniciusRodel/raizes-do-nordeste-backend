@@ -1,220 +1,220 @@
-(node:23924) [DEP0176] DeprecationWarning: fs.F_OK is deprecated, use fs.constants.F_OK instead
+(node:20388) [DEP0176] DeprecationWarning: fs.F_OK is deprecated, use fs.constants.F_OK instead
 (Use `node --trace-deprecation ...` to show where the warning was created)
 newman
 
 Raizes do Nordeste - Back-end (caminho de ouro)
 
 → 1. Login - Cliente (Maria)
-  POST http://localhost:3000/v1/auth/login [200 OK, 536B, 74ms]
+  POST http://localhost:3000/v1/auth/login [200 OK, 546B, 145ms]
   √  200 e token recebido
 
 → 2. Login - Atendente
-  POST http://localhost:3000/v1/auth/login [200 OK, 550B, 20ms]
+  POST http://localhost:3000/v1/auth/login [200 OK, 560B, 22ms]
   √  200
 
 → 3. Login - Cozinheiro
-  POST http://localhost:3000/v1/auth/login [200 OK, 554B, 43ms]
+  POST http://localhost:3000/v1/auth/login [200 OK, 564B, 20ms]
   √  200
 
 → 4. Login - Analista da Matriz
-  POST http://localhost:3000/v1/auth/login [200 OK, 567B, 18ms]
+  POST http://localhost:3000/v1/auth/login [200 OK, 577B, 22ms]
   √  200
 
 → 5. Cardapio da unidade 1 (canal APP)
-  GET http://localhost:3000/v1/unidades/1/cardapio?canal=APP [200 OK, 789B, 17ms]
+  GET http://localhost:3000/v1/unidades/1/cardapio?canal=APP [200 OK, 799B, 41ms]
   √  200 e lista de itens
   √  Canjica sazonal NAO aparece fora de junho/2026
 
 → 6. Criar pedido (Cliente, canal APP)  [CT-01]
-  POST http://localhost:3000/v1/pedidos [201 Created, 448B, 75ms]
+  POST http://localhost:3000/v1/pedidos [201 Created, 458B, 41ms]
   √  201 Created
   √  status AGUARDANDO_PAGAMENTO
   √  total = 1x12 + 2x9 = 30
 
 → 7. Consultar pedido (AGUARDANDO_PAGAMENTO)
-  GET http://localhost:3000/v1/pedidos/1 [200 OK, 677B, 3ms]
+  GET http://localhost:3000/v1/pedidos/1 [200 OK, 687B, 5ms]
   √  200
   √  ainda nao pago
 
 → 8. PSP: aprovar cobranca (dispara webhook)  [CT-04]
-  POST http://localhost:4000/charges/psp_0c6fe27fb21e3f32/aprovar [200 OK, 381B, 67ms]
+  POST http://localhost:4000/charges/psp_4017c5473729f8eb/aprovar [200 OK, 381B, 111ms]
   √  webhook entregue com 200
 
 → 9. Consultar pedido (agora PAGO)
-  GET http://localhost:3000/v1/pedidos/1 [200 OK, 683B, 3ms]
+  GET http://localhost:3000/v1/pedidos/1 [200 OK, 693B, 4ms]
   √  status PAGO
 
 → 10. Fidelidade da Maria (pontos creditados)
-  GET http://localhost:3000/v1/clientes/1/fidelidade [200 OK, 368B, 4ms]
+  GET http://localhost:3000/v1/clientes/1/fidelidade [200 OK, 378B, 6ms]
   √  saldo = 30 pontos (1 por real)
 
 → 11. PSP: reenviar o MESMO webhook (idempotencia)  [CT-11]
-  POST http://localhost:4000/charges/psp_0c6fe27fb21e3f32/reenviar [200 OK, 381B, 19ms]
+  POST http://localhost:4000/charges/psp_4017c5473729f8eb/reenviar [200 OK, 381B, 20ms]
   √  webhook reenviado com 200
 
 → 12. Fidelidade da Maria (saldo NAO dobrou)
-  GET http://localhost:3000/v1/clientes/1/fidelidade [200 OK, 368B, 2ms]
+  GET http://localhost:3000/v1/clientes/1/fidelidade [200 OK, 378B, 4ms]
   √  saldo continua 30 (idempotencia)
 
 → 13. Fila da cozinha (unidade 1)  [CT-05]
-  GET http://localhost:3000/v1/unidades/1/fila-cozinha [200 OK, 391B, 3ms]
+  GET http://localhost:3000/v1/unidades/1/fila-cozinha [200 OK, 401B, 4ms]
   √  200 e o pedido esta na fila
 
 → 14. Avancar status -> EM_PREPARO
-  PATCH http://localhost:3000/v1/pedidos/1/status [200 OK, 265B, 4ms]
+  PATCH http://localhost:3000/v1/pedidos/1/status [200 OK, 275B, 5ms]
   √  200 e EM_PREPARO
 
 → 15. Avancar status -> PRONTO
-  PATCH http://localhost:3000/v1/pedidos/1/status [200 OK, 261B, 3ms]
+  PATCH http://localhost:3000/v1/pedidos/1/status [200 OK, 271B, 3ms]
   √  200 e PRONTO
 
 → 16. Avancar status -> ENTREGUE
-  PATCH http://localhost:3000/v1/pedidos/1/status [200 OK, 263B, 7ms]
+  PATCH http://localhost:3000/v1/pedidos/1/status [200 OK, 273B, 4ms]
   √  200 e ENTREGUE
 
 → 17. Transicao invalida (ENTREGUE -> EM_PREPARO) => 409  [CT-20]
-  PATCH http://localhost:3000/v1/pedidos/1/status [409 Conflict, 340B, 3ms]
+  PATCH http://localhost:3000/v1/pedidos/1/status [409 Conflict, 350B, 4ms]
   √  409 Conflict
   √  codigo TRANSICAO_INVALIDA
 
 → 18. RBAC: relatorio de vendas com token do Cozinheiro => 403  [CT-16]
-  GET http://localhost:3000/v1/relatorios/vendas [403 Forbidden, 320B, 1ms]
+  GET http://localhost:3000/v1/relatorios/vendas [403 Forbidden, 330B, 2ms]
   √  403 Forbidden
   √  codigo ACESSO_NEGADO
 
 → 19. Relatorio de vendas com Analista => 200  [CT-07 parcial]
-  GET http://localhost:3000/v1/relatorios/vendas [200 OK, 392B, 6ms]
+  GET http://localhost:3000/v1/relatorios/vendas [200 OK, 402B, 8ms]
   √  200 e series agregadas
 
 → 20. Trilha de auditoria (Analista)  [RF-14]
-  GET http://localhost:3000/v1/auditoria [200 OK, 527B, 2ms]
+  GET http://localhost:3000/v1/auditoria [200 OK, 537B, 3ms]
   √  200 e registrou PAGAMENTO_CONFIRMADO
 
 → 21. Negativo: item sazonal fora da janela => 422  [CT-13]
-  POST http://localhost:3000/v1/pedidos [422 Unprocessable Entity, 411B, 12ms]
+  POST http://localhost:3000/v1/pedidos [422 Unprocessable Entity, 421B, 3ms]
   √  422 Unprocessable
   √  motivo FORA_DA_JANELA_SAZONAL
 
 → 22. Criar 2o pedido (Cuscuz) - para testar cancelamento
-  POST http://localhost:3000/v1/pedidos [201 Created, 448B, 20ms]
+  POST http://localhost:3000/v1/pedidos [201 Created, 458B, 18ms]
   √  201 e total = 18 (Cuscuz)
 
 → 23. PSP: aprovar cobranca do 2o pedido
-  POST http://localhost:4000/charges/psp_d32bbe59ccc49efb/aprovar [200 OK, 381B, 21ms]
+  POST http://localhost:4000/charges/psp_fcd77257cb8e31ee/aprovar [200 OK, 381B, 21ms]
   √  webhook entregue com 200
 
 → 24. Fidelidade da Maria antes do cancelamento (30 + 18 = 48)
-  GET http://localhost:3000/v1/clientes/1/fidelidade [200 OK, 459B, 4ms]
+  GET http://localhost:3000/v1/clientes/1/fidelidade [200 OK, 469B, 3ms]
   √  saldo = 48
 
 → 25. Cancelar o 2o pedido com estorno (Atendente)  [CT-17]
-  POST http://localhost:3000/v1/pedidos/2/cancelamento [200 OK, 282B, 22ms]
+  POST http://localhost:3000/v1/pedidos/2/cancelamento [200 OK, 292B, 21ms]
   √  200 e CANCELADO_COM_ESTORNO
 
 → 26. Fidelidade da Maria apos o estorno (volta a 30)
-  GET http://localhost:3000/v1/clientes/1/fidelidade [200 OK, 544B, 2ms]
+  GET http://localhost:3000/v1/clientes/1/fidelidade [200 OK, 554B, 3ms]
   √  saldo volta a 30 (pontos do 2o pedido estornados)
 
 → 27. Auditoria mostra o CANCELAMENTO com motivo e autor
-  GET http://localhost:3000/v1/auditoria?tipo=CANCELAMENTO [200 OK, 554B, 2ms]
+  GET http://localhost:3000/v1/auditoria?tipo=CANCELAMENTO [200 OK, 564B, 3ms]
   √  200 e registrou CANCELAMENTO com motivo
 
 → 28. Negativo: cancelar pedido ja ENTREGUE => 409
-  POST http://localhost:3000/v1/pedidos/1/cancelamento [409 Conflict, 355B, 3ms]
+  POST http://localhost:3000/v1/pedidos/1/cancelamento [409 Conflict, 365B, 3ms]
   √  409 Conflict
   √  codigo TRANSICAO_INVALIDA
 
 → 29. Negativo: cancelar sem motivo => 400
-  POST http://localhost:3000/v1/pedidos/2/cancelamento [400 Bad Request, 340B, 2ms]
+  POST http://localhost:3000/v1/pedidos/2/cancelamento [400 Bad Request, 350B, 3ms]
   √  400 Bad Request
   √  codigo PAYLOAD_INVALIDO
 
 → 30. Login - Admin
-  POST http://localhost:3000/v1/auth/login [200 OK, 540B, 26ms]
+  POST http://localhost:3000/v1/auth/login [200 OK, 550B, 20ms]
   √  200
 
 → 31. Admin consulta cadastro do cliente (dados decifrados)  [RNF-06]
-  GET http://localhost:3000/v1/clientes/1 [200 OK, 417B, 5ms]
+  GET http://localhost:3000/v1/clientes/1 [200 OK, 427B, 8ms]
   √  200 e nome/cpf decifrados corretamente
 
 → 32. Negativo: Atendente NAO pode ver cadastro do cliente => 403
-  GET http://localhost:3000/v1/clientes/1 [403 Forbidden, 329B, 4ms]
+  GET http://localhost:3000/v1/clientes/1 [403 Forbidden, 339B, 2ms]
   √  403 Forbidden
 
 → 33. Auditoria mostra o ACESSO_DADO_PESSOAL do Admin
-  GET http://localhost:3000/v1/auditoria?tipo=ACESSO_DADO_PESSOAL [200 OK, 517B, 4ms]
+  GET http://localhost:3000/v1/auditoria?tipo=ACESSO_DADO_PESSOAL [200 OK, 527B, 2ms]
   √  200 e registrou o acesso ao dado pessoal
 
 → 34. Login - Joao
-  POST http://localhost:3000/v1/auth/login [200 OK, 533B, 25ms]
+  POST http://localhost:3000/v1/auth/login [200 OK, 543B, 20ms]
   √  200
 
 → 35. Negativo: Joao tenta revogar consentimento da Maria => 403
-  DELETE http://localhost:3000/v1/clientes/1/consentimentos/1 [403 Forbidden, 358B, 2ms]
+  DELETE http://localhost:3000/v1/clientes/1/consentimentos/1 [403 Forbidden, 368B, 3ms]
   √  403 Forbidden
 
 → 36. Maria revoga o proprio consentimento de FIDELIDADE  [RF-18]
-  DELETE http://localhost:3000/v1/clientes/1/consentimentos/1 [200 OK, 276B, 6ms]
+  DELETE http://localhost:3000/v1/clientes/1/consentimentos/1 [200 OK, 286B, 4ms]
   √  200 e revogadoEm preenchido
 
 → 37. Revogar de novo e idempotente (mesmo revogadoEm)
-  DELETE http://localhost:3000/v1/clientes/1/consentimentos/1 [200 OK, 276B, 3ms]
+  DELETE http://localhost:3000/v1/clientes/1/consentimentos/1 [200 OK, 286B, 3ms]
   √  200 e revogadoEm nao mudou
 
 → 38. Maria solicita anonimizacao  [CT-18]
-  POST http://localhost:3000/v1/clientes/1/anonimizacao [200 OK, 269B, 3ms]
+  POST http://localhost:3000/v1/clientes/1/anonimizacao [200 OK, 279B, 6ms]
   √  200 e anonimizado=true
 
 → 39. Negativo: anonimizar de novo => 409 JA_ANONIMIZADO
-  POST http://localhost:3000/v1/clientes/1/anonimizacao [409 Conflict, 317B, 3ms]
+  POST http://localhost:3000/v1/clientes/1/anonimizacao [409 Conflict, 327B, 3ms]
   √  409 Conflict
   √  codigo JA_ANONIMIZADO
 
 → 40. Admin confirma: cadastro da Maria agora vem nulo
-  GET http://localhost:3000/v1/clientes/1 [200 OK, 337B, 4ms]
+  GET http://localhost:3000/v1/clientes/1 [200 OK, 347B, 3ms]
   √  nome/cpf/email/telefone nulos
 
 → 41. Novo pedido da Maria apos anonimizacao
-  POST http://localhost:3000/v1/pedidos [201 Created, 447B, 19ms]
+  POST http://localhost:3000/v1/pedidos [201 Created, 457B, 19ms]
   √  201 Created
 
 → 42. PSP aprova o novo pedido da Maria
-  POST http://localhost:4000/charges/psp_cc7c22183c93d5d3/aprovar [200 OK, 381B, 20ms]
+  POST http://localhost:4000/charges/psp_9b7751de7dfd5101/aprovar [200 OK, 381B, 21ms]
   √  webhook entregue com 200
 
 → 43. Fidelidade da Maria: saldo NAO mudou (consentimento revogado)  [CT-18]
-  GET http://localhost:3000/v1/clientes/1/fidelidade [200 OK, 544B, 3ms]
+  GET http://localhost:3000/v1/clientes/1/fidelidade [200 OK, 554B, 3ms]
   √  saldo continua 30 - pedido pos-anonimizacao nao creditou pontos
 
 → 44. Auditoria mostra a ANONIMIZACAO
-  GET http://localhost:3000/v1/auditoria?tipo=ANONIMIZACAO [200 OK, 567B, 3ms]
+  GET http://localhost:3000/v1/auditoria?tipo=ANONIMIZACAO [200 OK, 577B, 4ms]
   √  200 e registrou ANONIMIZACAO
 
 → 45. Joao registra consentimento de FIDELIDADE  [RF-17]
-  POST http://localhost:3000/v1/clientes/2/consentimentos [201 Created, 349B, 3ms]
+  POST http://localhost:3000/v1/clientes/2/consentimentos [201 Created, 359B, 4ms]
   √  201 Created
 
 → 46. Negativo: Joao registra a mesma finalidade de novo => 409
-  POST http://localhost:3000/v1/clientes/2/consentimentos [409 Conflict, 354B, 2ms]
+  POST http://localhost:3000/v1/clientes/2/consentimentos [409 Conflict, 364B, 3ms]
   √  409 Conflict
   √  codigo CONSENTIMENTO_JA_VIGENTE
 
-┌─────────────────────────┬──────────────────┬──────────────────┐
-│                         │         executed │           failed │
-├─────────────────────────┼──────────────────┼──────────────────┤
-│              iterations │                1 │                0 │
-├─────────────────────────┼──────────────────┼──────────────────┤
-│                requests │               46 │                0 │
-├─────────────────────────┼──────────────────┼──────────────────┤
-│            test-scripts │               46 │                0 │
-├─────────────────────────┼──────────────────┼──────────────────┤
-│      prerequest-scripts │                0 │                0 │
-├─────────────────────────┼──────────────────┼──────────────────┤
-│              assertions │               57 │                0 │
-├─────────────────────────┴──────────────────┴──────────────────┤
-│ total run duration: 4.5s                                      │
-├───────────────────────────────────────────────────────────────┤
-│ total data received: 8.7kB (approx)                           │
-├───────────────────────────────────────────────────────────────┤
-│ average response time: 12ms [min: 1ms, max: 75ms, s.d.: 18ms] │
-└───────────────────────────────────────────────────────────────┘
+┌─────────────────────────┬───────────────────┬──────────────────┐
+│                         │          executed │           failed │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│              iterations │                 1 │                0 │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│                requests │                46 │                0 │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│            test-scripts │                46 │                0 │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│      prerequest-scripts │                 0 │                0 │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│              assertions │                57 │                0 │
+├─────────────────────────┴───────────────────┴──────────────────┤
+│ total run duration: 4.5s                                       │
+├────────────────────────────────────────────────────────────────┤
+│ total data received: 8.7kB (approx)                            │
+├────────────────────────────────────────────────────────────────┤
+│ average response time: 14ms [min: 2ms, max: 145ms, s.d.: 26ms] │
+└────────────────────────────────────────────────────────────────┘

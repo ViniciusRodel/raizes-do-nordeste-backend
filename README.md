@@ -159,9 +159,10 @@ src/
     auditoria/routes.js
     relatorios/routes.js
 db/schema.sql                DDL (recriado a cada migrate)
-scripts/migrate.js · seed.js
+scripts/migrate.js · seed.js · loadtest-setup.js
 psp-fake/server.js           provedor de pagamento simulado (fora do sistema)
 postman/                     coleção + environment
+loadtest/pedidos.js          script k6 do teste de carga (CT-19)
 test/stateMachine.test.js    unitário puro (roda no CI, sem banco)
 ```
 
@@ -173,12 +174,22 @@ test/stateMachine.test.js    unitário puro (roda no CI, sem banco)
 npm test          # unitário: regras da máquina de estados do pedido
 ```
 
-O workflow em `.github/workflows/ci.yml` roda `npm test` a cada push/PR.
+O workflow em `.github/workflows/ci.yml` tem dois jobs a cada push/PR:
+**`unit`** (`npm test`, sem serviços) e **`e2e`**, que sobe um PostgreSQL real como
+serviço do runner, aplica o schema e o seed, sobe a API e o PSP fake, e roda a
+coleção Postman completa via Newman (46 requests / 57 assertions) — o relatório
+HTML fica publicado como artefato do job (RNF-12 — automatizado, não é mais só
+execução manual).
 
-**A coleção Postman foi executada de ponta a ponta contra o stack real** (API + PostgreSQL +
-PSP fake) — evidência, relatório HTML e os detalhes (incluindo um bug real encontrado e
-corrigido nessa execução) estão em [`test-results/EXECUCAO.md`](test-results/EXECUCAO.md).
-Rodar a coleção via Newman dentro do pipeline de CI é o próximo incremento (RNF-12).
+**Evidência de execução real** (fora do CI, feita durante o desenvolvimento):
+- [`test-results/EXECUCAO.md`](test-results/EXECUCAO.md) — coleção completa contra
+  o stack real, incluindo um bug real encontrado e corrigido.
+- [`test-results/loadtest/CT-19.md`](test-results/loadtest/CT-19.md) — teste de
+  carga com k6: p95 de 31ms na criação de pedido (meta RNF-02: 1000ms) e 0% de
+  erro (meta RNF-03: 0,1%).
+- [`test-results/security/ZAP.md`](test-results/security/ZAP.md) — varredura
+  OWASP ZAP (passiva + ativa): 1 achado Alto investigado e explicado como falso
+  positivo, 2 achados Baixo (headers) corrigidos de verdade no código.
 
 ---
 
