@@ -8,7 +8,7 @@ const { podeTransicionar } = require('./stateMachine');
 const psp = require('../pagamento/pspClient');
 const { registrarAuditoria } = require('../../lib/audit');
 const { devolverEstoque } = require('../../lib/estoque');
-const { estornarPontos } = require('../../lib/pontos');
+const { estornarPontos, resgatarPontos, reverterResgate } = require('../../lib/pontos');
 const { CANAIS } = require('../../lib/canais');
 
 const router = express.Router();
@@ -22,7 +22,7 @@ router.post(
   '/pedidos',
   requer('CLIENTE', 'ATENDENTE'),
   asyncHandler(async (req, res) => {
-    const { unidadeId: unidadeIdBody, canal, itens, clienteId } = req.body || {};
+    const { unidadeId: unidadeIdBody, canal, itens, clienteId, resgatePontos } = req.body || {};
 
     if (!unidadeIdBody || !canal || !Array.isArray(itens) || itens.length === 0) {
       throw erro(400, 'PAYLOAD_INVALIDO', 'Informe unidadeId, canal e itens[] nao vazio');
@@ -109,7 +109,7 @@ router.post(
 
       // 3) cria pedido + itens
       const subtotal = linhas.reduce((s, l) => s + l.precoUnit * l.quantidade, 0);
-      const total = subtotal;
+      let total = subtotal;
       const { rows: pr } = await client.query(
         `INSERT INTO pedido (unidade_id, canal, cliente_id, status, subtotal, total)
          VALUES ($1, $2, $3, 'AGUARDANDO_PAGAMENTO', $4, $5)
@@ -124,6 +124,27 @@ router.post(
              (pedido_id, produto_base_id, descricao_snapshot, preco_unit_snapshot, quantidade, subtotal)
            VALUES ($1, $2, $3, $4, $5, $6)`,
           [pedido.id, l.produtoId, l.nome, l.precoUnit, l.quantidade, l.precoUnit * l.quantidade],
+        );
+      }
+
+      // 3b) resgate de pontos (RF-20) - opcional, so com cliente identificado
+      let descontoPontos = 0;
+      if (resgatePontos) {
+        const pontos = Number(resgatePontos);
+        if (!Number.isInteger(pontos) || pontos <= 0) {
+          throw erro(400, 'PAYLOAD_INVALIDO', 'resgatePontos deve ser um inteiro positivo');
+        }
+        if (!clienteFinal) {
+          throw erro(400, 'PAYLOAD_INVALIDO', 'resgatePontos exige um cliente identificado no pedido');
+        }
+        descontoPontos = await resgatarPontos(client, clienteFinal, pedido.id, pontos);
+        if (descontoPontos > subtotal) {
+          throw erro(422, 'PONTOS_EXCEDEM_TOTAL', 'O desconto do resgate excede o total do pedido');
+        }
+        total = Number((subtotal - descontoPontos).toFixed(2));
+        await client.query(
+          'UPDATE pedido SET desconto_pontos = $1, total = $2 WHERE id = $3',
+          [descontoPontos, total, pedido.id],
         );
       }
 
@@ -145,6 +166,7 @@ router.post(
           pedidoId: pedido.id,
           status: pedido.status,
           total,
+          descontoPontos,
           pagamento: {
             idTransacaoPSP: cobranca.idTransacao,
             meio: cobranca.meio,
@@ -168,6 +190,7 @@ router.post(
           pedidoId: pedido.id,
           status: 'PAGAMENTO_PENDENTE',
           total,
+          descontoPontos,
           pagamento: null,
           aviso: 'PSP indisponivel; a cobranca sera reprocessada automaticamente',
         };
@@ -187,7 +210,7 @@ router.get(
     const id = parseId(req.params.id);
     const { rows } = await db.query(
       `SELECT p.id, p.unidade_id, p.canal, p.cliente_id, p.status,
-              p.subtotal, p.total, p.criado_em, p.pago_em,
+              p.subtotal, p.desconto_pontos, p.total, p.criado_em, p.pago_em,
               COALESCE(
                 json_agg(json_build_object(
                   'produtoId', ip.produto_base_id,
@@ -219,6 +242,7 @@ router.get(
       clienteId: pedido.cliente_id,
       status: pedido.status,
       subtotal: pedido.subtotal,
+      descontoPontos: pedido.desconto_pontos,
       total: pedido.total,
       criadoEm: pedido.criado_em,
       pagoEm: pedido.pago_em,
@@ -353,6 +377,7 @@ router.post(
       }
 
       await devolverEstoque(client, pedido);
+      await reverterResgate(client, pedido);
 
       await client.query(
         `UPDATE pedido

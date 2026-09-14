@@ -5,31 +5,109 @@
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
-    { "key": "baseUrl", "value": "http://localhost:3000" },
-    { "key": "pspUrl", "value": "http://localhost:4000" },
-    { "key": "token_cliente", "value": "" },
-    { "key": "token_atendente", "value": "" },
-    { "key": "token_cozinheiro", "value": "" },
-    { "key": "token_analista", "value": "" },
-    { "key": "cliente_id_maria", "value": "" },
-    { "key": "pedido_id", "value": "" },
-    { "key": "charge_id", "value": "" },
-    { "key": "pedido2_id", "value": "" },
-    { "key": "charge2_id", "value": "" },
-    { "key": "token_admin", "value": "" },
-    { "key": "token_joao", "value": "" },
-    { "key": "cliente_id_joao", "value": "" },
-    { "key": "pedido3_id", "value": "" },
-    { "key": "charge3_id", "value": "" }
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "pspUrl",
+      "value": "http://localhost:4000"
+    },
+    {
+      "key": "token_cliente",
+      "value": ""
+    },
+    {
+      "key": "token_atendente",
+      "value": ""
+    },
+    {
+      "key": "token_cozinheiro",
+      "value": ""
+    },
+    {
+      "key": "token_analista",
+      "value": ""
+    },
+    {
+      "key": "cliente_id_maria",
+      "value": ""
+    },
+    {
+      "key": "pedido_id",
+      "value": ""
+    },
+    {
+      "key": "charge_id",
+      "value": ""
+    },
+    {
+      "key": "pedido2_id",
+      "value": ""
+    },
+    {
+      "key": "charge2_id",
+      "value": ""
+    },
+    {
+      "key": "token_admin",
+      "value": ""
+    },
+    {
+      "key": "token_joao",
+      "value": ""
+    },
+    {
+      "key": "cliente_id_joao",
+      "value": ""
+    },
+    {
+      "key": "pedido3_id",
+      "value": ""
+    },
+    {
+      "key": "charge3_id",
+      "value": ""
+    },
+    {
+      "key": "token_gerente",
+      "value": ""
+    },
+    {
+      "key": "pedido_resgate_id",
+      "value": ""
+    },
+    {
+      "key": "campanha_id",
+      "value": ""
+    }
   ],
   "item": [
     {
       "name": "1. Login - Cliente (Maria)",
       "request": {
         "method": "POST",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
-        "url": { "raw": "{{baseUrl}}/v1/auth/login", "host": ["{{baseUrl}}"], "path": ["v1", "auth", "login"] },
-        "body": { "mode": "raw", "raw": "{\n  \"login\": \"maria\",\n  \"senha\": \"senha123\"\n}" }
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "auth",
+            "login"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"login\": \"maria\",\n  \"senha\": \"senha123\"\n}"
+        }
       },
       "event": [
         {
@@ -50,64 +128,160 @@
       "name": "2. Login - Atendente",
       "request": {
         "method": "POST",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
-        "url": { "raw": "{{baseUrl}}/v1/auth/login", "host": ["{{baseUrl}}"], "path": ["v1", "auth", "login"] },
-        "body": { "mode": "raw", "raw": "{\n  \"login\": \"atendente\",\n  \"senha\": \"senha123\"\n}" }
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "auth",
+            "login"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"login\": \"atendente\",\n  \"senha\": \"senha123\"\n}"
+        }
       },
       "event": [
-        { "listen": "test", "script": { "type": "text/javascript", "exec": [
-          "pm.collectionVariables.set('token_atendente', pm.response.json().token);",
-          "pm.test('200', () => pm.response.to.have.status(200));"
-        ] } }
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.collectionVariables.set('token_atendente', pm.response.json().token);",
+              "pm.test('200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
       ]
     },
     {
       "name": "3. Login - Cozinheiro",
       "request": {
         "method": "POST",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
-        "url": { "raw": "{{baseUrl}}/v1/auth/login", "host": ["{{baseUrl}}"], "path": ["v1", "auth", "login"] },
-        "body": { "mode": "raw", "raw": "{\n  \"login\": \"cozinheiro\",\n  \"senha\": \"senha123\"\n}" }
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "auth",
+            "login"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"login\": \"cozinheiro\",\n  \"senha\": \"senha123\"\n}"
+        }
       },
       "event": [
-        { "listen": "test", "script": { "type": "text/javascript", "exec": [
-          "pm.collectionVariables.set('token_cozinheiro', pm.response.json().token);",
-          "pm.test('200', () => pm.response.to.have.status(200));"
-        ] } }
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.collectionVariables.set('token_cozinheiro', pm.response.json().token);",
+              "pm.test('200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
       ]
     },
     {
       "name": "4. Login - Analista da Matriz",
       "request": {
         "method": "POST",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
-        "url": { "raw": "{{baseUrl}}/v1/auth/login", "host": ["{{baseUrl}}"], "path": ["v1", "auth", "login"] },
-        "body": { "mode": "raw", "raw": "{\n  \"login\": \"analista\",\n  \"senha\": \"senha123\"\n}" }
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "auth",
+            "login"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"login\": \"analista\",\n  \"senha\": \"senha123\"\n}"
+        }
       },
       "event": [
-        { "listen": "test", "script": { "type": "text/javascript", "exec": [
-          "pm.collectionVariables.set('token_analista', pm.response.json().token);",
-          "pm.test('200', () => pm.response.to.have.status(200));"
-        ] } }
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.collectionVariables.set('token_analista', pm.response.json().token);",
+              "pm.test('200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
       ]
     },
     {
       "name": "5. Cardapio da unidade 1 (canal APP)",
       "request": {
         "method": "GET",
-        "header": [{ "key": "Authorization", "value": "Bearer {{token_cliente}}" }],
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_cliente}}"
+          }
+        ],
         "url": {
           "raw": "{{baseUrl}}/v1/unidades/1/cardapio?canal=APP",
-          "host": ["{{baseUrl}}"], "path": ["v1", "unidades", "1", "cardapio"],
-          "query": [{ "key": "canal", "value": "APP" }]
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "unidades",
+            "1",
+            "cardapio"
+          ],
+          "query": [
+            {
+              "key": "canal",
+              "value": "APP"
+            }
+          ]
         }
       },
       "event": [
-        { "listen": "test", "script": { "type": "text/javascript", "exec": [
-          "const j = pm.response.json();",
-          "pm.test('200 e lista de itens', () => { pm.response.to.have.status(200); pm.expect(j.itens).to.be.an('array'); });",
-          "pm.test('Canjica sazonal NAO aparece fora de junho/2026', () => pm.expect(j.itens.some(i => i.nome === 'Canjica Junina')).to.be.false);"
-        ] } }
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const j = pm.response.json();",
+              "pm.test('200 e lista de itens', () => { pm.response.to.have.status(200); pm.expect(j.itens).to.be.an('array'); });",
+              "pm.test('Canjica sazonal NAO aparece fora de junho/2026', () => pm.expect(j.itens.some(i => i.nome === 'Canjica Junina')).to.be.false);"
+            ]
+          }
+        }
       ]
     },
     {
@@ -115,35 +289,80 @@
       "request": {
         "method": "POST",
         "header": [
-          { "key": "Content-Type", "value": "application/json" },
-          { "key": "Authorization", "value": "Bearer {{token_cliente}}" }
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_cliente}}"
+          }
         ],
-        "url": { "raw": "{{baseUrl}}/v1/pedidos", "host": ["{{baseUrl}}"], "path": ["v1", "pedidos"] },
-        "body": { "mode": "raw", "raw": "{\n  \"unidadeId\": 1,\n  \"canal\": \"APP\",\n  \"itens\": [\n    { \"produtoId\": 1, \"quantidade\": 1 },\n    { \"produtoId\": 4, \"quantidade\": 2 }\n  ]\n}" }
+        "url": {
+          "raw": "{{baseUrl}}/v1/pedidos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "pedidos"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"unidadeId\": 1,\n  \"canal\": \"APP\",\n  \"itens\": [\n    { \"produtoId\": 1, \"quantidade\": 1 },\n    { \"produtoId\": 4, \"quantidade\": 2 }\n  ]\n}"
+        }
       },
       "event": [
-        { "listen": "test", "script": { "type": "text/javascript", "exec": [
-          "const j = pm.response.json();",
-          "pm.collectionVariables.set('pedido_id', String(j.pedidoId));",
-          "pm.collectionVariables.set('charge_id', j.pagamento && j.pagamento.idTransacaoPSP);",
-          "pm.test('201 Created', () => pm.response.to.have.status(201));",
-          "pm.test('status AGUARDANDO_PAGAMENTO', () => pm.expect(j.status).to.eql('AGUARDANDO_PAGAMENTO'));",
-          "pm.test('total = 1x12 + 2x9 = 30', () => pm.expect(Number(j.total)).to.eql(30));"
-        ] } }
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const j = pm.response.json();",
+              "pm.collectionVariables.set('pedido_id', String(j.pedidoId));",
+              "pm.collectionVariables.set('charge_id', j.pagamento && j.pagamento.idTransacaoPSP);",
+              "pm.test('201 Created', () => pm.response.to.have.status(201));",
+              "pm.test('status AGUARDANDO_PAGAMENTO', () => pm.expect(j.status).to.eql('AGUARDANDO_PAGAMENTO'));",
+              "pm.test('total = 1x12 + 2x9 = 30', () => pm.expect(Number(j.total)).to.eql(30));"
+            ]
+          }
+        }
       ]
     },
     {
       "name": "7. Consultar pedido (AGUARDANDO_PAGAMENTO)",
       "request": {
         "method": "GET",
-        "header": [{ "key": "Authorization", "value": "Bearer {{token_cliente}}" }],
-        "url": { "raw": "{{baseUrl}}/v1/pedidos/{{pedido_id}}", "host": ["{{baseUrl}}"], "path": ["v1", "pedidos", "{{pedido_id}}"] }
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_cliente}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/pedidos/{{pedido_id}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "pedidos",
+            "{{pedido_id}}"
+          ]
+        }
       },
       "event": [
-        { "listen": "test", "script": { "type": "text/javascript", "exec": [
-          "pm.test('200', () => pm.response.to.have.status(200));",
-          "pm.test('ainda nao pago', () => pm.expect(pm.response.json().status).to.eql('AGUARDANDO_PAGAMENTO'));"
-        ] } }
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('200', () => pm.response.to.have.status(200));",
+              "pm.test('ainda nao pago', () => pm.expect(pm.response.json().status).to.eql('AGUARDANDO_PAGAMENTO'));"
+            ]
+          }
+        }
       ]
     },
     {
@@ -151,40 +370,99 @@
       "request": {
         "method": "POST",
         "header": [],
-        "url": { "raw": "{{pspUrl}}/charges/{{charge_id}}/aprovar", "host": ["{{pspUrl}}"], "path": ["charges", "{{charge_id}}", "aprovar"] }
+        "url": {
+          "raw": "{{pspUrl}}/charges/{{charge_id}}/aprovar",
+          "host": [
+            "{{pspUrl}}"
+          ],
+          "path": [
+            "charges",
+            "{{charge_id}}",
+            "aprovar"
+          ]
+        }
       },
       "event": [
-        { "listen": "test", "script": { "type": "text/javascript", "exec": [
-          "const j = pm.response.json();",
-          "pm.test('webhook entregue com 200', () => pm.expect(j.httpStatus).to.eql(200));"
-        ] } }
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const j = pm.response.json();",
+              "pm.test('webhook entregue com 200', () => pm.expect(j.httpStatus).to.eql(200));"
+            ]
+          }
+        }
       ]
     },
     {
       "name": "9. Consultar pedido (agora PAGO)",
       "request": {
         "method": "GET",
-        "header": [{ "key": "Authorization", "value": "Bearer {{token_cliente}}" }],
-        "url": { "raw": "{{baseUrl}}/v1/pedidos/{{pedido_id}}", "host": ["{{baseUrl}}"], "path": ["v1", "pedidos", "{{pedido_id}}"] }
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_cliente}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/pedidos/{{pedido_id}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "pedidos",
+            "{{pedido_id}}"
+          ]
+        }
       },
       "event": [
-        { "listen": "test", "script": { "type": "text/javascript", "exec": [
-          "pm.test('status PAGO', () => pm.expect(pm.response.json().status).to.eql('PAGO'));"
-        ] } }
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status PAGO', () => pm.expect(pm.response.json().status).to.eql('PAGO'));"
+            ]
+          }
+        }
       ]
     },
     {
       "name": "10. Fidelidade da Maria (pontos creditados)",
       "request": {
         "method": "GET",
-        "header": [{ "key": "Authorization", "value": "Bearer {{token_cliente}}" }],
-        "url": { "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_maria}}/fidelidade", "host": ["{{baseUrl}}"], "path": ["v1", "clientes", "{{cliente_id_maria}}", "fidelidade"] }
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_cliente}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_maria}}/fidelidade",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "clientes",
+            "{{cliente_id_maria}}",
+            "fidelidade"
+          ]
+        }
       },
       "event": [
-        { "listen": "test", "script": { "type": "text/javascript", "exec": [
-          "const j = pm.response.json();",
-          "pm.test('saldo = 30 pontos (1 por real)', () => pm.expect(j.saldo).to.eql(30));"
-        ] } }
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const j = pm.response.json();",
+              "pm.test('saldo = 30 pontos (1 por real)', () => pm.expect(j.saldo).to.eql(30));"
+            ]
+          }
+        }
       ]
     },
     {
@@ -192,39 +470,99 @@
       "request": {
         "method": "POST",
         "header": [],
-        "url": { "raw": "{{pspUrl}}/charges/{{charge_id}}/reenviar", "host": ["{{pspUrl}}"], "path": ["charges", "{{charge_id}}", "reenviar"] }
+        "url": {
+          "raw": "{{pspUrl}}/charges/{{charge_id}}/reenviar",
+          "host": [
+            "{{pspUrl}}"
+          ],
+          "path": [
+            "charges",
+            "{{charge_id}}",
+            "reenviar"
+          ]
+        }
       },
       "event": [
-        { "listen": "test", "script": { "type": "text/javascript", "exec": [
-          "pm.test('webhook reenviado com 200', () => pm.expect(pm.response.json().httpStatus).to.eql(200));"
-        ] } }
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('webhook reenviado com 200', () => pm.expect(pm.response.json().httpStatus).to.eql(200));"
+            ]
+          }
+        }
       ]
     },
     {
       "name": "12. Fidelidade da Maria (saldo NAO dobrou)",
       "request": {
         "method": "GET",
-        "header": [{ "key": "Authorization", "value": "Bearer {{token_cliente}}" }],
-        "url": { "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_maria}}/fidelidade", "host": ["{{baseUrl}}"], "path": ["v1", "clientes", "{{cliente_id_maria}}", "fidelidade"] }
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_cliente}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_maria}}/fidelidade",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "clientes",
+            "{{cliente_id_maria}}",
+            "fidelidade"
+          ]
+        }
       },
       "event": [
-        { "listen": "test", "script": { "type": "text/javascript", "exec": [
-          "pm.test('saldo continua 30 (idempotencia)', () => pm.expect(pm.response.json().saldo).to.eql(30));"
-        ] } }
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('saldo continua 30 (idempotencia)', () => pm.expect(pm.response.json().saldo).to.eql(30));"
+            ]
+          }
+        }
       ]
     },
     {
       "name": "13. Fila da cozinha (unidade 1)  [CT-05]",
       "request": {
         "method": "GET",
-        "header": [{ "key": "Authorization", "value": "Bearer {{token_cozinheiro}}" }],
-        "url": { "raw": "{{baseUrl}}/v1/unidades/1/fila-cozinha", "host": ["{{baseUrl}}"], "path": ["v1", "unidades", "1", "fila-cozinha"] }
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_cozinheiro}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/unidades/1/fila-cozinha",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "unidades",
+            "1",
+            "fila-cozinha"
+          ]
+        }
       },
       "event": [
-        { "listen": "test", "script": { "type": "text/javascript", "exec": [
-          "const j = pm.response.json();",
-          "pm.test('200 e o pedido esta na fila', () => { pm.response.to.have.status(200); pm.expect(j.fila.some(p => String(p.id) === pm.collectionVariables.get('pedido_id'))).to.be.true; });"
-        ] } }
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const j = pm.response.json();",
+              "pm.test('200 e o pedido esta na fila', () => { pm.response.to.have.status(200); pm.expect(j.fila.some(p => String(p.id) === pm.collectionVariables.get('pedido_id'))).to.be.true; });"
+            ]
+          }
+        }
       ]
     },
     {
@@ -232,132 +570,362 @@
       "request": {
         "method": "PATCH",
         "header": [
-          { "key": "Content-Type", "value": "application/json" },
-          { "key": "Authorization", "value": "Bearer {{token_cozinheiro}}" }
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_cozinheiro}}"
+          }
         ],
-        "url": { "raw": "{{baseUrl}}/v1/pedidos/{{pedido_id}}/status", "host": ["{{baseUrl}}"], "path": ["v1", "pedidos", "{{pedido_id}}", "status"] },
-        "body": { "mode": "raw", "raw": "{ \"novoStatus\": \"EM_PREPARO\" }" }
+        "url": {
+          "raw": "{{baseUrl}}/v1/pedidos/{{pedido_id}}/status",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "pedidos",
+            "{{pedido_id}}",
+            "status"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"novoStatus\": \"EM_PREPARO\" }"
+        }
       },
-      "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
-        "pm.test('200 e EM_PREPARO', () => { pm.response.to.have.status(200); pm.expect(pm.response.json().status).to.eql('EM_PREPARO'); });"
-      ] } } ]
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('200 e EM_PREPARO', () => { pm.response.to.have.status(200); pm.expect(pm.response.json().status).to.eql('EM_PREPARO'); });"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "15. Avancar status -> PRONTO",
       "request": {
         "method": "PATCH",
         "header": [
-          { "key": "Content-Type", "value": "application/json" },
-          { "key": "Authorization", "value": "Bearer {{token_cozinheiro}}" }
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_cozinheiro}}"
+          }
         ],
-        "url": { "raw": "{{baseUrl}}/v1/pedidos/{{pedido_id}}/status", "host": ["{{baseUrl}}"], "path": ["v1", "pedidos", "{{pedido_id}}", "status"] },
-        "body": { "mode": "raw", "raw": "{ \"novoStatus\": \"PRONTO\" }" }
+        "url": {
+          "raw": "{{baseUrl}}/v1/pedidos/{{pedido_id}}/status",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "pedidos",
+            "{{pedido_id}}",
+            "status"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"novoStatus\": \"PRONTO\" }"
+        }
       },
-      "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
-        "pm.test('200 e PRONTO', () => { pm.response.to.have.status(200); pm.expect(pm.response.json().status).to.eql('PRONTO'); });"
-      ] } } ]
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('200 e PRONTO', () => { pm.response.to.have.status(200); pm.expect(pm.response.json().status).to.eql('PRONTO'); });"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "16. Avancar status -> ENTREGUE",
       "request": {
         "method": "PATCH",
         "header": [
-          { "key": "Content-Type", "value": "application/json" },
-          { "key": "Authorization", "value": "Bearer {{token_cozinheiro}}" }
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_cozinheiro}}"
+          }
         ],
-        "url": { "raw": "{{baseUrl}}/v1/pedidos/{{pedido_id}}/status", "host": ["{{baseUrl}}"], "path": ["v1", "pedidos", "{{pedido_id}}", "status"] },
-        "body": { "mode": "raw", "raw": "{ \"novoStatus\": \"ENTREGUE\" }" }
+        "url": {
+          "raw": "{{baseUrl}}/v1/pedidos/{{pedido_id}}/status",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "pedidos",
+            "{{pedido_id}}",
+            "status"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"novoStatus\": \"ENTREGUE\" }"
+        }
       },
-      "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
-        "pm.test('200 e ENTREGUE', () => { pm.response.to.have.status(200); pm.expect(pm.response.json().status).to.eql('ENTREGUE'); });"
-      ] } } ]
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('200 e ENTREGUE', () => { pm.response.to.have.status(200); pm.expect(pm.response.json().status).to.eql('ENTREGUE'); });"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "17. Transicao invalida (ENTREGUE -> EM_PREPARO) => 409  [CT-20]",
       "request": {
         "method": "PATCH",
         "header": [
-          { "key": "Content-Type", "value": "application/json" },
-          { "key": "Authorization", "value": "Bearer {{token_cozinheiro}}" }
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_cozinheiro}}"
+          }
         ],
-        "url": { "raw": "{{baseUrl}}/v1/pedidos/{{pedido_id}}/status", "host": ["{{baseUrl}}"], "path": ["v1", "pedidos", "{{pedido_id}}", "status"] },
-        "body": { "mode": "raw", "raw": "{ \"novoStatus\": \"EM_PREPARO\" }" }
+        "url": {
+          "raw": "{{baseUrl}}/v1/pedidos/{{pedido_id}}/status",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "pedidos",
+            "{{pedido_id}}",
+            "status"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"novoStatus\": \"EM_PREPARO\" }"
+        }
       },
-      "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
-        "pm.test('409 Conflict', () => pm.response.to.have.status(409));",
-        "pm.test('codigo TRANSICAO_INVALIDA', () => pm.expect(pm.response.json().erro.codigo).to.eql('TRANSICAO_INVALIDA'));"
-      ] } } ]
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('409 Conflict', () => pm.response.to.have.status(409));",
+              "pm.test('codigo TRANSICAO_INVALIDA', () => pm.expect(pm.response.json().erro.codigo).to.eql('TRANSICAO_INVALIDA'));"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "18. RBAC: relatorio de vendas com token do Cozinheiro => 403  [CT-16]",
       "request": {
         "method": "GET",
-        "header": [{ "key": "Authorization", "value": "Bearer {{token_cozinheiro}}" }],
-        "url": { "raw": "{{baseUrl}}/v1/relatorios/vendas", "host": ["{{baseUrl}}"], "path": ["v1", "relatorios", "vendas"] }
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_cozinheiro}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/relatorios/vendas",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "relatorios",
+            "vendas"
+          ]
+        }
       },
-      "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
-        "pm.test('403 Forbidden', () => pm.response.to.have.status(403));",
-        "pm.test('codigo ACESSO_NEGADO', () => pm.expect(pm.response.json().erro.codigo).to.eql('ACESSO_NEGADO'));"
-      ] } } ]
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('403 Forbidden', () => pm.response.to.have.status(403));",
+              "pm.test('codigo ACESSO_NEGADO', () => pm.expect(pm.response.json().erro.codigo).to.eql('ACESSO_NEGADO'));"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "19. Relatorio de vendas com Analista => 200  [CT-07 parcial]",
       "request": {
         "method": "GET",
-        "header": [{ "key": "Authorization", "value": "Bearer {{token_analista}}" }],
-        "url": { "raw": "{{baseUrl}}/v1/relatorios/vendas", "host": ["{{baseUrl}}"], "path": ["v1", "relatorios", "vendas"] }
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_analista}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/relatorios/vendas",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "relatorios",
+            "vendas"
+          ]
+        }
       },
-      "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
-        "const j = pm.response.json();",
-        "pm.test('200 e series agregadas', () => { pm.response.to.have.status(200); pm.expect(j.series).to.be.an('array'); });"
-      ] } } ]
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const j = pm.response.json();",
+              "pm.test('200 e series agregadas', () => { pm.response.to.have.status(200); pm.expect(j.series).to.be.an('array'); });"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "20. Trilha de auditoria (Analista)  [RF-14]",
       "request": {
         "method": "GET",
-        "header": [{ "key": "Authorization", "value": "Bearer {{token_analista}}" }],
-        "url": { "raw": "{{baseUrl}}/v1/auditoria", "host": ["{{baseUrl}}"], "path": ["v1", "auditoria"] }
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_analista}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/auditoria",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "auditoria"
+          ]
+        }
       },
-      "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
-        "const j = pm.response.json();",
-        "pm.test('200 e registrou PAGAMENTO_CONFIRMADO', () => { pm.response.to.have.status(200); pm.expect(j.registros.some(r => r.tipo === 'PAGAMENTO_CONFIRMADO')).to.be.true; });"
-      ] } } ]
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const j = pm.response.json();",
+              "pm.test('200 e registrou PAGAMENTO_CONFIRMADO', () => { pm.response.to.have.status(200); pm.expect(j.registros.some(r => r.tipo === 'PAGAMENTO_CONFIRMADO')).to.be.true; });"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "21. Negativo: item sazonal fora da janela => 422  [CT-13]",
       "request": {
         "method": "POST",
         "header": [
-          { "key": "Content-Type", "value": "application/json" },
-          { "key": "Authorization", "value": "Bearer {{token_cliente}}" }
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_cliente}}"
+          }
         ],
-        "url": { "raw": "{{baseUrl}}/v1/pedidos", "host": ["{{baseUrl}}"], "path": ["v1", "pedidos"] },
-        "body": { "mode": "raw", "raw": "{\n  \"unidadeId\": 1,\n  \"canal\": \"APP\",\n  \"itens\": [ { \"produtoId\": 5, \"quantidade\": 1 } ]\n}" }
+        "url": {
+          "raw": "{{baseUrl}}/v1/pedidos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "pedidos"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"unidadeId\": 1,\n  \"canal\": \"APP\",\n  \"itens\": [ { \"produtoId\": 5, \"quantidade\": 1 } ]\n}"
+        }
       },
-      "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
-        "pm.test('422 Unprocessable', () => pm.response.to.have.status(422));",
-        "pm.test('motivo FORA_DA_JANELA_SAZONAL', () => pm.expect(JSON.stringify(pm.response.json())).to.include('FORA_DA_JANELA_SAZONAL'));"
-      ] } } ]
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('422 Unprocessable', () => pm.response.to.have.status(422));",
+              "pm.test('motivo FORA_DA_JANELA_SAZONAL', () => pm.expect(JSON.stringify(pm.response.json())).to.include('FORA_DA_JANELA_SAZONAL'));"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "22. Criar 2o pedido (Cuscuz) - para testar cancelamento",
       "request": {
         "method": "POST",
         "header": [
-          { "key": "Content-Type", "value": "application/json" },
-          { "key": "Authorization", "value": "Bearer {{token_cliente}}" }
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_cliente}}"
+          }
         ],
-        "url": { "raw": "{{baseUrl}}/v1/pedidos", "host": ["{{baseUrl}}"], "path": ["v1", "pedidos"] },
-        "body": { "mode": "raw", "raw": "{\n  \"unidadeId\": 1,\n  \"canal\": \"APP\",\n  \"itens\": [ { \"produtoId\": 2, \"quantidade\": 1 } ]\n}" }
+        "url": {
+          "raw": "{{baseUrl}}/v1/pedidos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "pedidos"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"unidadeId\": 1,\n  \"canal\": \"APP\",\n  \"itens\": [ { \"produtoId\": 2, \"quantidade\": 1 } ]\n}"
+        }
       },
       "event": [
-        { "listen": "test", "script": { "type": "text/javascript", "exec": [
-          "const j = pm.response.json();",
-          "pm.collectionVariables.set('pedido2_id', String(j.pedidoId));",
-          "pm.collectionVariables.set('charge2_id', j.pagamento && j.pagamento.idTransacaoPSP);",
-          "pm.test('201 e total = 18 (Cuscuz)', () => { pm.response.to.have.status(201); pm.expect(Number(j.total)).to.eql(18); });"
-        ] } }
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const j = pm.response.json();",
+              "pm.collectionVariables.set('pedido2_id', String(j.pedidoId));",
+              "pm.collectionVariables.set('charge2_id', j.pagamento && j.pagamento.idTransacaoPSP);",
+              "pm.test('201 e total = 18 (Cuscuz)', () => { pm.response.to.have.status(201); pm.expect(Number(j.total)).to.eql(18); });"
+            ]
+          }
+        }
       ]
     },
     {
@@ -365,259 +933,721 @@
       "request": {
         "method": "POST",
         "header": [],
-        "url": { "raw": "{{pspUrl}}/charges/{{charge2_id}}/aprovar", "host": ["{{pspUrl}}"], "path": ["charges", "{{charge2_id}}", "aprovar"] }
+        "url": {
+          "raw": "{{pspUrl}}/charges/{{charge2_id}}/aprovar",
+          "host": [
+            "{{pspUrl}}"
+          ],
+          "path": [
+            "charges",
+            "{{charge2_id}}",
+            "aprovar"
+          ]
+        }
       },
-      "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
-        "pm.test('webhook entregue com 200', () => pm.expect(pm.response.json().httpStatus).to.eql(200));"
-      ] } } ]
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('webhook entregue com 200', () => pm.expect(pm.response.json().httpStatus).to.eql(200));"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "24. Fidelidade da Maria antes do cancelamento (30 + 18 = 48)",
       "request": {
         "method": "GET",
-        "header": [{ "key": "Authorization", "value": "Bearer {{token_cliente}}" }],
-        "url": { "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_maria}}/fidelidade", "host": ["{{baseUrl}}"], "path": ["v1", "clientes", "{{cliente_id_maria}}", "fidelidade"] }
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_cliente}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_maria}}/fidelidade",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "clientes",
+            "{{cliente_id_maria}}",
+            "fidelidade"
+          ]
+        }
       },
-      "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
-        "pm.test('saldo = 48', () => pm.expect(pm.response.json().saldo).to.eql(48));"
-      ] } } ]
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('saldo = 48', () => pm.expect(pm.response.json().saldo).to.eql(48));"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "25. Cancelar o 2o pedido com estorno (Atendente)  [CT-17]",
       "request": {
         "method": "POST",
         "header": [
-          { "key": "Content-Type", "value": "application/json" },
-          { "key": "Authorization", "value": "Bearer {{token_atendente}}" }
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_atendente}}"
+          }
         ],
-        "url": { "raw": "{{baseUrl}}/v1/pedidos/{{pedido2_id}}/cancelamento", "host": ["{{baseUrl}}"], "path": ["v1", "pedidos", "{{pedido2_id}}", "cancelamento"] },
-        "body": { "mode": "raw", "raw": "{ \"motivo\": \"Cozinha sem insumo para produzir o pedido\" }" }
+        "url": {
+          "raw": "{{baseUrl}}/v1/pedidos/{{pedido2_id}}/cancelamento",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "pedidos",
+            "{{pedido2_id}}",
+            "cancelamento"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"motivo\": \"Cozinha sem insumo para produzir o pedido\" }"
+        }
       },
-      "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
-        "const j = pm.response.json();",
-        "pm.test('200 e CANCELADO_COM_ESTORNO', () => { pm.response.to.have.status(200); pm.expect(j.status).to.eql('CANCELADO_COM_ESTORNO'); });"
-      ] } } ]
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const j = pm.response.json();",
+              "pm.test('200 e CANCELADO_COM_ESTORNO', () => { pm.response.to.have.status(200); pm.expect(j.status).to.eql('CANCELADO_COM_ESTORNO'); });"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "26. Fidelidade da Maria apos o estorno (volta a 30)",
       "request": {
         "method": "GET",
-        "header": [{ "key": "Authorization", "value": "Bearer {{token_cliente}}" }],
-        "url": { "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_maria}}/fidelidade", "host": ["{{baseUrl}}"], "path": ["v1", "clientes", "{{cliente_id_maria}}", "fidelidade"] }
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_cliente}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_maria}}/fidelidade",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "clientes",
+            "{{cliente_id_maria}}",
+            "fidelidade"
+          ]
+        }
       },
-      "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
-        "pm.test('saldo volta a 30 (pontos do 2o pedido estornados)', () => pm.expect(pm.response.json().saldo).to.eql(30));"
-      ] } } ]
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('saldo volta a 30 (pontos do 2o pedido estornados)', () => pm.expect(pm.response.json().saldo).to.eql(30));"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "27. Auditoria mostra o CANCELAMENTO com motivo e autor",
       "request": {
         "method": "GET",
-        "header": [{ "key": "Authorization", "value": "Bearer {{token_analista}}" }],
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_analista}}"
+          }
+        ],
         "url": {
           "raw": "{{baseUrl}}/v1/auditoria?tipo=CANCELAMENTO",
-          "host": ["{{baseUrl}}"], "path": ["v1", "auditoria"],
-          "query": [{ "key": "tipo", "value": "CANCELAMENTO" }]
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "auditoria"
+          ],
+          "query": [
+            {
+              "key": "tipo",
+              "value": "CANCELAMENTO"
+            }
+          ]
         }
       },
-      "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
-        "const j = pm.response.json();",
-        "pm.test('200 e registrou CANCELAMENTO com motivo', () => { pm.response.to.have.status(200); pm.expect(j.registros.some(r => r.tipo === 'CANCELAMENTO' && r.motivo)).to.be.true; });"
-      ] } } ]
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const j = pm.response.json();",
+              "pm.test('200 e registrou CANCELAMENTO com motivo', () => { pm.response.to.have.status(200); pm.expect(j.registros.some(r => r.tipo === 'CANCELAMENTO' && r.motivo)).to.be.true; });"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "28. Negativo: cancelar pedido ja ENTREGUE => 409",
       "request": {
         "method": "POST",
         "header": [
-          { "key": "Content-Type", "value": "application/json" },
-          { "key": "Authorization", "value": "Bearer {{token_atendente}}" }
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_atendente}}"
+          }
         ],
-        "url": { "raw": "{{baseUrl}}/v1/pedidos/{{pedido_id}}/cancelamento", "host": ["{{baseUrl}}"], "path": ["v1", "pedidos", "{{pedido_id}}", "cancelamento"] },
-        "body": { "mode": "raw", "raw": "{ \"motivo\": \"Tentativa invalida - pedido ja entregue\" }" }
+        "url": {
+          "raw": "{{baseUrl}}/v1/pedidos/{{pedido_id}}/cancelamento",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "pedidos",
+            "{{pedido_id}}",
+            "cancelamento"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"motivo\": \"Tentativa invalida - pedido ja entregue\" }"
+        }
       },
-      "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
-        "pm.test('409 Conflict', () => pm.response.to.have.status(409));",
-        "pm.test('codigo TRANSICAO_INVALIDA', () => pm.expect(pm.response.json().erro.codigo).to.eql('TRANSICAO_INVALIDA'));"
-      ] } } ]
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('409 Conflict', () => pm.response.to.have.status(409));",
+              "pm.test('codigo TRANSICAO_INVALIDA', () => pm.expect(pm.response.json().erro.codigo).to.eql('TRANSICAO_INVALIDA'));"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "29. Negativo: cancelar sem motivo => 400",
       "request": {
         "method": "POST",
         "header": [
-          { "key": "Content-Type", "value": "application/json" },
-          { "key": "Authorization", "value": "Bearer {{token_atendente}}" }
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_atendente}}"
+          }
         ],
-        "url": { "raw": "{{baseUrl}}/v1/pedidos/{{pedido2_id}}/cancelamento", "host": ["{{baseUrl}}"], "path": ["v1", "pedidos", "{{pedido2_id}}", "cancelamento"] },
-        "body": { "mode": "raw", "raw": "{}" }
+        "url": {
+          "raw": "{{baseUrl}}/v1/pedidos/{{pedido2_id}}/cancelamento",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "pedidos",
+            "{{pedido2_id}}",
+            "cancelamento"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{}"
+        }
       },
-      "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
-        "pm.test('400 Bad Request', () => pm.response.to.have.status(400));",
-        "pm.test('codigo PAYLOAD_INVALIDO', () => pm.expect(pm.response.json().erro.codigo).to.eql('PAYLOAD_INVALIDO'));"
-      ] } } ]
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('400 Bad Request', () => pm.response.to.have.status(400));",
+              "pm.test('codigo PAYLOAD_INVALIDO', () => pm.expect(pm.response.json().erro.codigo).to.eql('PAYLOAD_INVALIDO'));"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "30. Login - Admin",
       "request": {
         "method": "POST",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
-        "url": { "raw": "{{baseUrl}}/v1/auth/login", "host": ["{{baseUrl}}"], "path": ["v1", "auth", "login"] },
-        "body": { "mode": "raw", "raw": "{\n  \"login\": \"admin\",\n  \"senha\": \"senha123\"\n}" }
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "auth",
+            "login"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"login\": \"admin\",\n  \"senha\": \"senha123\"\n}"
+        }
       },
       "event": [
-        { "listen": "test", "script": { "type": "text/javascript", "exec": [
-          "pm.collectionVariables.set('token_admin', pm.response.json().token);",
-          "pm.test('200', () => pm.response.to.have.status(200));"
-        ] } }
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.collectionVariables.set('token_admin', pm.response.json().token);",
+              "pm.test('200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
       ]
     },
     {
       "name": "31. Admin consulta cadastro do cliente (dados decifrados)  [RNF-06]",
       "request": {
         "method": "GET",
-        "header": [{ "key": "Authorization", "value": "Bearer {{token_admin}}" }],
-        "url": { "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_maria}}", "host": ["{{baseUrl}}"], "path": ["v1", "clientes", "{{cliente_id_maria}}"] }
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_admin}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_maria}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "clientes",
+            "{{cliente_id_maria}}"
+          ]
+        }
       },
-      "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
-        "const j = pm.response.json();",
-        "pm.test('200 e nome/cpf decifrados corretamente', () => { pm.response.to.have.status(200); pm.expect(j.nome).to.eql('Maria Souza'); pm.expect(j.cpf).to.eql('123.456.789-00'); });"
-      ] } } ]
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const j = pm.response.json();",
+              "pm.test('200 e nome/cpf decifrados corretamente', () => { pm.response.to.have.status(200); pm.expect(j.nome).to.eql('Maria Souza'); pm.expect(j.cpf).to.eql('123.456.789-00'); });"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "32. Negativo: Atendente NAO pode ver cadastro do cliente => 403",
       "request": {
         "method": "GET",
-        "header": [{ "key": "Authorization", "value": "Bearer {{token_atendente}}" }],
-        "url": { "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_maria}}", "host": ["{{baseUrl}}"], "path": ["v1", "clientes", "{{cliente_id_maria}}"] }
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_atendente}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_maria}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "clientes",
+            "{{cliente_id_maria}}"
+          ]
+        }
       },
-      "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
-        "pm.test('403 Forbidden', () => pm.response.to.have.status(403));"
-      ] } } ]
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('403 Forbidden', () => pm.response.to.have.status(403));"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "33. Auditoria mostra o ACESSO_DADO_PESSOAL do Admin",
       "request": {
         "method": "GET",
-        "header": [{ "key": "Authorization", "value": "Bearer {{token_analista}}" }],
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_analista}}"
+          }
+        ],
         "url": {
           "raw": "{{baseUrl}}/v1/auditoria?tipo=ACESSO_DADO_PESSOAL",
-          "host": ["{{baseUrl}}"], "path": ["v1", "auditoria"],
-          "query": [{ "key": "tipo", "value": "ACESSO_DADO_PESSOAL" }]
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "auditoria"
+          ],
+          "query": [
+            {
+              "key": "tipo",
+              "value": "ACESSO_DADO_PESSOAL"
+            }
+          ]
         }
       },
-      "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
-        "const j = pm.response.json();",
-        "pm.test('200 e registrou o acesso ao dado pessoal', () => { pm.response.to.have.status(200); pm.expect(j.registros.some(r => r.tipo === 'ACESSO_DADO_PESSOAL')).to.be.true; });"
-      ] } } ]
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const j = pm.response.json();",
+              "pm.test('200 e registrou o acesso ao dado pessoal', () => { pm.response.to.have.status(200); pm.expect(j.registros.some(r => r.tipo === 'ACESSO_DADO_PESSOAL')).to.be.true; });"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "34. Login - Joao",
       "request": {
         "method": "POST",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
-        "url": { "raw": "{{baseUrl}}/v1/auth/login", "host": ["{{baseUrl}}"], "path": ["v1", "auth", "login"] },
-        "body": { "mode": "raw", "raw": "{\n  \"login\": \"joao\",\n  \"senha\": \"senha123\"\n}" }
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "auth",
+            "login"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"login\": \"joao\",\n  \"senha\": \"senha123\"\n}"
+        }
       },
       "event": [
-        { "listen": "test", "script": { "type": "text/javascript", "exec": [
-          "const j = pm.response.json();",
-          "pm.collectionVariables.set('token_joao', j.token);",
-          "pm.collectionVariables.set('cliente_id_joao', String(j.clienteId));",
-          "pm.test('200', () => pm.response.to.have.status(200));"
-        ] } }
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const j = pm.response.json();",
+              "pm.collectionVariables.set('token_joao', j.token);",
+              "pm.collectionVariables.set('cliente_id_joao', String(j.clienteId));",
+              "pm.test('200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
       ]
     },
     {
       "name": "35. Negativo: Joao tenta revogar consentimento da Maria => 403",
       "request": {
         "method": "DELETE",
-        "header": [{ "key": "Authorization", "value": "Bearer {{token_joao}}" }],
-        "url": { "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_maria}}/consentimentos/1", "host": ["{{baseUrl}}"], "path": ["v1", "clientes", "{{cliente_id_maria}}", "consentimentos", "1"] }
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_joao}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_maria}}/consentimentos/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "clientes",
+            "{{cliente_id_maria}}",
+            "consentimentos",
+            "1"
+          ]
+        }
       },
-      "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
-        "pm.test('403 Forbidden', () => pm.response.to.have.status(403));"
-      ] } } ]
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('403 Forbidden', () => pm.response.to.have.status(403));"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "36. Maria revoga o proprio consentimento de FIDELIDADE  [RF-18]",
       "request": {
         "method": "DELETE",
-        "header": [{ "key": "Authorization", "value": "Bearer {{token_cliente}}" }],
-        "url": { "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_maria}}/consentimentos/1", "host": ["{{baseUrl}}"], "path": ["v1", "clientes", "{{cliente_id_maria}}", "consentimentos", "1"] }
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_cliente}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_maria}}/consentimentos/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "clientes",
+            "{{cliente_id_maria}}",
+            "consentimentos",
+            "1"
+          ]
+        }
       },
-      "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
-        "const j = pm.response.json();",
-        "pm.collectionVariables.set('revogado_em_1', j.revogadoEm);",
-        "pm.test('200 e revogadoEm preenchido', () => { pm.response.to.have.status(200); pm.expect(j.revogadoEm).to.be.a('string'); });"
-      ] } } ]
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const j = pm.response.json();",
+              "pm.collectionVariables.set('revogado_em_1', j.revogadoEm);",
+              "pm.test('200 e revogadoEm preenchido', () => { pm.response.to.have.status(200); pm.expect(j.revogadoEm).to.be.a('string'); });"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "37. Revogar de novo e idempotente (mesmo revogadoEm)",
       "request": {
         "method": "DELETE",
-        "header": [{ "key": "Authorization", "value": "Bearer {{token_cliente}}" }],
-        "url": { "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_maria}}/consentimentos/1", "host": ["{{baseUrl}}"], "path": ["v1", "clientes", "{{cliente_id_maria}}", "consentimentos", "1"] }
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_cliente}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_maria}}/consentimentos/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "clientes",
+            "{{cliente_id_maria}}",
+            "consentimentos",
+            "1"
+          ]
+        }
       },
-      "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
-        "const j = pm.response.json();",
-        "pm.test('200 e revogadoEm nao mudou', () => { pm.response.to.have.status(200); pm.expect(j.revogadoEm).to.eql(pm.collectionVariables.get('revogado_em_1')); });"
-      ] } } ]
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const j = pm.response.json();",
+              "pm.test('200 e revogadoEm nao mudou', () => { pm.response.to.have.status(200); pm.expect(j.revogadoEm).to.eql(pm.collectionVariables.get('revogado_em_1')); });"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "38. Maria solicita anonimizacao  [CT-18]",
       "request": {
         "method": "POST",
-        "header": [{ "key": "Authorization", "value": "Bearer {{token_cliente}}" }],
-        "url": { "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_maria}}/anonimizacao", "host": ["{{baseUrl}}"], "path": ["v1", "clientes", "{{cliente_id_maria}}", "anonimizacao"] }
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_cliente}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_maria}}/anonimizacao",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "clientes",
+            "{{cliente_id_maria}}",
+            "anonimizacao"
+          ]
+        }
       },
-      "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
-        "const j = pm.response.json();",
-        "pm.test('200 e anonimizado=true', () => { pm.response.to.have.status(200); pm.expect(j.anonimizado).to.be.true; });"
-      ] } } ]
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const j = pm.response.json();",
+              "pm.test('200 e anonimizado=true', () => { pm.response.to.have.status(200); pm.expect(j.anonimizado).to.be.true; });"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "39. Negativo: anonimizar de novo => 409 JA_ANONIMIZADO",
       "request": {
         "method": "POST",
-        "header": [{ "key": "Authorization", "value": "Bearer {{token_cliente}}" }],
-        "url": { "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_maria}}/anonimizacao", "host": ["{{baseUrl}}"], "path": ["v1", "clientes", "{{cliente_id_maria}}", "anonimizacao"] }
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_cliente}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_maria}}/anonimizacao",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "clientes",
+            "{{cliente_id_maria}}",
+            "anonimizacao"
+          ]
+        }
       },
-      "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
-        "pm.test('409 Conflict', () => pm.response.to.have.status(409));",
-        "pm.test('codigo JA_ANONIMIZADO', () => pm.expect(pm.response.json().erro.codigo).to.eql('JA_ANONIMIZADO'));"
-      ] } } ]
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('409 Conflict', () => pm.response.to.have.status(409));",
+              "pm.test('codigo JA_ANONIMIZADO', () => pm.expect(pm.response.json().erro.codigo).to.eql('JA_ANONIMIZADO'));"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "40. Admin confirma: cadastro da Maria agora vem nulo",
       "request": {
         "method": "GET",
-        "header": [{ "key": "Authorization", "value": "Bearer {{token_admin}}" }],
-        "url": { "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_maria}}", "host": ["{{baseUrl}}"], "path": ["v1", "clientes", "{{cliente_id_maria}}"] }
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_admin}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_maria}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "clientes",
+            "{{cliente_id_maria}}"
+          ]
+        }
       },
-      "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
-        "const j = pm.response.json();",
-        "pm.test('nome/cpf/email/telefone nulos', () => { pm.expect(j.nome).to.be.null; pm.expect(j.cpf).to.be.null; pm.expect(j.email).to.be.null; pm.expect(j.telefone).to.be.null; });"
-      ] } } ]
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const j = pm.response.json();",
+              "pm.test('nome/cpf/email/telefone nulos', () => { pm.expect(j.nome).to.be.null; pm.expect(j.cpf).to.be.null; pm.expect(j.email).to.be.null; pm.expect(j.telefone).to.be.null; });"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "41. Novo pedido da Maria apos anonimizacao",
       "request": {
         "method": "POST",
         "header": [
-          { "key": "Content-Type", "value": "application/json" },
-          { "key": "Authorization", "value": "Bearer {{token_cliente}}" }
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_cliente}}"
+          }
         ],
-        "url": { "raw": "{{baseUrl}}/v1/pedidos", "host": ["{{baseUrl}}"], "path": ["v1", "pedidos"] },
-        "body": { "mode": "raw", "raw": "{\n  \"unidadeId\": 1,\n  \"canal\": \"APP\",\n  \"itens\": [ { \"produtoId\": 4, \"quantidade\": 1 } ]\n}" }
+        "url": {
+          "raw": "{{baseUrl}}/v1/pedidos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "pedidos"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"unidadeId\": 1,\n  \"canal\": \"APP\",\n  \"itens\": [ { \"produtoId\": 4, \"quantidade\": 1 } ]\n}"
+        }
       },
       "event": [
-        { "listen": "test", "script": { "type": "text/javascript", "exec": [
-          "const j = pm.response.json();",
-          "pm.collectionVariables.set('pedido3_id', String(j.pedidoId));",
-          "pm.collectionVariables.set('charge3_id', j.pagamento && j.pagamento.idTransacaoPSP);",
-          "pm.test('201 Created', () => pm.response.to.have.status(201));"
-        ] } }
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const j = pm.response.json();",
+              "pm.collectionVariables.set('pedido3_id', String(j.pedidoId));",
+              "pm.collectionVariables.set('charge3_id', j.pagamento && j.pagamento.idTransacaoPSP);",
+              "pm.test('201 Created', () => pm.response.to.have.status(201));"
+            ]
+          }
+        }
       ]
     },
     {
@@ -625,71 +1655,835 @@
       "request": {
         "method": "POST",
         "header": [],
-        "url": { "raw": "{{pspUrl}}/charges/{{charge3_id}}/aprovar", "host": ["{{pspUrl}}"], "path": ["charges", "{{charge3_id}}", "aprovar"] }
+        "url": {
+          "raw": "{{pspUrl}}/charges/{{charge3_id}}/aprovar",
+          "host": [
+            "{{pspUrl}}"
+          ],
+          "path": [
+            "charges",
+            "{{charge3_id}}",
+            "aprovar"
+          ]
+        }
       },
-      "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
-        "pm.test('webhook entregue com 200', () => pm.expect(pm.response.json().httpStatus).to.eql(200));"
-      ] } } ]
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('webhook entregue com 200', () => pm.expect(pm.response.json().httpStatus).to.eql(200));"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "43. Fidelidade da Maria: saldo NAO mudou (consentimento revogado)  [CT-18]",
       "request": {
         "method": "GET",
-        "header": [{ "key": "Authorization", "value": "Bearer {{token_cliente}}" }],
-        "url": { "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_maria}}/fidelidade", "host": ["{{baseUrl}}"], "path": ["v1", "clientes", "{{cliente_id_maria}}", "fidelidade"] }
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_cliente}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_maria}}/fidelidade",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "clientes",
+            "{{cliente_id_maria}}",
+            "fidelidade"
+          ]
+        }
       },
-      "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
-        "const j = pm.response.json();",
-        "pm.test('saldo continua 30 - pedido pos-anonimizacao nao creditou pontos', () => pm.expect(j.saldo).to.eql(30));"
-      ] } } ]
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const j = pm.response.json();",
+              "pm.test('saldo continua 30 - pedido pos-anonimizacao nao creditou pontos', () => pm.expect(j.saldo).to.eql(30));"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "44. Auditoria mostra a ANONIMIZACAO",
       "request": {
         "method": "GET",
-        "header": [{ "key": "Authorization", "value": "Bearer {{token_analista}}" }],
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_analista}}"
+          }
+        ],
         "url": {
           "raw": "{{baseUrl}}/v1/auditoria?tipo=ANONIMIZACAO",
-          "host": ["{{baseUrl}}"], "path": ["v1", "auditoria"],
-          "query": [{ "key": "tipo", "value": "ANONIMIZACAO" }]
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "auditoria"
+          ],
+          "query": [
+            {
+              "key": "tipo",
+              "value": "ANONIMIZACAO"
+            }
+          ]
         }
       },
-      "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
-        "const j = pm.response.json();",
-        "pm.test('200 e registrou ANONIMIZACAO', () => { pm.response.to.have.status(200); pm.expect(j.registros.some(r => r.tipo === 'ANONIMIZACAO')).to.be.true; });"
-      ] } } ]
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const j = pm.response.json();",
+              "pm.test('200 e registrou ANONIMIZACAO', () => { pm.response.to.have.status(200); pm.expect(j.registros.some(r => r.tipo === 'ANONIMIZACAO')).to.be.true; });"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "45. Joao registra consentimento de FIDELIDADE  [RF-17]",
       "request": {
         "method": "POST",
         "header": [
-          { "key": "Content-Type", "value": "application/json" },
-          { "key": "Authorization", "value": "Bearer {{token_joao}}" }
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_joao}}"
+          }
         ],
-        "url": { "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_joao}}/consentimentos", "host": ["{{baseUrl}}"], "path": ["v1", "clientes", "{{cliente_id_joao}}", "consentimentos"] },
-        "body": { "mode": "raw", "raw": "{ \"finalidade\": \"FIDELIDADE\", \"versaoTexto\": \"v1\" }" }
+        "url": {
+          "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_joao}}/consentimentos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "clientes",
+            "{{cliente_id_joao}}",
+            "consentimentos"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"finalidade\": \"FIDELIDADE\", \"versaoTexto\": \"v1\" }"
+        }
       },
-      "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
-        "const j = pm.response.json();",
-        "pm.test('201 Created', () => { pm.response.to.have.status(201); pm.expect(j.finalidade).to.eql('FIDELIDADE'); });"
-      ] } } ]
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const j = pm.response.json();",
+              "pm.test('201 Created', () => { pm.response.to.have.status(201); pm.expect(j.finalidade).to.eql('FIDELIDADE'); });"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "46. Negativo: Joao registra a mesma finalidade de novo => 409",
       "request": {
         "method": "POST",
         "header": [
-          { "key": "Content-Type", "value": "application/json" },
-          { "key": "Authorization", "value": "Bearer {{token_joao}}" }
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_joao}}"
+          }
         ],
-        "url": { "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_joao}}/consentimentos", "host": ["{{baseUrl}}"], "path": ["v1", "clientes", "{{cliente_id_joao}}", "consentimentos"] },
-        "body": { "mode": "raw", "raw": "{ \"finalidade\": \"FIDELIDADE\", \"versaoTexto\": \"v1\" }" }
+        "url": {
+          "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_joao}}/consentimentos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "clientes",
+            "{{cliente_id_joao}}",
+            "consentimentos"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"finalidade\": \"FIDELIDADE\", \"versaoTexto\": \"v1\" }"
+        }
       },
-      "event": [ { "listen": "test", "script": { "type": "text/javascript", "exec": [
-        "pm.test('409 Conflict', () => pm.response.to.have.status(409));",
-        "pm.test('codigo CONSENTIMENTO_JA_VIGENTE', () => pm.expect(pm.response.json().erro.codigo).to.eql('CONSENTIMENTO_JA_VIGENTE'));"
-      ] } } ]
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('409 Conflict', () => pm.response.to.have.status(409));",
+              "pm.test('codigo CONSENTIMENTO_JA_VIGENTE', () => pm.expect(pm.response.json().erro.codigo).to.eql('CONSENTIMENTO_JA_VIGENTE'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "47. Login - Gerente (unidade 1)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "auth",
+            "login"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"login\": \"gerente\",\n  \"senha\": \"senha123\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.collectionVariables.set('token_gerente', pm.response.json().token);",
+              "pm.test('200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "48. Gerente registra entrada de estoque (unidade 1)  [RF-16]",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_gerente}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/unidades/1/estoque/movimentos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "unidades",
+            "1",
+            "estoque",
+            "movimentos"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"itemEstoqueId\": 1,\n  \"tipo\": \"ENTRADA_COMPRA\",\n  \"quantidade\": 30\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const j = pm.response.json();",
+              "pm.test('201 Created', () => pm.response.to.have.status(201));",
+              "pm.test('tipo ENTRADA_COMPRA e saldoAtual numerico', () => { pm.expect(j.tipo).to.eql('ENTRADA_COMPRA'); pm.expect(j.saldoAtual).to.be.a('number'); pm.expect(j.saldoAtual).to.be.at.least(30); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "49. Negativo: AJUSTE de estoque sem motivo => 400  [RF-16]",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_gerente}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/unidades/1/estoque/movimentos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "unidades",
+            "1",
+            "estoque",
+            "movimentos"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"itemEstoqueId\": 1,\n  \"tipo\": \"AJUSTE\",\n  \"quantidade\": -5\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('400 Bad Request', () => pm.response.to.have.status(400));",
+              "pm.test('codigo PAYLOAD_INVALIDO', () => pm.expect(pm.response.json().erro.codigo).to.eql('PAYLOAD_INVALIDO'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "50. Negativo: Gerente mexe em estoque de outra unidade => 403  [RF-16]",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_gerente}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/unidades/2/estoque/movimentos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "unidades",
+            "2",
+            "estoque",
+            "movimentos"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"itemEstoqueId\": 8,\n  \"tipo\": \"ENTRADA_COMPRA\",\n  \"quantidade\": 5\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('403 Forbidden', () => pm.response.to.have.status(403));",
+              "pm.test('codigo ACESSO_NEGADO', () => pm.expect(pm.response.json().erro.codigo).to.eql('ACESSO_NEGADO'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "51. Maria resgata 10 pontos no pedido (desconto R$0,10)  [RF-20]",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_cliente}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/pedidos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "pedidos"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"unidadeId\": 1,\n  \"canal\": \"APP\",\n  \"itens\": [\n    {\n      \"produtoId\": 4,\n      \"quantidade\": 1\n    }\n  ],\n  \"resgatePontos\": 10\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const j = pm.response.json();",
+              "pm.collectionVariables.set('pedido_resgate_id', String(j.pedidoId));",
+              "pm.test('201 Created', () => pm.response.to.have.status(201));",
+              "pm.test('descontoPontos = 0.10', () => pm.expect(j.descontoPontos).to.eql(0.1));",
+              "pm.test('total = 9.00 - 0.10 = 8.90', () => pm.expect(j.total).to.eql(8.9));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "52. Negativo: resgate maior que o saldo de pontos => 422  [RF-20]",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_cliente}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/pedidos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "pedidos"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"unidadeId\": 1,\n  \"canal\": \"APP\",\n  \"itens\": [\n    {\n      \"produtoId\": 4,\n      \"quantidade\": 1\n    }\n  ],\n  \"resgatePontos\": 999999\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('422 Unprocessable', () => pm.response.to.have.status(422));",
+              "pm.test('codigo SALDO_PONTOS_INSUFICIENTE', () => pm.expect(pm.response.json().erro.codigo).to.eql('SALDO_PONTOS_INSUFICIENTE'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "53. Admin cria campanha segmentada  [RF-21]",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_admin}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/campanhas",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "campanhas"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Volta as aulas\",\n  \"criterio\": {},\n  \"descontoTipo\": \"PERCENTUAL\",\n  \"descontoValor\": 10,\n  \"inicio\": \"2026-01-01\",\n  \"fim\": \"2026-12-31\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const j = pm.response.json();",
+              "pm.collectionVariables.set('campanha_id', String(j.id));",
+              "pm.test('201 Created', () => pm.response.to.have.status(201));",
+              "pm.test('nome confere', () => pm.expect(j.nome).to.eql('Volta as aulas'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "54. Joao registra consentimento de CAMPANHA_SEGMENTADA (setup)  [RF-17]",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_joao}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/clientes/{{cliente_id_joao}}/consentimentos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "clientes",
+            "{{cliente_id_joao}}",
+            "consentimentos"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"finalidade\": \"CAMPANHA_SEGMENTADA\",\n  \"versaoTexto\": \"v1\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('201 Created', () => pm.response.to.have.status(201));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "55. Analista consulta segmento da campanha (inclui Joao)  [RF-21]",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_analista}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/campanhas/{{campanha_id}}/segmento",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "campanhas",
+            "{{campanha_id}}",
+            "segmento"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const j = pm.response.json();",
+              "pm.test('200', () => pm.response.to.have.status(200));",
+              "pm.test('Joao esta no segmento', () => pm.expect(j.clientes.map(String)).to.include(pm.collectionVariables.get('cliente_id_joao')));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "56. Negativo: segmento de campanha inexistente => 404  [RF-21]",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_analista}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/campanhas/999999/segmento",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "campanhas",
+            "999999",
+            "segmento"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('404 Not Found', () => pm.response.to.have.status(404));",
+              "pm.test('codigo CAMPANHA_NAO_ENCONTRADA', () => pm.expect(pm.response.json().erro.codigo).to.eql('CAMPANHA_NAO_ENCONTRADA'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "57. Ranking de produtos consumidos  [RF-22]",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_analista}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/relatorios/produtos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "relatorios",
+            "produtos"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const j = pm.response.json();",
+              "pm.test('200 e ranking nao vazio', () => { pm.response.to.have.status(200); pm.expect(j.ranking.length).to.be.above(0); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "58. Exporta relatorio de vendas em CSV  [RF-23]",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_analista}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/relatorios/vendas/export?formato=csv",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "relatorios",
+            "vendas",
+            "export"
+          ],
+          "query": [
+            {
+              "key": "formato",
+              "value": "csv"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('200', () => pm.response.to.have.status(200));",
+              "pm.test('CSV com cabecalho esperado', () => pm.expect(pm.response.text()).to.match(/^unidadeId,unidade,regiao,qtdPedidos,valorLiquido/));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "59. Admin cria novo usuario interno  [RF-24]",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_admin}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/usuarios",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "usuarios"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Atendente Sao Paulo\",\n  \"login\": \"atendente_sp\",\n  \"senha\": \"senha123\",\n  \"papeis\": [\n    \"ATENDENTE\"\n  ],\n  \"unidadeId\": 2\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const j = pm.response.json();",
+              "pm.test('201 Created', () => pm.response.to.have.status(201));",
+              "pm.test('papeis confere', () => pm.expect(j.papeis).to.eql(['ATENDENTE']));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "60. Negativo: login ja em uso => 409  [RF-24]",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_admin}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/usuarios",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "usuarios"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Duplicado\",\n  \"login\": \"atendente_sp\",\n  \"senha\": \"senha123\",\n  \"papeis\": [\n    \"ATENDENTE\"\n  ]\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('409 Conflict', () => pm.response.to.have.status(409));",
+              "pm.test('codigo LOGIN_EM_USO', () => pm.expect(pm.response.json().erro.codigo).to.eql('LOGIN_EM_USO'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "61. Negativo: nao-ADMIN cria usuario => 403  [RF-24]",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token_gerente}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/usuarios",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "usuarios"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"X\",\n  \"login\": \"x_qualquer\",\n  \"senha\": \"senha123\",\n  \"papeis\": [\n    \"ATENDENTE\"\n  ]\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('403 Forbidden', () => pm.response.to.have.status(403));",
+              "pm.test('codigo ACESSO_NEGADO', () => pm.expect(pm.response.json().erro.codigo).to.eql('ACESSO_NEGADO'));"
+            ]
+          }
+        }
+      ]
     }
   ]
 }

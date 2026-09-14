@@ -8,6 +8,7 @@
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 DROP TABLE IF EXISTS
+  campanha,
   movimento_pontos, conta_fidelidade, consentimento_lgpd,
   evento_pagamento_recebido, pagamento, item_pedido, pedido,
   movimento_estoque, composicao_consumo, item_estoque, item_cardapio_unidade,
@@ -195,6 +196,21 @@ CREATE TABLE movimento_pontos (
   pontos    INT NOT NULL,
   pedido_id BIGINT,
   data_hora TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- Campanhas segmentadas (RF-21). criterio guarda o filtro de segmentacao
+-- (minPedidosPagos, dataNascimentoApos/Antes) avaliado em GET /v1/campanhas/:id/segmento
+-- contra clientes com consentimento CAMPANHA_SEGMENTADA vigente.
+CREATE TABLE campanha (
+  id             BIGSERIAL PRIMARY KEY,
+  nome           VARCHAR(120) NOT NULL,
+  criterio       JSONB NOT NULL DEFAULT '{}',
+  desconto_tipo  VARCHAR(20) NOT NULL CHECK (desconto_tipo IN ('PERCENTUAL', 'VALOR_FIXO')),
+  desconto_valor NUMERIC(10,2) NOT NULL,
+  inicio         DATE NOT NULL,
+  fim            DATE NOT NULL,
+  criada_por     BIGINT REFERENCES usuario(id),
+  criada_em      TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
 -- Trilha de auditoria imutavel (RF-14 / RNF-08).

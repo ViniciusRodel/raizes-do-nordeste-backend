@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const { pool } = require('../src/db');
 const { criarClienteCifrado } = require('../src/lib/dadosPessoais');
+const { PAPEIS_INTERNOS } = require('../src/lib/papeis');
 
 const PRECOS = {
   'Tapioca de Queijo Coalho': 12.0,
@@ -110,7 +111,7 @@ async function main() {
     );
 
     // Papeis e usuarios (senha de todos: senha123)
-    const papeis = ['ADMIN', 'GERENTE_UNIDADE', 'ATENDENTE', 'COZINHEIRO', 'ANALISTA_MATRIZ', 'CLIENTE'];
+    const papeis = [...PAPEIS_INTERNOS, 'CLIENTE'];
     const { rows: pr } = await client.query(
       `INSERT INTO papel (nome) SELECT unnest($1::text[]) RETURNING id, nome`,
       [papeis],

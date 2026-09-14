@@ -6,7 +6,7 @@ const { erro } = require('../../lib/errors');
 const { pspWebhookSecret } = require('../../config');
 const { registrarAuditoria } = require('../../lib/audit');
 const { devolverEstoque } = require('../../lib/estoque');
-const { creditarPontos } = require('../../lib/pontos');
+const { creditarPontos, reverterResgate } = require('../../lib/pontos');
 
 const router = express.Router();
 
@@ -109,6 +109,7 @@ router.post(
           [pedido.id],
         );
         await devolverEstoque(client, pedido);
+        await reverterResgate(client, pedido);
         await registrarAuditoria(client, {
           tipo: 'PAGAMENTO_RECUSADO',
           papel: 'PSP',

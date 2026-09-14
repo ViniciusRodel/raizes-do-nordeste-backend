@@ -134,9 +134,19 @@ Outros negativos já suportados pelo código, sem passo dedicado na coleção:
 | DELETE | `/v1/clientes/:id/consentimentos/:cid` | CLIENTE (dono) — idempotente |
 | POST | `/v1/clientes/:id/anonimizacao` | CLIENTE (dono), ADMIN — 409 se já anonimizado |
 | GET | `/v1/clientes/:id/fidelidade` | dono, ou ATENDENTE/GERENTE/ADMIN |
+| POST | `/v1/unidades/:id/estoque/movimentos` | GERENTE_UNIDADE (só a própria unidade), ADMIN — `AJUSTE` exige `motivo` e audita `AJUSTE_ESTOQUE` |
+| POST | `/v1/campanhas` | ADMIN, ANALISTA_MATRIZ |
+| GET | `/v1/campanhas/:id/segmento` | ANALISTA_MATRIZ — só clientes com consentimento `CAMPANHA_SEGMENTADA` vigente |
 | GET | `/v1/relatorios/vendas` | ANALISTA_MATRIZ |
+| GET | `/v1/relatorios/vendas/export?formato=csv` | ANALISTA_MATRIZ |
+| GET | `/v1/relatorios/produtos` | ANALISTA_MATRIZ — ranking por quantidade/valor |
 | GET | `/v1/auditoria` | ANALISTA_MATRIZ, ADMIN |
+| POST | `/v1/usuarios` | ADMIN — cria usuário interno, audita `ALTERACAO_USUARIO` |
 | GET | `/health`, `/ready` | público |
+
+`POST /v1/pedidos` aceita `resgatePontos` (inteiro, opcional): debita pontos do cliente
+identificado e aplica desconto de R$ 0,01 por ponto no total (RF-20) — revertido
+automaticamente se o pedido for recusado ou cancelado, mesmo padrão da reserva de estoque.
 
 Erros seguem `{ "erro": { "codigo", "mensagem", "detalhes" } }`.
 
@@ -152,12 +162,15 @@ src/
   lib/           errors.js · asyncHandler.js · audit.js · estoque.js · pontos.js · dadosPessoais.js
   modules/
     catalogo/routes.js
-    pedidos/routes.js (criar, status, cancelamento) · stateMachine.js
+    pedidos/routes.js (criar, status, cancelamento, resgate de pontos - RF-20) · stateMachine.js
     pagamento/webhookRoutes.js · pspClient.js
+    estoque/routes.js         (entrada e ajuste de estoque - RF-16)
     clientes/routes.js        (cadastro decifrado, consentimentos, anonimizacao - RF-17/RF-18)
     fidelidade/routes.js
+    campanhas/routes.js       (criar campanha, segmento por consentimento - RF-21)
     auditoria/routes.js
-    relatorios/routes.js
+    relatorios/routes.js      (vendas, export CSV, ranking de produtos - RF-22/RF-23)
+    usuarios/routes.js        (cadastro de usuario interno - RF-24)
 db/schema.sql                DDL (recriado a cada migrate)
 scripts/migrate.js · seed.js · loadtest-setup.js
 psp-fake/server.js           provedor de pagamento simulado (fora do sistema)
@@ -179,7 +192,7 @@ npm run lint       # ESLint (regras recomendadas, config em eslint.config.js)
 O workflow em `.github/workflows/ci.yml` tem dois jobs a cada push/PR:
 **`unit`** (`npm test`, sem serviços) e **`e2e`**, que sobe um PostgreSQL real como
 serviço do runner, aplica o schema e o seed, sobe a API e o PSP fake, e roda a
-coleção Postman completa via Newman (46 requests / 57 assertions) — o relatório
+coleção Postman completa via Newman (61 requests / 85 assertions) — o relatório
 HTML fica publicado como artefato do job (RNF-12 — automatizado, não é mais só
 execução manual).
 
@@ -210,10 +223,19 @@ auditado (`ACESSO_DADO_PESSOAL`) (RNF-06)**, **registro e revogação de consent
 e anonimização do cliente (RF-17, RF-18, CT-18)** — anonimizar revoga também os
 consentimentos ainda vigentes, então o acúmulo de pontos e a elegibilidade a campanha
 segmentada cessam sozinhos, sem lógica especial; o histórico de pedidos permanece
-vinculado ao `cliente_id`, só sem dado pessoal associado.
+vinculado ao `cliente_id`, só sem dado pessoal associado. **Resgate de pontos como
+desconto progressivo no pedido (RF-20)** — debitado no momento da criação (mesmo padrão
+de reserva da RF-15) e revertido automaticamente se o pedido for recusado ou cancelado.
+**Entrada e ajuste manual de estoque pelo gerente (RF-16)** — ajuste exige motivo e
+audita `AJUSTE_ESTOQUE`; gerente só mexe na própria unidade. **Campanhas segmentadas
+(RF-21)** — criação da campanha e consulta do segmento elegível (só clientes com
+consentimento `CAMPANHA_SEGMENTADA` vigente, filtrado por critério simples de
+frequência/faixa etária). **Ranking de produtos e exportação CSV do relatório de vendas
+(RF-22/RF-23)**. **Cadastro de usuário interno com papéis (RF-24)** — só ADMIN, audita
+`ALTERACAO_USUARIO`, senha nunca volta na resposta.
 
 **Ainda não implementado (documentado no PDF, fora do recorte "caminho de ouro"):**
-o endpoint de desconto manual; resgate de pontos (RF-20); campanhas segmentadas (RF-21);
+o endpoint de desconto manual em um pedido já criado;
 tabelas `consolidado_*` + job de agregação (hoje o relatório lê direto das transacionais);
 reprocessamento automático de `PAGAMENTO_PENDENTE` com backoff; réplica de leitura, cache Redis
 e broker de eventos (RabbitMQ) — os efeitos de negócio já estão isolados em funções, prontos
