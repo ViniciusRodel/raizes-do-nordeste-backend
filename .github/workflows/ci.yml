@@ -5,7 +5,8 @@ on:
   pull_request:
 
 jobs:
-  test:
+  unit:
+    name: Testes unitarios
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -14,3 +15,86 @@ jobs:
           node-version: "20"
       - run: npm install --no-audit --no-fund
       - run: npm test
+
+  # Sobe a API real contra um Postgres real (servico do runner) + o PSP fake,
+  # e roda a colecao Postman/Newman de ponta a ponta - mesmo fluxo validado
+  # manualmente durante o desenvolvimento (ver test-results/EXECUCAO.md),
+  # agora automatizado a cada push/PR (RNF-12).
+  e2e:
+    name: Postman/Newman (API + Postgres real)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: raizes
+          POSTGRES_PASSWORD: raizes
+          POSTGRES_DB: raizes
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U raizes"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgres://raizes:raizes@localhost:5432/raizes
+      JWT_SECRET: ci-jwt-secret
+      JWT_EXPIRA_EM: 8h
+      PSP_BASE_URL: http://localhost:4000
+      PSP_WEBHOOK_SECRET: ci-psp-hmac-secret
+      WEBHOOK_URL_PUBLICA: http://localhost:3000/v1/webhooks/pagamento
+      DADOS_PESSOAIS_CHAVE: ci-chave-dados-pessoais
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Instalar dependencias (API)
+        run: npm install --no-audit --no-fund
+
+      - name: Instalar dependencias (PSP fake)
+        working-directory: psp-fake
+        run: npm install --no-audit --no-fund
+
+      - name: Aplicar schema
+        run: npm run migrate
+
+      - name: Semear dados de exemplo
+        run: npm run seed
+
+      - name: Subir o PSP fake (porta 4000)
+        working-directory: psp-fake
+        run: PORT=4000 nohup node server.js > psp-fake.log 2>&1 &
+
+      - name: Subir a API (porta 3000)
+        run: PORT=3000 nohup node src/server.js > api.log 2>&1 &
+
+      - name: Esperar API e PSP fake ficarem prontos
+        run: |
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:3000/ready > /dev/null && curl -sf http://localhost:4000/health > /dev/null && exit 0
+            sleep 1
+          done
+          echo "API ou PSP fake nao ficaram prontos a tempo"
+          cat api.log || true
+          cat psp-fake/psp-fake.log || true
+          exit 1
+
+      - name: Rodar a colecao Postman (Newman)
+        run: |
+          npx newman run postman/raizes-do-nordeste.postman_collection.json \
+            -e postman/raizes-do-nordeste.postman_environment.json \
+            -r cli,htmlextra --reporter-htmlextra-export newman-report.html
+
+      - name: Publicar relatorio e logs (sempre, para depurar falhas tambem)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: newman-report
+          path: |
+            newman-report.html
+            api.log
+            psp-fake/psp-fake.log
+          retention-days: 14
