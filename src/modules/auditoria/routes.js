@@ -32,7 +32,20 @@ router.get(
         LIMIT 100`,
       params,
     );
-    res.json({ registros: rows });
+    const registros = rows.map((r) => ({
+      id: r.id,
+      tipo: r.tipo,
+      usuarioId: r.usuario_id,
+      papel: r.papel,
+      unidadeId: r.unidade_id,
+      entidadeAfetada: r.entidade_afetada,
+      entidadeId: r.entidade_id,
+      valorAnterior: r.valor_anterior,
+      valorNovo: r.valor_novo,
+      motivo: r.motivo,
+      dataHora: r.data_hora,
+    }));
+    res.json({ registros });
   }),
 );
 

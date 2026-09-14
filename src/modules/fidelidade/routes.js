@@ -1,7 +1,8 @@
 const express = require('express');
 const db = require('../../db');
 const asyncHandler = require('../../lib/asyncHandler');
-const { erro } = require('../../lib/errors');
+const { parseId } = require('../../lib/errors');
+const { garantirDonoOuStaff } = require('../../auth/rbac');
 
 const router = express.Router();
 
@@ -9,18 +10,8 @@ const router = express.Router();
 router.get(
   '/clientes/:id/fidelidade',
   asyncHandler(async (req, res) => {
-    const clienteId = Number(req.params.id);
-
-    const ehStaff = req.usuario.papeis.some((p) =>
-      ['ATENDENTE', 'GERENTE_UNIDADE', 'ADMIN'].includes(p),
-    );
-    if (
-      req.usuario.papeis.includes('CLIENTE') &&
-      !ehStaff &&
-      req.usuario.clienteId !== clienteId
-    ) {
-      throw erro(403, 'ACESSO_NEGADO', 'Fidelidade pertence a outro cliente');
-    }
+    const clienteId = parseId(req.params.id, 'id');
+    garantirDonoOuStaff(req, clienteId, ['ATENDENTE', 'GERENTE_UNIDADE', 'ADMIN']);
 
     const { rows: cf } = await db.query(
       'SELECT id, saldo_pontos FROM conta_fidelidade WHERE cliente_id = $1',
@@ -36,7 +27,13 @@ router.get(
         LIMIT 50`,
       [cf[0].id],
     );
-    res.json({ clienteId, saldo: cf[0].saldo_pontos, movimentos: mov });
+    const movimentos = mov.map((m) => ({
+      tipo: m.tipo,
+      pontos: m.pontos,
+      pedidoId: m.pedido_id,
+      dataHora: m.data_hora,
+    }));
+    res.json({ clienteId, saldo: cf[0].saldo_pontos, movimentos });
   }),
 );
 

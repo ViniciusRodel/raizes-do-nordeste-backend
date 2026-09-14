@@ -173,6 +173,7 @@ docs/diagramas.drawio        casos de uso, classes, DER, componentes, máquina d
 
 ```bash
 npm test          # unitário: regras da máquina de estados do pedido
+npm run lint       # ESLint (regras recomendadas, config em eslint.config.js)
 ```
 
 O workflow em `.github/workflows/ci.yml` tem dois jobs a cada push/PR:

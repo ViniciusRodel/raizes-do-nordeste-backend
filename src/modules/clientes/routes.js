@@ -1,23 +1,13 @@
 const express = require('express');
 const db = require('../../db');
 const asyncHandler = require('../../lib/asyncHandler');
-const { erro } = require('../../lib/errors');
-const { requer } = require('../../auth/rbac');
+const { erro, parseId } = require('../../lib/errors');
+const { requer, garantirDonoOuStaff } = require('../../auth/rbac');
 const { registrarAuditoria } = require('../../lib/audit');
 const { buscarClienteDecifrado } = require('../../lib/dadosPessoais');
 
 const router = express.Router();
 const FINALIDADES = ['FIDELIDADE', 'CAMPANHA_SEGMENTADA', 'ANALISE_PERFIL'];
-
-/**
- * Papeis de staff em `papeisStaff` sempre podem agir; caso contrario, so o
- * proprio cliente (token CLIENTE com clienteId batendo com :id) pode.
- */
-function garantirDonoOuStaff(req, idParam, papeisStaff = []) {
-  if (req.usuario.papeis.some((p) => papeisStaff.includes(p))) return;
-  if (req.usuario.papeis.includes('CLIENTE') && req.usuario.clienteId === Number(idParam)) return;
-  throw erro(403, 'ACESSO_NEGADO', 'So o proprio cliente (ou papel autorizado) pode realizar esta acao');
-}
 
 // GET /v1/clientes/:id  -> RNF-06 (dados pessoais cifrados em repouso) + RF-14
 // Cadastro completo do cliente, decifrado sob demanda (pgp_sym_decrypt). Acesso
@@ -27,8 +17,9 @@ router.get(
   '/clientes/:id',
   requer('ADMIN', 'GERENTE_UNIDADE'),
   asyncHandler(async (req, res) => {
+    const id = parseId(req.params.id, 'id');
     const cliente = await db.withTransaction(async (client) => {
-      const c = await buscarClienteDecifrado(client, req.params.id);
+      const c = await buscarClienteDecifrado(client, id);
       if (!c) throw erro(404, 'CLIENTE_NAO_ENCONTRADO', 'Cliente inexistente');
 
       await registrarAuditoria(client, {
@@ -66,7 +57,8 @@ router.post(
   '/clientes/:id/consentimentos',
   requer('CLIENTE', 'ATENDENTE'),
   asyncHandler(async (req, res) => {
-    garantirDonoOuStaff(req, req.params.id, ['ATENDENTE']);
+    const id = parseId(req.params.id, 'id');
+    garantirDonoOuStaff(req, id, ['ATENDENTE']);
 
     const { finalidade, versaoTexto } = req.body || {};
     if (!FINALIDADES.includes(finalidade)) {
@@ -74,13 +66,13 @@ router.post(
     }
 
     const resultado = await db.withTransaction(async (client) => {
-      const { rows: cli } = await client.query('SELECT id FROM cliente WHERE id = $1', [req.params.id]);
+      const { rows: cli } = await client.query('SELECT id FROM cliente WHERE id = $1', [id]);
       if (!cli[0]) throw erro(404, 'CLIENTE_NAO_ENCONTRADO', 'Cliente inexistente');
 
       const { rows: vigente } = await client.query(
         `SELECT 1 FROM consentimento_lgpd
           WHERE cliente_id = $1 AND finalidade = $2 AND revogado_em IS NULL`,
-        [req.params.id, finalidade],
+        [id, finalidade],
       );
       if (vigente.length) {
         throw erro(409, 'CONSENTIMENTO_JA_VIGENTE', 'Ja existe consentimento vigente para essa finalidade');
@@ -90,7 +82,7 @@ router.post(
         `INSERT INTO consentimento_lgpd (cliente_id, finalidade, versao_texto)
          VALUES ($1, $2, $3)
          RETURNING id, cliente_id, finalidade, versao_texto, concedido_em`,
-        [req.params.id, finalidade, versaoTexto || 'v1'],
+        [id, finalidade, versaoTexto || 'v1'],
       );
       return rows[0];
     });
@@ -114,12 +106,14 @@ router.delete(
   '/clientes/:id/consentimentos/:cid',
   requer('CLIENTE'),
   asyncHandler(async (req, res) => {
-    garantirDonoOuStaff(req, req.params.id, []);
+    const id = parseId(req.params.id, 'id');
+    const cid = parseId(req.params.cid, 'cid');
+    garantirDonoOuStaff(req, id, []);
 
     const resultado = await db.withTransaction(async (client) => {
       const { rows } = await client.query(
         'SELECT id, revogado_em FROM consentimento_lgpd WHERE id = $1 AND cliente_id = $2',
-        [req.params.cid, req.params.id],
+        [cid, id],
       );
       if (!rows[0]) {
         throw erro(404, 'CONSENTIMENTO_NAO_ENCONTRADO', 'Consentimento inexistente para este cliente');
@@ -128,7 +122,7 @@ router.delete(
 
       const { rows: upd } = await client.query(
         'UPDATE consentimento_lgpd SET revogado_em = now() WHERE id = $1 RETURNING revogado_em',
-        [req.params.cid],
+        [cid],
       );
       return upd[0];
     });
@@ -150,12 +144,13 @@ router.post(
   '/clientes/:id/anonimizacao',
   requer('CLIENTE', 'ADMIN'),
   asyncHandler(async (req, res) => {
-    garantirDonoOuStaff(req, req.params.id, ['ADMIN']);
+    const id = parseId(req.params.id, 'id');
+    garantirDonoOuStaff(req, id, ['ADMIN']);
 
     await db.withTransaction(async (client) => {
       const { rows: cli } = await client.query(
         'SELECT id, anonimizado FROM cliente WHERE id = $1 FOR UPDATE',
-        [req.params.id],
+        [id],
       );
       if (!cli[0]) throw erro(404, 'CLIENTE_NAO_ENCONTRADO', 'Cliente inexistente');
       if (cli[0].anonimizado) throw erro(409, 'JA_ANONIMIZADO', 'Cliente ja foi anonimizado');
@@ -165,12 +160,12 @@ router.post(
             SET nome_cif = NULL, cpf_cif = NULL, email_cif = NULL, telefone_cif = NULL,
                 data_nascimento = NULL, anonimizado = true
           WHERE id = $1`,
-        [req.params.id],
+        [id],
       );
       await client.query(
         `UPDATE consentimento_lgpd SET revogado_em = now()
           WHERE cliente_id = $1 AND revogado_em IS NULL`,
-        [req.params.id],
+        [id],
       );
 
       await registrarAuditoria(client, {
@@ -178,14 +173,14 @@ router.post(
         usuarioId: req.usuario.id,
         papel: req.usuario.papeis.join(','),
         entidadeAfetada: 'cliente',
-        entidadeId: req.params.id,
+        entidadeId: id,
         valorAnterior: { anonimizado: false },
         valorNovo: { anonimizado: true },
         motivo: 'Solicitacao de exclusao/anonimizacao de dados pessoais (RF-18)',
       });
     });
 
-    res.json({ clienteId: Number(req.params.id), anonimizado: true });
+    res.json({ clienteId: id, anonimizado: true });
   }),
 );
 

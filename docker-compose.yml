@@ -1,7 +1,7 @@
 # Sobe o stack completo: banco + API + PSP simulado.
 #   docker compose up
 # A API fica em http://localhost:3000 e o PSP fake em http://localhost:4000.
-# migrate + seed rodam automaticamente no boot da API (SEED_ON_BOOT=true).
+# migrate + seed rodam automaticamente no boot da API (ver `command` do servico `api`).
 
 services:
   db:

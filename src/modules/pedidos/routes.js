@@ -2,16 +2,16 @@ const express = require('express');
 const { randomUUID } = require('crypto');
 const db = require('../../db');
 const asyncHandler = require('../../lib/asyncHandler');
-const { erro } = require('../../lib/errors');
+const { erro, parseId } = require('../../lib/errors');
 const { requer } = require('../../auth/rbac');
 const { podeTransicionar } = require('./stateMachine');
 const psp = require('../pagamento/pspClient');
 const { registrarAuditoria } = require('../../lib/audit');
 const { devolverEstoque } = require('../../lib/estoque');
 const { estornarPontos } = require('../../lib/pontos');
+const { CANAIS } = require('../../lib/canais');
 
 const router = express.Router();
-const CANAIS = ['APP', 'TOTEM', 'BALCAO', 'PICKUP'];
 
 // ---------------------------------------------------------------------------
 // POST /v1/pedidos  -> RF-05, RF-06, RF-15, RF-08 (CT-01/02/03/10/13/14)
@@ -22,11 +22,12 @@ router.post(
   '/pedidos',
   requer('CLIENTE', 'ATENDENTE'),
   asyncHandler(async (req, res) => {
-    const { unidadeId, canal, itens, clienteId } = req.body || {};
+    const { unidadeId: unidadeIdBody, canal, itens, clienteId } = req.body || {};
 
-    if (!unidadeId || !canal || !Array.isArray(itens) || itens.length === 0) {
+    if (!unidadeIdBody || !canal || !Array.isArray(itens) || itens.length === 0) {
       throw erro(400, 'PAYLOAD_INVALIDO', 'Informe unidadeId, canal e itens[] nao vazio');
     }
+    const unidadeId = parseId(unidadeIdBody, 'unidadeId');
     if (!CANAIS.includes(canal)) {
       throw erro(400, 'CANAL_INVALIDO', `canal deve ser um de ${CANAIS.join(', ')}`);
     }
@@ -152,6 +153,7 @@ router.post(
         };
       } catch (e) {
         // PSP indisponivel: pedido fica PAGAMENTO_PENDENTE para reprocessamento (CT-10)
+        console.error(`PSP indisponivel ao cobrar pedido ${pedido.id}:`, e.message);
         await client.query(
           `INSERT INTO pagamento
              (pedido_id, id_transacao_psp, status, valor, chave_idempotencia, tentativas)
@@ -182,6 +184,7 @@ router.post(
 router.get(
   '/pedidos/:id',
   asyncHandler(async (req, res) => {
+    const id = parseId(req.params.id);
     const { rows } = await db.query(
       `SELECT p.id, p.unidade_id, p.canal, p.cliente_id, p.status,
               p.subtotal, p.total, p.criado_em, p.pago_em,
@@ -200,7 +203,7 @@ router.get(
          LEFT JOIN pagamento pg   ON pg.pedido_id = p.id
         WHERE p.id = $1
         GROUP BY p.id, pg.status, pg.id_transacao_psp`,
-      [req.params.id],
+      [id],
     );
     const pedido = rows[0];
     if (!pedido) throw erro(404, 'PEDIDO_NAO_ENCONTRADO', 'Pedido inexistente');
@@ -209,7 +212,20 @@ router.get(
     if (req.usuario.papeis.includes('CLIENTE') && pedido.cliente_id !== req.usuario.clienteId) {
       throw erro(403, 'ACESSO_NEGADO', 'Pedido pertence a outro cliente');
     }
-    res.json(pedido);
+    res.json({
+      id: pedido.id,
+      unidadeId: pedido.unidade_id,
+      canal: pedido.canal,
+      clienteId: pedido.cliente_id,
+      status: pedido.status,
+      subtotal: pedido.subtotal,
+      total: pedido.total,
+      criadoEm: pedido.criado_em,
+      pagoEm: pedido.pago_em,
+      itens: pedido.itens,
+      pagamentoStatus: pedido.pagamento_status,
+      idTransacaoPSP: pedido.id_transacao_psp,
+    });
   }),
 );
 
@@ -220,14 +236,21 @@ router.get(
   '/unidades/:unidadeId/fila-cozinha',
   requer('COZINHEIRO', 'GERENTE_UNIDADE'),
   asyncHandler(async (req, res) => {
+    const unidadeId = parseId(req.params.unidadeId, 'unidadeId');
     const { rows } = await db.query(
       `SELECT id, canal, status, total, pago_em, criado_em
          FROM pedido
         WHERE unidade_id = $1 AND status IN ('PAGO', 'EM_PREPARO', 'PRONTO')
         ORDER BY pago_em ASC NULLS LAST, criado_em ASC`,
-      [req.params.unidadeId],
+      [unidadeId],
     );
-    res.json({ unidadeId: Number(req.params.unidadeId), fila: rows });
+    res.json({
+      unidadeId,
+      fila: rows.map((r) => ({
+        id: r.id, canal: r.canal, status: r.status, total: r.total,
+        pagoEm: r.pago_em, criadoEm: r.criado_em,
+      })),
+    });
   }),
 );
 
@@ -244,10 +267,11 @@ router.patch(
       throw erro(400, 'STATUS_INVALIDO', `novoStatus deve ser um de ${PERMITIDOS.join(', ')}`);
     }
 
+    const id = parseId(req.params.id);
     const atualizado = await db.withTransaction(async (client) => {
       const { rows } = await client.query(
         'SELECT id, status FROM pedido WHERE id = $1 FOR UPDATE',
-        [req.params.id],
+        [id],
       );
       if (!rows[0]) throw erro(404, 'PEDIDO_NAO_ENCONTRADO', 'Pedido inexistente');
 
@@ -257,7 +281,7 @@ router.patch(
       }
       const { rows: up } = await client.query(
         'UPDATE pedido SET status = $1 WHERE id = $2 RETURNING id, status',
-        [novoStatus, req.params.id],
+        [novoStatus, id],
       );
       return up[0];
     });
@@ -284,10 +308,11 @@ router.post(
       throw erro(400, 'PAYLOAD_INVALIDO', 'motivo e obrigatorio para cancelar um pedido');
     }
 
+    const id = parseId(req.params.id);
     const resultado = await db.withTransaction(async (client) => {
       const { rows: peds } = await client.query(
         'SELECT * FROM pedido WHERE id = $1 FOR UPDATE',
-        [req.params.id],
+        [id],
       );
       const pedido = peds[0];
       if (!pedido) throw erro(404, 'PEDIDO_NAO_ENCONTRADO', 'Pedido inexistente');
@@ -312,6 +337,7 @@ router.post(
           try {
             await psp.solicitarEstorno({ idTransacaoPSP: pagamento.id_transacao_psp });
           } catch (e) {
+            console.error(`Falha ao estornar pedido ${pedido.id} no PSP:`, e.message);
             throw erro(
               502,
               'PSP_INDISPONIVEL',

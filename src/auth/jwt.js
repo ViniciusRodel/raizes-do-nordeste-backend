@@ -23,7 +23,7 @@ function autenticar(req, _res, next) {
       unidadeId: claims.unidadeId ?? null,
     };
     next();
-  } catch (e) {
+  } catch (_e) {
     next(erro(401, 'TOKEN_INVALIDO', 'Token invalido ou expirado'));
   }
 }

@@ -53,7 +53,6 @@ app.use((req, res) => {
 });
 
 // ---- Middleware de erro ----
-// eslint-disable-next-line no-unused-vars
 app.use((err, _req, res, _next) => {
   if (err instanceof HttpError) {
     return res.status(err.status).json({

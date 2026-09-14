@@ -29,7 +29,14 @@ router.get(
         ORDER BY valor_liquido DESC`,
       [inicio || null, fim || null],
     );
-    res.json({ periodo: { inicio: inicio || null, fim: fim || null }, series: rows });
+    const series = rows.map((r) => ({
+      unidadeId: r.unidade_id,
+      unidade: r.unidade,
+      regiao: r.regiao,
+      qtdPedidos: r.qtd_pedidos,
+      valorLiquido: r.valor_liquido,
+    }));
+    res.json({ periodo: { inicio: inicio || null, fim: fim || null }, series });
   }),
 );
 

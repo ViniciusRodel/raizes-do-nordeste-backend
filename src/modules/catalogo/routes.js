@@ -1,9 +1,10 @@
 const express = require('express');
 const db = require('../../db');
 const asyncHandler = require('../../lib/asyncHandler');
+const { parseId } = require('../../lib/errors');
+const { CANAIS } = require('../../lib/canais');
 
 const router = express.Router();
-const CANAIS = ['APP', 'TOTEM', 'BALCAO', 'PICKUP'];
 
 // GET /v1/unidades/:unidadeId/cardapio?canal=APP  -> RF-04
 // Retorna apenas itens habilitados na unidade, com produto ativo,
@@ -11,7 +12,7 @@ const CANAIS = ['APP', 'TOTEM', 'BALCAO', 'PICKUP'];
 router.get(
   '/unidades/:unidadeId/cardapio',
   asyncHandler(async (req, res) => {
-    const { unidadeId } = req.params;
+    const unidadeId = parseId(req.params.unidadeId, 'unidadeId');
     const { rows } = await db.query(
       `SELECT pb.id                       AS "produtoId",
               pb.nome,
@@ -41,11 +42,7 @@ router.get(
     // test-results/security/ZAP.md).
     const canal = CANAIS.includes(req.query.canal) ? req.query.canal : 'APP';
 
-    res.json({
-      unidadeId: Number(unidadeId),
-      canal,
-      itens: rows,
-    });
+    res.json({ unidadeId, canal, itens: rows });
   }),
 );
 

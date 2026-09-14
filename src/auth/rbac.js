@@ -14,4 +14,16 @@ const requer = (...papeisPermitidos) => (req, _res, next) => {
   next();
 };
 
-module.exports = { requer };
+/**
+ * Papeis de staff em `papeisStaff` sempre podem agir; caso contrario, so o
+ * proprio cliente (token CLIENTE com clienteId batendo com idAlvo) pode.
+ * Usado nas rotas de LGPD (clientes/consentimentos) e no extrato de fidelidade,
+ * onde tanto o titular quanto certos papeis de staff podem consultar.
+ */
+function garantirDonoOuStaff(req, idAlvo, papeisStaff = []) {
+  if (req.usuario.papeis.some((p) => papeisStaff.includes(p))) return;
+  if (req.usuario.papeis.includes('CLIENTE') && req.usuario.clienteId === Number(idAlvo)) return;
+  throw erro(403, 'ACESSO_NEGADO', 'So o proprio cliente (ou papel autorizado) pode realizar esta acao');
+}
+
+module.exports = { requer, garantirDonoOuStaff };
