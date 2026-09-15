@@ -7,10 +7,10 @@ const DEV_DEFAULTS = {
 };
 
 // Avisa (sem bloquear o boot) quando um segredo sensivel esta usando o valor
-// padrao de desenvolvimento — facil de esquecer de trocar ao subir em producao.
+// padrao de desenvolvimento - facil de esquecer de trocar ao subir em producao.
 for (const chave of Object.keys(DEV_DEFAULTS)) {
   if (!process.env[chave]) {
-    console.warn(`[config] ${chave} nao definido — usando valor padrao de desenvolvimento (NAO use em producao)`);
+    console.warn(`[config] ${chave} nao definido - usando valor padrao de desenvolvimento (NAO use em producao)`);
   }
 }
 

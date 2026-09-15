@@ -1,4 +1,4 @@
-/** Papeis internos validos (RF-24). Unica fonte de verdade — usado no
+/** Papeis internos validos (RF-24). Unica fonte de verdade - usado no
  * cadastro de usuario e no seed. CLIENTE nao entra aqui: e atribuido
  * automaticamente a um usuario vinculado a um cliente, nao cadastrado por
  * este endpoint administrativo. */

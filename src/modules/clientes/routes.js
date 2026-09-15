@@ -12,7 +12,7 @@ const FINALIDADES = ['FIDELIDADE', 'CAMPANHA_SEGMENTADA', 'ANALISE_PERFIL'];
 // GET /v1/clientes/:id  -> RNF-06 (dados pessoais cifrados em repouso) + RF-14
 // Cadastro completo do cliente, decifrado sob demanda (pgp_sym_decrypt). Acesso
 // restrito a ADMIN/GERENTE_UNIDADE e SEMPRE gera um registro de auditoria
-// ACESSO_DADO_PESSOAL — ninguem consulta nome/CPF/e-mail/telefone sem deixar rastro.
+// ACESSO_DADO_PESSOAL - ninguem consulta nome/CPF/e-mail/telefone sem deixar rastro.
 router.get(
   '/clientes/:id',
   requer('ADMIN', 'GERENTE_UNIDADE'),

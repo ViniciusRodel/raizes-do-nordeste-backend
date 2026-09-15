@@ -34,7 +34,7 @@ async function solicitarCobranca({ valor, pedidoId, chaveIdempotencia }) {
  * Solicita o estorno de uma cobranca ja aprovada (RF-13).
  * Usado no cancelamento de pedido pago (POST /v1/pedidos/:id/cancelamento).
  * Diferente da cobranca, o estorno aqui e sincrono: o PSP confirma na resposta
- * (nao volta por webhook) — simplificacao razoavel para esta entrega.
+ * (nao volta por webhook) - simplificacao razoavel para esta entrega.
  *
  * @throws Error com .pspStatus quando o PSP responde erro de HTTP.
  */

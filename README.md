@@ -1,7 +1,7 @@
-# Raízes do Nordeste — Back-end
+# Raízes do Nordeste - Back-end
 
 Plataforma única de pedidos e gestão para a rede de lanchonetes **Raízes do Nordeste**.
-Recorte de **back-end** do Projeto Multidisciplinar (UNINTER) — modelagem, contrato de API,
+Recorte de **back-end** do Projeto Multidisciplinar (UNINTER) - modelagem, contrato de API,
 integração de pagamento e uma **implementação parcial do caminho de ouro**.
 
 > A documentação completa (requisitos, DER, arquitetura, plano de testes) está no PDF
@@ -17,11 +17,11 @@ integração de pagamento e uma **implementação parcial do caminho de ouro**.
 | HTTP | Express 4 (sem framework de aplicação, roteamento manual por módulo) |
 | Banco | PostgreSQL 16 (`pg`, SQL puro) |
 | Auth | JWT (`jsonwebtoken`) + RBAC por papel; senhas com `bcryptjs` |
-| Pagamento | serviço externo — aqui simulado por `psp-fake/` |
+| Pagamento | serviço externo - aqui simulado por `psp-fake/` |
 | Orquestração | Docker Compose (banco + API + PSP fake) |
 | Testes | `node --test` (unitário) + coleção Postman/Newman (contrato) |
 
-Arquitetura: **monólito modular** — cada _bounded context_ é uma pasta em `src/modules/`
+Arquitetura: **monólito modular** - cada _bounded context_ é uma pasta em `src/modules/`
 com suas rotas; efeitos de negócio (pontos, auditoria) rodam na mesma transação nesta
 entrega e ficam prontos para virar eventos assíncronos (ver "Próximos passos").
 
@@ -49,13 +49,13 @@ Sem Docker (precisa de um PostgreSQL local): `cp .env.example .env`, ajuste `DAT
 
 | login | papel | observação |
 |---|---|---|
-| `maria` | CLIENTE | consente com FIDELIDADE — acumula pontos |
-| `joao` | CLIENTE | **não** consente — não acumula pontos |
+| `maria` | CLIENTE | consente com FIDELIDADE - acumula pontos |
+| `joao` | CLIENTE | **não** consente - não acumula pontos |
 | `atendente` | ATENDENTE | unidade 1 (Recife) |
 | `cozinheiro` | COZINHEIRO | unidade 1 |
 | `gerente` | GERENTE_UNIDADE | unidade 1 |
 | `analista` | ANALISTA_MATRIZ | acesso aos relatórios e à auditoria |
-| `admin` | ADMIN | — |
+| `admin` | ADMIN | - |
 
 `produtoId`: 1 Tapioca · 2 Cuscuz · 3 Bolo de Macaxeira · 4 Suco de Caju · 5 Canjica Junina (sazonal, só junho/2026).
 Unidades: 1 Recife (COMPLETA), 2 São Paulo (REDUZIDA, não serve Canjica).
@@ -75,30 +75,30 @@ npx newman run postman/raizes-do-nordeste.postman_collection.json \
 | # | Passo | CT do PDF |
 |---|---|---|
 | 1–4 | Login (cliente, atendente, cozinheiro, analista) | RF-25 |
-| 5 | `GET /v1/unidades/1/cardapio?canal=APP` — Canjica sazonal não aparece | RF-04 / CT-13 |
-| 6 | `POST /v1/pedidos` — valida itens, reserva estoque, cria pedido, chama o PSP | **CT-01** |
-| 7 | `GET /v1/pedidos/:id` — `AGUARDANDO_PAGAMENTO` | RF-12 |
-| 8 | PSP fake: `POST /charges/:id/aprovar` — dispara o webhook assinado | **CT-04** |
+| 5 | `GET /v1/unidades/1/cardapio?canal=APP` - Canjica sazonal não aparece | RF-04 / CT-13 |
+| 6 | `POST /v1/pedidos` - valida itens, reserva estoque, cria pedido, chama o PSP | **CT-01** |
+| 7 | `GET /v1/pedidos/:id` - `AGUARDANDO_PAGAMENTO` | RF-12 |
+| 8 | PSP fake: `POST /charges/:id/aprovar` - dispara o webhook assinado | **CT-04** |
 | 9–10 | Pedido vira `PAGO`; Maria ganha 30 pontos (1 por real) | RF-09, RF-19 |
-| 11–12 | PSP fake: `reenviar` o mesmo webhook — saldo **não** dobra | **CT-11** (idempotência) |
-| 13 | `GET /v1/unidades/1/fila-cozinha` — o pedido pago está na fila | RF-11 |
+| 11–12 | PSP fake: `reenviar` o mesmo webhook - saldo **não** dobra | **CT-11** (idempotência) |
+| 13 | `GET /v1/unidades/1/fila-cozinha` - o pedido pago está na fila | RF-11 |
 | 14–16 | `PATCH /v1/pedidos/:id/status` → EM_PREPARO → PRONTO → ENTREGUE | **CT-05** |
 | 17 | ENTREGUE → EM_PREPARO devolve **409** | **CT-20** |
 | 18 | `GET /v1/relatorios/vendas` com token do cozinheiro → **403** | **CT-16** (RBAC) |
 | 19 | mesmo endpoint com o Analista → 200 | CT-07 (parcial) |
-| 20 | `GET /v1/auditoria` — registro `PAGAMENTO_CONFIRMADO` | RF-14 |
+| 20 | `GET /v1/auditoria` - registro `PAGAMENTO_CONFIRMADO` | RF-14 |
 | 21 | `POST /v1/pedidos` com a Canjica fora de junho → **422** | **CT-13** |
 | 22–23 | Cria um 2º pedido (Cuscuz) e aprova o pagamento | RF-05, RF-09 |
 | 24 | Fidelidade da Maria: 30 + 18 = 48 pontos | RF-19 |
 | 25 | `POST /v1/pedidos/:id/cancelamento` no pedido **pago**, com `motivo` → `CANCELADO_COM_ESTORNO` | **CT-17** |
 | 26 | Fidelidade da Maria: pontos do 2º pedido estornados, saldo volta a 30 | RF-13, RF-19 |
-| 27 | `GET /v1/auditoria?tipo=CANCELAMENTO` — registro com autor, papel e motivo | RF-14 |
+| 27 | `GET /v1/auditoria?tipo=CANCELAMENTO` - registro com autor, papel e motivo | RF-14 |
 | 28 | Cancelar o 1º pedido (já `ENTREGUE`) → **409** | RF-13 |
 | 29 | Cancelar sem `motivo` → **400** | RF-14 (operação sensível exige motivo) |
 | 30 | Login Admin | RF-25 |
-| 31 | `GET /v1/clientes/:id` (Admin) — nome/CPF decifrados corretamente | **RNF-06** |
+| 31 | `GET /v1/clientes/:id` (Admin) - nome/CPF decifrados corretamente | **RNF-06** |
 | 32 | Mesmo endpoint com token do Atendente → **403** | RNF-07 (RBAC) |
-| 33 | `GET /v1/auditoria?tipo=ACESSO_DADO_PESSOAL` — registra quem acessou | RF-14 |
+| 33 | `GET /v1/auditoria?tipo=ACESSO_DADO_PESSOAL` - registra quem acessou | RF-14 |
 | 34 | Login Joao | RF-25 |
 | 35 | Joao tenta revogar consentimento da Maria → **403** | RNF-07 |
 | 36–37 | Maria revoga o próprio consentimento de FIDELIDADE (idempotente na 2ª chamada) | **RF-18** |
@@ -113,7 +113,7 @@ Outros negativos já suportados pelo código, sem passo dedicado na coleção:
 **CT-02** (pedido no totem sem `clienteId`), **CT-03** (pedido pelo atendente),
 **CT-10** (PSP fora do ar → pedido nasce `PAGAMENTO_PENDENTE`; pare o container `psp-fake` e refaça o passo 6),
 **CT-12** (webhook com HMAC inválido → 401),
-**CT-14** (2 pedidos simultâneos de "Bolo de Macaxeira" na unidade 1 — estoque 1 → um 201, outro 422).
+**CT-14** (2 pedidos simultâneos de "Bolo de Macaxeira" na unidade 1 - estoque 1 → um 201, outro 422).
 
 ---
 
@@ -122,31 +122,31 @@ Outros negativos já suportados pelo código, sem passo dedicado na coleção:
 | Método | Rota | Papel |
 |---|---|---|
 | POST | `/v1/auth/login` | público |
-| POST | `/v1/webhooks/pagamento` | sem JWT — autenticado por HMAC |
+| POST | `/v1/webhooks/pagamento` | sem JWT - autenticado por HMAC |
 | GET | `/v1/unidades/:id/cardapio` | autenticado |
 | POST | `/v1/pedidos` | CLIENTE, ATENDENTE |
 | GET | `/v1/pedidos/:id` | autenticado (cliente só vê o próprio) |
 | GET | `/v1/unidades/:id/fila-cozinha` | COZINHEIRO, GERENTE_UNIDADE |
 | PATCH | `/v1/pedidos/:id/status` | COZINHEIRO, ATENDENTE, GERENTE_UNIDADE |
 | POST | `/v1/pedidos/:id/cancelamento` | ATENDENTE, GERENTE_UNIDADE (exige `motivo`) |
-| POST | `/v1/pedidos/:id/desconto` | GERENTE_UNIDADE/ADMIN sem teto; ATENDENTE com teto (10%/R$ 20) — só antes do pagamento, exige `motivo`, audita `DESCONTO_MANUAL` |
-| GET | `/v1/clientes/:id` | ADMIN, GERENTE_UNIDADE — dados pessoais decifrados; sempre audita `ACESSO_DADO_PESSOAL` |
-| POST | `/v1/clientes/:id/consentimentos` | CLIENTE (dono), ATENDENTE — 409 se já vigente |
-| DELETE | `/v1/clientes/:id/consentimentos/:cid` | CLIENTE (dono) — idempotente |
-| POST | `/v1/clientes/:id/anonimizacao` | CLIENTE (dono), ADMIN — 409 se já anonimizado |
+| POST | `/v1/pedidos/:id/desconto` | GERENTE_UNIDADE/ADMIN sem teto; ATENDENTE com teto (10%/R$ 20) - só antes do pagamento, exige `motivo`, audita `DESCONTO_MANUAL` |
+| GET | `/v1/clientes/:id` | ADMIN, GERENTE_UNIDADE - dados pessoais decifrados; sempre audita `ACESSO_DADO_PESSOAL` |
+| POST | `/v1/clientes/:id/consentimentos` | CLIENTE (dono), ATENDENTE - 409 se já vigente |
+| DELETE | `/v1/clientes/:id/consentimentos/:cid` | CLIENTE (dono) - idempotente |
+| POST | `/v1/clientes/:id/anonimizacao` | CLIENTE (dono), ADMIN - 409 se já anonimizado |
 | GET | `/v1/clientes/:id/fidelidade` | dono, ou ATENDENTE/GERENTE/ADMIN |
-| POST | `/v1/unidades/:id/estoque/movimentos` | GERENTE_UNIDADE (só a própria unidade), ADMIN — `AJUSTE` exige `motivo` e audita `AJUSTE_ESTOQUE` |
+| POST | `/v1/unidades/:id/estoque/movimentos` | GERENTE_UNIDADE (só a própria unidade), ADMIN - `AJUSTE` exige `motivo` e audita `AJUSTE_ESTOQUE` |
 | POST | `/v1/campanhas` | ADMIN, ANALISTA_MATRIZ |
-| GET | `/v1/campanhas/:id/segmento` | ANALISTA_MATRIZ — só clientes com consentimento `CAMPANHA_SEGMENTADA` vigente |
+| GET | `/v1/campanhas/:id/segmento` | ANALISTA_MATRIZ - só clientes com consentimento `CAMPANHA_SEGMENTADA` vigente |
 | GET | `/v1/relatorios/vendas` | ANALISTA_MATRIZ |
 | GET | `/v1/relatorios/vendas/export?formato=csv` | ANALISTA_MATRIZ |
-| GET | `/v1/relatorios/produtos` | ANALISTA_MATRIZ — ranking por quantidade/valor |
+| GET | `/v1/relatorios/produtos` | ANALISTA_MATRIZ - ranking por quantidade/valor |
 | GET | `/v1/auditoria` | ANALISTA_MATRIZ, ADMIN |
-| POST | `/v1/usuarios` | ADMIN — cria usuário interno, audita `ALTERACAO_USUARIO` |
+| POST | `/v1/usuarios` | ADMIN - cria usuário interno, audita `ALTERACAO_USUARIO` |
 | GET | `/health`, `/ready` | público |
 
 `POST /v1/pedidos` aceita `resgatePontos` (inteiro, opcional): debita pontos do cliente
-identificado e aplica desconto de R$ 0,01 por ponto no total (RF-20) — revertido
+identificado e aplica desconto de R$ 0,01 por ponto no total (RF-20) - revertido
 automaticamente se o pedido for recusado ou cancelado, mesmo padrão da reserva de estoque.
 
 Erros seguem `{ "erro": { "codigo", "mensagem", "detalhes" } }`.
@@ -195,27 +195,27 @@ O workflow em `.github/workflows/ci.yml` tem um job **`unit`** a cada push/PR qu
 `npm test`, `npm run lint` e `npm run test:coverage` (sem serviços), e um job **`e2e`**
 que sobe um PostgreSQL real como serviço do runner, aplica o schema e o seed, sobe a
 API e o PSP fake, e roda a coleção Postman completa via Newman (70 requests / 102
-assertions) — o relatório HTML fica publicado como artefato do job (RNF-12 —
+assertions) - o relatório HTML fica publicado como artefato do job (RNF-12 -
 automatizado, não é mais só execução manual).
 
 **Cobertura de testes (RNF-12).** `npm run test:coverage` roda via `c8`, escopado ao
 único módulo hoje coberto por teste unitário isolado (sem banco): a máquina de estados
 do pedido (`src/modules/pedidos/stateMachine.js`), com **gate de 70% em linhas, branches
-e funções** — o build falha abaixo do limite (hoje: 100/100/100). O resto da lógica de
+e funções** - o build falha abaixo do limite (hoje: 100/100/100). O resto da lógica de
 domínio (`src/lib/*.js`) depende de PostgreSQL e é validado pela suíte de integração
-(Newman/CT-*), não por teste unitário isolado — por isso o escopo do gate é só o que é
+(Newman/CT-*), não por teste unitário isolado - por isso o escopo do gate é só o que é
 unitariamente testável hoje, não o repositório inteiro.
 
 **Evidência de execução real** (fora do CI, feita durante o desenvolvimento):
-- [`test-results/EXECUCAO.md`](test-results/EXECUCAO.md) — coleção completa contra
+- [`test-results/EXECUCAO.md`](test-results/EXECUCAO.md) - coleção completa contra
   o stack real, incluindo um bug real encontrado e corrigido.
-- [`test-results/loadtest/CT-19.md`](test-results/loadtest/CT-19.md) — teste de
+- [`test-results/loadtest/CT-19.md`](test-results/loadtest/CT-19.md) - teste de
   carga com k6: p95 de 31ms na criação de pedido (meta RNF-02: 1000ms) e 0% de
   erro (meta RNF-03: 0,1%).
-- [`test-results/security/ZAP.md`](test-results/security/ZAP.md) — varredura
+- [`test-results/security/ZAP.md`](test-results/security/ZAP.md) - varredura
   OWASP ZAP (passiva + ativa), 4 rodadas de scan contra os 68 endpoints atuais:
   **3 bugs reais encontrados e corrigidos** (validação de tamanho de texto,
-  corrida em checagem de login único, validação de formato de data — nenhum
+  corrida em checagem de login único, validação de formato de data - nenhum
   era a vulnerabilidade que o scanner apontou) e os achados restantes
   (SQL Injection/Path Traversal/XSS-em-JSON) investigados e confirmados como
   falso positivo, com evidência.
@@ -231,28 +231,28 @@ efeitos (status, pontos condicionados a consentimento LGPD, devolução de estoq
 fila da cozinha e máquina de estados, trilha de auditoria, relatório de vendas agregado,
 **cancelamento de pedido pago com estorno ao PSP, reversão de pontos e devolução de
 estoque (RF-13, CT-17)**, **dados pessoais do cliente (nome, CPF, e-mail, telefone)
-cifrados em repouso com pgcrypto — `pgp_sym_encrypt`/`pgp_sym_decrypt`, chave fora do
-código (`DADOS_PESSOAIS_CHAVE`) — com acesso restrito a ADMIN/GERENTE_UNIDADE e sempre
+cifrados em repouso com pgcrypto - `pgp_sym_encrypt`/`pgp_sym_decrypt`, chave fora do
+código (`DADOS_PESSOAIS_CHAVE`) - com acesso restrito a ADMIN/GERENTE_UNIDADE e sempre
 auditado (`ACESSO_DADO_PESSOAL`) (RNF-06)**, **registro e revogação de consentimento LGPD
-e anonimização do cliente (RF-17, RF-18, CT-18)** — anonimizar revoga também os
+e anonimização do cliente (RF-17, RF-18, CT-18)** - anonimizar revoga também os
 consentimentos ainda vigentes, então o acúmulo de pontos e a elegibilidade a campanha
 segmentada cessam sozinhos, sem lógica especial; o histórico de pedidos permanece
 vinculado ao `cliente_id`, só sem dado pessoal associado. **Resgate de pontos como
-desconto progressivo no pedido (RF-20)** — debitado no momento da criação (mesmo padrão
+desconto progressivo no pedido (RF-20)** - debitado no momento da criação (mesmo padrão
 de reserva da RF-15) e revertido automaticamente se o pedido for recusado ou cancelado.
-**Entrada e ajuste manual de estoque pelo gerente (RF-16)** — ajuste exige motivo e
+**Entrada e ajuste manual de estoque pelo gerente (RF-16)** - ajuste exige motivo e
 audita `AJUSTE_ESTOQUE`; gerente só mexe na própria unidade. **Campanhas segmentadas
-(RF-21)** — criação da campanha e consulta do segmento elegível (só clientes com
+(RF-21)** - criação da campanha e consulta do segmento elegível (só clientes com
 consentimento `CAMPANHA_SEGMENTADA` vigente, filtrado por critério simples de
 frequência/faixa etária). **Ranking de produtos e exportação CSV do relatório de vendas
-(RF-22/RF-23)**. **Cadastro de usuário interno com papéis (RF-24)** — só ADMIN, audita
+(RF-22/RF-23)**. **Cadastro de usuário interno com papéis (RF-24)** - só ADMIN, audita
 `ALTERACAO_USUARIO`, senha nunca volta na resposta. **Desconto manual em um pedido ainda
-não pago** — gerente/admin sem teto, atendente com teto (10% ou R$ 20, o que for definido
+não pago** - gerente/admin sem teto, atendente com teto (10% ou R$ 20, o que for definido
 como `tipo`); reaplicar substitui o desconto anterior (não acumula); exige `motivo` e
 audita `DESCONTO_MANUAL`.
 
 **Ainda não implementado (documentado no PDF, fora do recorte "caminho de ouro"):**
 tabelas `consolidado_*` + job de agregação (hoje o relatório lê direto das transacionais);
 reprocessamento automático de `PAGAMENTO_PENDENTE` com backoff; réplica de leitura, cache Redis
-e broker de eventos (RabbitMQ) — os efeitos de negócio já estão isolados em funções, prontos
+e broker de eventos (RabbitMQ) - os efeitos de negócio já estão isolados em funções, prontos
 para virar handlers de evento.

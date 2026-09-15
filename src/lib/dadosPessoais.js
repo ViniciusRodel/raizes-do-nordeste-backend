@@ -3,7 +3,7 @@ const { dadosPessoaisChave } = require('../config');
 /**
  * Unica porta de entrada/saida dos dados pessoais do cliente (RNF-06).
  * Nome, CPF, e-mail e telefone ficam cifrados em repouso (BYTEA) com
- * pgp_sym_encrypt/pgp_sym_decrypt (pgcrypto) — nunca em texto plano na tabela
+ * pgp_sym_encrypt/pgp_sym_decrypt (pgcrypto) - nunca em texto plano na tabela
  * `cliente`. A chave e passada como parametro bindado da query (nunca
  * concatenada no SQL), para nao aparecer em texto no plano de execucao.
  */
@@ -28,7 +28,7 @@ async function criarClienteCifrado(client, {
 
 /**
  * Le um cliente decifrando os campos pessoais. Quem chama e responsavel por
- * registrar a auditoria ACESSO_DADO_PESSOAL (RF-14) — esta funcao so decifra.
+ * registrar a auditoria ACESSO_DADO_PESSOAL (RF-14) - esta funcao so decifra.
  */
 async function buscarClienteDecifrado(client, id) {
   const { rows } = await client.query(
